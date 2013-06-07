@@ -12,7 +12,8 @@ Depends:
     doBy,
     XML,
     hydroGOF,
-    HITHATStats
+    HITHATStats,
+    lmomco
 Description: Calculates comparison stats for two timeseries.
 License: file LICENSE
 Collate:
@@ -33,3 +34,5 @@ Collate:
     'MonthlyAnnualGoF.R'
     'RegionalGoF.R'
     'SiteGoF.R'
+    'compute_magnif7.r'
+    'deseason.R'
