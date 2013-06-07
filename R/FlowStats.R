@@ -137,8 +137,8 @@ FlowStats <- function(data,drain_area) {
   fh2v<-unlist(fh1.2(data)[2])
   fh3v<-fh3(data) 
   fh4v<-fh4(data) 
-  fh3v<-fh3v[1]
-  fh4v<-fh4v[1]
+  fh6v<-fh6(data)
+  fh7v<-fh7(data)
   dl1v<-dl1(data)
   dl2v<-dl2(data)
   dl3v<-dl3(data)
@@ -157,6 +157,9 @@ FlowStats <- function(data,drain_area) {
   dh5v<-dh5(data)
   dh10v<-dh10(data)
   dh11v<-dh11(data)
+  dh13v<-dh13(data)
+  dh16v<-unlist(dh15.16(data)[2])
+  ta1v<-unlist(ta1.2(data)[1])
   tl1v<-unlist(tl1.2(data)[1])
   tl2v<-unlist(tl1.2(data)[2])
   th1v<-unlist(th1.2(data)[1])
@@ -165,6 +168,9 @@ FlowStats <- function(data,drain_area) {
   ra2v<-ra2(data)
   ra3v<-ra3(data)
   ra4v<-ra4(data)
+  ra5v<-ra5(data)
+  ra7v<-ra7(data)
+  ra8v<-unlist(ra8.9(data)[1])
   l7Q10v<-l7Q10(data)
   l7Q2v<-l7Q2(data)
   return_10v<-return_10(data)
@@ -177,19 +183,8 @@ FlowStats <- function(data,drain_area) {
   flow_90 <- obs_percentiles[5]
   
   
-  Output<-c(mean_flow,med_flow,cv_flow,cv_daily,ma1v,ma2v,ma3v,ma4v,ma5v,ma6v,
-            ma7v,ma8v,ma9v,ma10v,ma11v,ma12v,ma13v,ma14v,ma15v,ma16v,
-            ma17v,ma18v,ma19v,ma20v,ma21v,ma22v,ma23v,ma24v,ma25v,ma26v,
-            ma27v,ma28v,ma29v,ma30v,ma31v,ma32v,ma33v,ma34v,ma35v,ma36v,
-            ma37v,ma38v,ma39v,ma40v,ma41v,ma42v,ma43v,ma44v,ma45v,ml1v,
-            ml2v,ml3v,ml4v,ml5v,ml6v,ml7v,ml8v,ml9v,ml10v,ml11v,
-            ml12v,ml13v,ml14v,ml15v,ml16v,ml17v,ml18v,ml19v,ml20v,ml21v,
-            ml22v,mh1v,mh2v,mh3v,mh4v,mh5v,mh6v,mh7v,mh8v,mh9v,
-            mh10v,mh11v,mh12v,mh13v,mh14v,mh15v,mh16v,mh17v,mh18v,mh19v,
-            mh20v,mh21v,mh22v,mh23v,mh24v,mh25v,mh26v,mh27v,fl1v,fl2v,
-            fh1v,fh2v,fh3v,fh4v,dl1v,dl2v,dl3v,dl4v,dl5v,dl6v,
-            dl7v,dl8v,dl9v,dl10v,dl18v,dh1v,dh2v,dh3v,dh4v,dh5v,
-            dh10v,dh11v,tl1v,tl2v,th1v,th2v,ra1v,ra2v,ra3v,ra4v,
+  Output<-c(med_flow,cv_flow,cv_daily,ma26v,ma41v,ml18v,ml20v,
+            mh10v,fl2v,fh6v,fh7v,dl6v,dh13v,dh16v,ta1v,tl1v,th1v,ra5v,ra7v,ra8v,
             l7Q10v,l7Q2v,return_10v,flow_10,flow_25,flow_50,flow_75,flow_90)
   return(Output)
   
