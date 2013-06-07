@@ -15,8 +15,8 @@
 #' nselog(timeseries1,timeseries2)
 nselog<-function(timeseries1,timeseries2) {
   # Count of zeros in dataset
-  sszeros<<-subset(timeseries1,timeseries1==0)
-  czeros<<-length(sszeros)
+  sszeros<-subset(timeseries1,timeseries1==0)
+  czeros<-length(sszeros)
   
   # Put timeseries1 and timeseries2 into a data frame  and add header
   obsestq<-data.frame(timeseries1,timeseries2)
