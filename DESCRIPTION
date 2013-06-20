@@ -36,3 +36,4 @@ Collate:
     'SiteGoF.R'
     'compute_magnif7.r'
     'deseason.R'
+    'rsr.R'
