@@ -17,6 +17,8 @@ SiteGoF <- function(Gaged,Modeled) {
   nsev<-nse(Gaged$discharge,Modeled$discharge)
   nselogv<-nselog(Gaged$discharge,Modeled$discharge)
   rmsev<-rmse(Gaged$discharge,Modeled$discharge)
+  rmsnev<-rmsne(Gaged$discharge,Modeled$discharge)
+  rsrv<-rsr(Gaged$discharge,Modeled$discharge)
   pbiasv<-pbias(Modeled$discharge,Gaged$discharge)
   pearsonv<-cor(Modeled$discharge,Gaged$discharge,method="pearson")
   spearmanv<-cor(Modeled$discharge,Gaged$discharge,method="spearman")
@@ -44,6 +46,18 @@ SiteGoF <- function(Gaged,Modeled) {
   rmsev_25_50 <- rmse(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
   rmsev_10_25 <- rmse(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
   rmsev_10 <- rmse(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
+  rmsnev_90 <- rmsne(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
+  rmsnev_75_90 <- rmsne(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
+  rmsnev_50_75 <- rmsne(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
+  rmsnev_25_50 <- rmsne(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
+  rmsnev_10_25 <- rmsne(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
+  rmsnev_10 <- rmsne(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
+  rsrv_90 <- rsr(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
+  rsrv_75_90 <- rsr(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
+  rsrv_50_75 <- rsr(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
+  rsrv_25_50 <- rsr(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
+  rsrv_10_25 <- rsr(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
+  rsrv_10 <- rsr(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
   pbiasv_90 <- pbias(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
   pbiasv_75_90 <- pbias(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
   pbiasv_50_75 <- pbias(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
@@ -66,6 +80,8 @@ SiteGoF <- function(Gaged,Modeled) {
   NSEbyMonth <-vector(length=12)
   NSELOGbyMonth <-vector(length=12)
   RMSEbyMonth <-vector(length=12)
+  RMSNEbyMonth <- vector(length=12)
+  RSRbyMonth <- vector(length=12)
   BiasbyMonth <-vector(length=12)
   PearsonbyMonth <-vector(length=12)
   SpearmanbyMonth <-vector(length=12)
@@ -78,17 +94,21 @@ SiteGoF <- function(Gaged,Modeled) {
     NSEbyMonth[m] <- nse(monthobs$discharge,monthmod$discharge)
     NSELOGbyMonth[m] <- nselog(monthobs$discharge,monthmod$discharge)
     RMSEbyMonth[m] <- rmse(monthobs$discharge,monthmod$discharge)
+    RMSNEbyMonth[m] <- rmsne(monthobs$discharge,monthmod$discharge)
+    RSRbyMonth[m] <- rsr(monthobs$discharge,monthmod$discharge)
     BiasbyMonth[m] <- pbias(monthobs$discharge,monthmod$discharge)
     PearsonbyMonth[m] <- cor(monthobs$discharge,monthmod$discharge,method="pearson")
     SpearmanbyMonth[m] <- cor(monthobs$discharge,monthmod$discharge,method="spearman")
   }
   
-  Output <- c(nsev,nselogv,rmsev,pbiasv,pearsonv,spearmanv,
+  Output <- c(nsev,nselogv,rmsev,rmsnev,rsrv,pbiasv,pearsonv,spearmanv,
               nsev_90,nsev_75_90,nsev_50_75,nsev_25_50,nsev_10_25,nsev_10,
               rmsev_90,rmsev_75_90,rmsev_50_75,rmsev_25_50,rmsev_10_25,rmsev_10,
+              rmsnev_90,rmsnev_75_90,rmsnev_50_75,rmsnev_25_50,rmsnev_10_25,rmsnev_10,
+              rsrv_90,rsrv_75_90,rsrv_50_75,rsrv_25_50,rsrv_10_25,rsrv_10,
               pbiasv_90,pbiasv_75_90,pbiasv_50_75,pbiasv_25_50,pbiasv_10_25,pbiasv_10,           
               pearsonv_90,pearsonv_75_90,pearsonv_50_75,pearsonv_25_50,pearsonv_10_25,pearsonv_10,
               spearmanv_90,spearmanv_75_90,spearmanv_50_75,spearmanv_25_50,spearmanv_10_25,spearmanv_10,
-              NSEbyMonth,NSELOGbyMonth,RMSEbyMonth,BiasbyMonth,PearsonbyMonth,SpearmanbyMonth)
+              NSEbyMonth,NSELOGbyMonth,RMSEbyMonth,RMSNEbyMonth,RSRbyMonth,BiasbyMonth,PearsonbyMonth,SpearmanbyMonth)
   return(Output)
 }
