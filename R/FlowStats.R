@@ -175,17 +175,18 @@ FlowStats <- function(data,drain_area) {
   l7Q2v<-l7Q2(data)
   return_10v<-return_10(data)
   
-  obs_percentiles <- quantile(data$discharge,probs=c(0.10, 0.25, 0.50, 0.75, 0.90),na.rm=TRUE)
+  obs_percentiles <- quantile(data$discharge,probs=c(0.10, 0.25, 0.50, 0.75, 0.90, 0.15),na.rm=TRUE)
   flow_10 <- obs_percentiles[1]
   flow_25 <- obs_percentiles[2]
   flow_50 <- obs_percentiles[3]
   flow_75 <- obs_percentiles[4]
   flow_90 <- obs_percentiles[5]
+  flow_15 <- obs_percentiles[6]
   
   
   Output<-c(med_flow,cv_flow,cv_daily,ma26v,ma41v,ml18v,ml20v,
             mh10v,fl2v,fh6v,fh7v,dl6v,dh13v,dh16v,ta1v,tl1v,th1v,ra5v,ra7v,ra8v,
-            l7Q10v,l7Q2v,return_10v,flow_10,flow_25,flow_50,flow_75,flow_90)
+            l7Q10v,l7Q2v,return_10v,flow_10,flow_25,flow_50,flow_75,flow_90,flow_15)
   return(Output)
   
 }

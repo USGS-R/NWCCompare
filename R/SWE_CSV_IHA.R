@@ -11,7 +11,22 @@
 SWE_CSV_IHA <- function(input) {
   cat(paste("Retrieving data from: \n", input, "\n", 
             sep = " "))
-  content<-paste(readLines(input,warn=FALSE))
+  mod_open <- file(input,open="r")
+  content<-paste(readLines(mod_open,warn=FALSE))
+  close(mod_open,type="r")
+  if (length(content)>0) {
+    test <- capture.output(tryCatch(xmlTreeParse(content, getDTD=F, useInternalNodes=TRUE), "XMLParserErrorList" = function(e) {cat("incomplete",e$message)}))
+  } else {test<-0}
+  while (length(grep("<?xml",test))==0) {
+    mod_open <- file(input,open="r")
+    content <- paste(readLines(mod_open,warn=FALSE))
+    close(mod_open,type="r")
+    if (length(content)>0) {
+      test <- capture.output(tryCatch(xmlTreeParse(content, getDTD=F, useInternalNodes=TRUE), "XMLParserErrorList" = function(e) {cat("incomplete",e$message)}))
+    } else {
+      test<-0
+    }
+  }
   if (length(sapply(content,nchar))>1) { 
     flow <- read.delim(header = F, comment.char = "", 
                        as.is = T, sep = ",", text = xpathApply(xmlParse(input), 
