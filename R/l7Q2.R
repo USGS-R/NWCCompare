@@ -22,7 +22,7 @@ l7Q2 <- function(qfiletempf) {
   if (rank_50 > 0) { 
     l7Q2<-sort_7day[rank_50] 
   } else { 
-    l7Q2<-FALSE 
+    l7Q2<-NaN 
   }
   return(l7Q2)
 }
