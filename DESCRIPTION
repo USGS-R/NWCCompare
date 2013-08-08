@@ -38,3 +38,4 @@ Collate:
     'deseason.R'
     'rsr.R'
     'rmsne.R'
+    'FlowStats_all.R'

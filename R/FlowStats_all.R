@@ -14,8 +14,8 @@
 #' drain_area<-getDrainageArea(drain_url)
 #' load_data<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
 #' qfiletempf<-read.csv(load_data,stringsAsFactors=FALSE)
-#' FlowStats(qfiletempf,drain_area)
-FlowStats <- function(data,drain_area) {
+#' FlowStats_all(qfiletempf,drain_area)
+FlowStats_all <- function(data,drain_area) {
   sdbyyr <- aggregate(data$discharge, list(data$year_val), 
                       sd)
   colnames(sdbyyr) <- c("Year", "sdq")

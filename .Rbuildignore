@@ -1,6 +1,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-FlowStats_all.R
 .gitignore.txt
 NWCCompare_1.0.tar.gz
 NWCCompare_2.0.tar.gz
