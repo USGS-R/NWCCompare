@@ -1,5 +1,5 @@
 export(FlowStats)
-export(FlowStats_all)
+export(FlowStatsAll)
 export(MonthlyAnnualGoF)
 export(RegionalGoF)
 export(SWE_CSV_IHA)
