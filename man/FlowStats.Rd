@@ -2,12 +2,15 @@
 \alias{FlowStats}
 \title{Function to run HIT/HAT statistics for a given data set}
 \usage{
-  FlowStats(data, drain_area)
+  FlowStats(data, drain_area,
+    stats = "magStat,flowStat,timStat,rateStat,otherStat")
 }
 \arguments{
   \item{data}{data frame of daily flow data}
 
   \item{drain_area}{drainage area for a given site}
+
+  \item{stats}{list of requested stat groups}
 }
 \value{
   Output data frame of calculated statistics
@@ -23,6 +26,6 @@ drain_url<-paste(drainage_url,sites,sep="")
 drain_area<-getDrainageArea(drain_url)
 load_data<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
 qfiletempf<-read.csv(load_data,stringsAsFactors=FALSE)
-FlowStats(qfiletempf,drain_area)
+FlowStats(qfiletempf,drain_area,"magStat,flowStat,durStat,timStat,rateStat,otherStat")
 }
 

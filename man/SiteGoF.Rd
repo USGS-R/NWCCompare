@@ -2,12 +2,14 @@
 \alias{SiteGoF}
 \title{Function to calculate GoF statistics for given observed and modeled data sets}
 \usage{
-  SiteGoF(Gaged, Modeled)
+  SiteGoF(Gaged, Modeled, stats = "GOF,GOFMonth")
 }
 \arguments{
   \item{Gaged}{data frame of daily flow data}
 
   \item{Modeled}{data frame of daily flow data}
+
+  \item{stats}{list of requested stat groups}
 }
 \value{
   Output data frame of calculated statistics
@@ -22,6 +24,6 @@ load_data<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep=""
 load_mod<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
 Gaged<-read.csv(load_data,stringsAsFactors=FALSE)
 Modeled<-read.csv(load_mod,stringsAsFactors=FALSE)
-SiteGoF(Gaged,Modeled)
+SiteGoF(Gaged,Modeled,"GOF,GOFMonth")
 }
 
