@@ -5,6 +5,7 @@
 #' 
 #' @param data data frame of daily flow data
 #' @param drain_area drainage area for a given site
+#' @param stats list of requested stat groups
 #' @return Output data frame of calculated statistics
 #' @export
 #' @examples
@@ -14,8 +15,9 @@
 #' drain_area<-getDrainageArea(drain_url)
 #' load_data<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
 #' qfiletempf<-read.csv(load_data,stringsAsFactors=FALSE)
-#' FlowStats(qfiletempf,drain_area)
-FlowStats <- function(data,drain_area) {
+#' FlowStats(qfiletempf,drain_area,"magStat,flowStat,durStat,timStat,rateStat,otherStat")
+FlowStats <- function(data,drain_area,stats="magStat,flowStat,timStat,rateStat,otherStat") {
+  if (length(grep("otherStat",stats))>0) {
   sdbyyr <- aggregate(data$discharge, list(data$year_val), 
                       sd)
   colnames(sdbyyr) <- c("Year", "sdq")
@@ -37,6 +39,20 @@ FlowStats <- function(data,drain_area) {
   med_flow<-median(dfcvbyyrf$meanq,na.rm=TRUE)
   cv_flow<-sd(dfcvbyyrf$meanq,na.rm=TRUE)/mean(dfcvbyyrf$meanq,na.rm=TRUE)
   cv_daily<-cv(data)
+  l7Q10v<-l7Q10(data)
+  l7Q2v<-l7Q2(data)
+  return_10v<-return_10(data)
+  
+  obs_percentiles <- quantile(data$discharge,probs=c(0.10, 0.25, 0.50, 0.75, 0.90, 0.15),na.rm=TRUE)
+  flow_10 <- obs_percentiles[1]
+  flow_25 <- obs_percentiles[2]
+  flow_50 <- obs_percentiles[3]
+  flow_75 <- obs_percentiles[4]
+  flow_90 <- obs_percentiles[5]
+  flow_15 <- obs_percentiles[6]
+  dfOut <- c(med_flow,cv_flow,cv_daily,l7Q10v,l7Q2v,return_10v,flow_10,flow_25,flow_50,flow_75,flow_90,flow_15)
+  }
+  if (length(grep("magStat",stats))>0) {
   #ma1v<-ma1(data)
   #ma2v<-ma2(data)
   #ma3v<-ma3(data)
@@ -131,6 +147,9 @@ FlowStats <- function(data,drain_area) {
   #mh25v<-mh25(data)
   #mh26v<-mh26(data)
   #mh27v<-mh27(data)
+  dfOut <- c(dfOut,ma26v,ma41v,ml18v,ml20v,mh10v)
+  }
+  if (length(grep("flowStat",stats))>0) {
   #fl1v<-unlist(fl1.2(data)[1])
   fl2v<-unlist(fl1.2(data)[2])
   #fh1v<-unlist(fh1.2(data)[1])
@@ -139,6 +158,9 @@ FlowStats <- function(data,drain_area) {
   #fh4v<-fh4(data) 
   fh6v<-fh6(data)
   fh7v<-fh7(data)
+  dfOut <- c(dfOut,fl2v,fh6v,fh7v)
+  }
+  if (length(grep("durStat",stats))>0) {
   #dl1v<-dl1(data)
   #dl2v<-dl2(data)
   #dl3v<-dl3(data)
@@ -159,11 +181,17 @@ FlowStats <- function(data,drain_area) {
   #dh11v<-dh11(data)
   dh13v<-dh13(data)
   dh16v<-unlist(dh15.16(data)[2])
+  dfOut <- c(dfOut,dl6v,dh13v,dh16v)
+  }
+  if (length(grep("timStat",stats))>0) {
   ta1v<-unlist(ta1.2(data)[1])
   tl1v<-unlist(tl1.2(data)[1])
   #tl2v<-unlist(tl1.2(data)[2])
   th1v<-unlist(th1.2(data)[1])
   #th2v<-unlist(th1.2(data)[2])
+  dfOut <- c(dfOut,ta1v,tl1v,th1v)
+  }
+  if (length(grep("rateStat",stats))>0) {
   #ra1v<-ra1(data)
   #ra2v<-ra2(data)
   #ra3v<-ra3(data)
@@ -171,22 +199,10 @@ FlowStats <- function(data,drain_area) {
   ra5v<-ra5(data)
   ra7v<-ra7(data)
   ra8v<-unlist(ra8.9(data)[1])
-  l7Q10v<-l7Q10(data)
-  l7Q2v<-l7Q2(data)
-  return_10v<-return_10(data)
+  dfOut <- c(dfOut,ra5v,ra7v,ra8v)
+  }
   
-  obs_percentiles <- quantile(data$discharge,probs=c(0.10, 0.25, 0.50, 0.75, 0.90, 0.15),na.rm=TRUE)
-  flow_10 <- obs_percentiles[1]
-  flow_25 <- obs_percentiles[2]
-  flow_50 <- obs_percentiles[3]
-  flow_75 <- obs_percentiles[4]
-  flow_90 <- obs_percentiles[5]
-  flow_15 <- obs_percentiles[6]
-  
-  
-  Output<-c(med_flow,cv_flow,cv_daily,ma26v,ma41v,ml18v,ml20v,
-            mh10v,fl2v,fh6v,fh7v,dl6v,dh13v,dh16v,ta1v,tl1v,th1v,ra5v,ra7v,ra8v,
-            l7Q10v,l7Q2v,return_10v,flow_10,flow_25,flow_50,flow_75,flow_90,flow_15)
+  Output<-dfOut
   return(Output)
   
 }
