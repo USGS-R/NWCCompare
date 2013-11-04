@@ -3,7 +3,7 @@
 \title{Function to run HIT/HAT statistics for a given data set}
 \usage{
   FlowStatsAll(data, drain_area,
-    stats = "magStat,flowStat,timStat,rateStat,otherStat")
+    stats = "magStat,flowStat,timStat,rateStat,otherStat,durStat")
 }
 \arguments{
   \item{data}{data frame of daily flow data}
