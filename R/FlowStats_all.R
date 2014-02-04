@@ -17,6 +17,7 @@
 #' qfiletempf<-read.csv(load_data,stringsAsFactors=FALSE)
 #' FlowStatsAll(qfiletempf,drain_area,"magStat,flowStat,durStat,timStat,rateStat,otherStat")
 FlowStatsAll <- function(data,drain_area,stats="magStat,flowStat,timStat,rateStat,otherStat,durStat") {
+  dfOut<-c()
   if (length(grep("otherStat",stats))>0) {
   sdbyyr <- aggregate(data$discharge, list(data$year_val), 
                       sd)
