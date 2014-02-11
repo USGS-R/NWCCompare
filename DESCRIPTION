@@ -43,3 +43,6 @@ Collate:
     'getWFSFieldAsNumeric.R'
     'getEmptyResultArrayNWCStats.R'
     'getSupportedStatsNames.R'
+    'calculateStatsGroupsNWIS.R'
+    'nameStatsArray.R'
+    'runStatsGroups.R'
