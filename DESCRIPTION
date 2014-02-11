@@ -39,3 +39,7 @@ Collate:
     'rsr.R'
     'rmsne.R'
     'FlowStats_all.R'
+    'calculateStatsGroupsSWE.R'
+    'getWFSFieldAsNumeric.R'
+    'getEmptyResultArrayNWCStats.R'
+    'getSupportedStatsNames.R'
