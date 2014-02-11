@@ -1,4 +1,4 @@
-calculateStatsGroupsSWE<-function(stats, sites, sos, observedProperty, wfs_url, wfsTypename, wfsProperty,wfsPropertyname) {
+calculateStatsGroupsSWE<-function(stats, sites, sos, startdate, enddate, observedProperty, wfs_url, wfsTypename, wfsProperty,wfsPropertyname) {
   sos<-paste(sos,'?request=GetObservation&service=SOS&version=1.0.0&observedProperty=',observedProperty,'&offering=REPLACE_SITE',sep="")
   supportedStats=getSupportedStatNames()
   tempArrays<-getEmptyResultArrayNWCStats(stats, length(sites), supportedStats)

@@ -1,4 +1,4 @@
-calculateStatsGroupsNWIS<-function(stats, sites) {
+calculateStatsGroupsNWIS<-function(stats, sites, startdate, enddate) {
   # Hardcode NWIS urls and parameters.
   nwisDvUrl <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
   offering <- "00003"
