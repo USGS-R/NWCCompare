@@ -1,8 +1,8 @@
-\name{calculateStatsGroupsSWE}
-\alias{calculateStatsGroupsSWE}
-\title{Calculate Statistics for SWE CSV SOS Streamflow Sites by Statistic Group}
-\description{Takes a list of stats groups an nwis site and a date range. Returns a dataframe with the requested statistics.}
-\usage{calculateStatsGroupsSWE(stats, sites, sos, startdate, enddate, observedProperty, wfsUrl, wfsTypename, wfsFilterProperty,wfsAreaPropertyname)}
+\name{calculateStatsGroups}
+\alias{calculateStatsGroups}
+\title{Calculate Statistics for daily streamflow by statistic group}
+\description{Takes a list of stats groups and list of sites and a date range. Returns a dataframe with the requested statistics.}
+\usage{calculateStatsGroups(stats, sites, startdate, enddate, SWE_CSV_IHA, urls, getWFSFieldAsNumeric, drain_args, drain_site_param=NULL)}
 \arguments{
   \item{stats}{Comma seperated string of stats like: "magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat"}
   \item{sites}{result of read.csv from a comma sperated list}
