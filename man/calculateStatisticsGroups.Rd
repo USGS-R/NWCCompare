@@ -8,7 +8,6 @@
   \item{sites}{result of read.csv from a comma sperated list}
   \item{startdate}{Like: "2008-10-01"}
   \item{enddate}{Like: "2013-09-30"}
-  X_DATA_FUN, , DRAIN_AREA_FUN, drain_args, drain_site_param=NULL
   \item{X_DATA_FUN}{The function to get flow data}
   \item{x_args}{A vector of arguments (constructed urls) for the flow data function}
   \item{DRAIN_AREA_FUN}{The function to get drainage area}
