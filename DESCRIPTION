@@ -39,3 +39,8 @@ Collate:
     'rsr.R'
     'rmsne.R'
     'FlowStats_all.R'
+    'getWFSFieldAsNumeric.R'
+    'getEmptyResultArrayNWCStats.R'
+    'getSupportedStatNames.R'
+    'calculateStatsGroups.R'
+    'nameStatsArray.R'
