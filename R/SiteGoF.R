@@ -91,8 +91,8 @@ SiteGoF <- function(Gaged,Modeled,stats="GOF,GOFMonth") {
   for (m in 1:12) {
     if (m<10) {month <- paste("0",m,sep="")
     } else {month<-paste("",m,sep="")}
-    monthobs<-subset(Gaged,month_val==month)
-    monthmod<-subset(Modeled,month_val==month)
+    monthobs<-subset(Gaged,Gaged$month_val==month)
+    monthmod<-subset(Modeled,Modeled$month_val==month)
     NSEbyMonth[m] <- nse(monthobs$discharge,monthmod$discharge)
     NSELOGbyMonth[m] <- nselog(monthobs$discharge,monthmod$discharge)
     RMSEbyMonth[m] <- rmse(monthobs$discharge,monthmod$discharge)
