@@ -1,6 +1,11 @@
 nameStatsArray<-function(stats, sites, tempArrays){
   supportedStats=getSupportedStatNames()
-  statsout <- data.frame(sites, tempArrays$min_date, tempArrays$max_date, tempArrays$magnifSevenObs, tempArrays$ObsFlowStats, tempArrays$comment, stringsAsFactors = FALSE)
+  if (stats=="GoF") {
+    statsout <- data.frame(t(sites),tempArrays$min_date, tempArrays$max_date, tempArrays$ObsStats, tempArrays$ModStats, tempArrays$DiffStats, tempArrays$GoFStats, tempArrays$comment, stringsAsFactors = FALSE)
+    namesFull <- c("site_no","min_date","max_date")
+    namesFull <- c(namesFull,supportedStats$namesCompareStatObs,supportedStats$namesCompareStatMod,supportedStats$namesCompareStatDiff,supportedStats$namesGoFStat,"comment")
+  } else {
+  statsout <- data.frame(t(sites),tempArrays$min_date, tempArrays$max_date, tempArrays$magnifSevenObs, tempArrays$ObsFlowStats, tempArrays$comment, stringsAsFactors = FALSE)
   
   namesFull <- c("site_no", "min_date", "max_date")
   
@@ -26,7 +31,7 @@ nameStatsArray<-function(stats, sites, tempArrays){
     namesFull <- c(namesFull, supportedStats$namesRateStat)
   }
   namesFull <- c(namesFull, "comment")
-  
+  }
   colnames(statsout) <- namesFull
   return(statsout)
 }
