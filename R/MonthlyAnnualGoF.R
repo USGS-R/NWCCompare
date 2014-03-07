@@ -8,8 +8,8 @@
 #' @return Output data frame of calculated statistics
 #' @export
 #' @examples
-#' Gaged<-qfiletempf.RData
-#' Modeled<-qfiletempf.RData
+#' Gaged<-qfiletempf
+#' Modeled<-qfiletempf
 #' MonthlyAnnualGoF(Gaged,Modeled)
 MonthlyAnnualGoF <- function(Gaged,Modeled) {
   NSEv <- vector(length=14)

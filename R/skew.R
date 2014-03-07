@@ -6,7 +6,7 @@
 #' @return skew skewness for the given data frame
 #' @export
 #' @examples
-#' qfiletempf<-qfiletempf.RData
+#' qfiletempf<-qfiletempf
 #' skew(qfiletempf)
 skew <- function(x) {
   x1 <- mean(x$discharge,na.rm=TRUE)

@@ -8,8 +8,8 @@
 #' @return Output data frame of calculated statistics
 #' @export
 #' @examples
-#' load_data<-qfiletempf.RData
-#' load_mod<-qfiletempf.RData
+#' load_data<-qfiletempf
+#' load_mod<-qfiletempf
 #' Gaged<-load_data
 #' Modeled<-load_mod
 #' SiteGoF(Gaged,Modeled)

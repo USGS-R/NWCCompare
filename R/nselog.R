@@ -8,8 +8,8 @@
 #' @return nselog Nash-Sutcliffe value between the natural log of the two timeseries
 #' @export
 #' @examples
-#' obs_data<-obs_data.RData
-#' mod_data<-mod_data.RData
+#' obs_data<-obs_data
+#' mod_data<-mod_data
 #' timeseries1<-obs_data$discharge
 #' timeseries2<-mod_data$discharge
 #' nselog(timeseries1,timeseries2)
