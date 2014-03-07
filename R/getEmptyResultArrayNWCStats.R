@@ -1,3 +1,15 @@
+#' Function to generate empty list of Arrays to use for stats
+#' 
+#' This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
+#' calculated diff statistics
+#' 
+#' @param stats string containing stat groups desired
+#' @param numSites number of sites in sites string
+#' @param supportedStats list of all supported names
+#' @return emptyArrays list of empty arrays for use with stats
+#' @export
+#' @examples
+#' emptyArrays<-getEmptyResultArrayNWCStats("GoF", 2, getSupportedStatNames())
 getEmptyResultArrayNWCStats <- function(stats, numSites, supportedStats){
   if (stats=="GoF") {
     Flownum <- length(supportedStats$namesCompareStatObs)

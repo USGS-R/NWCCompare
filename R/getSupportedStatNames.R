@@ -1,3 +1,10 @@
+#' Function to generate list of al possible names
+#' 
+#' This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
+#' calculated diff statistics
+#' 
+#' @return supportedNames list of all names supported by the package
+#' @export
 getSupportedStatNames <- function() {
   namesMagnif <- c("lam1Obs", "tau2Obs", "tau3Obs", "tau4Obs", "ar1Obs", "amplitudeObs", "phaseObs")
   namesMagStat <- c(paste('ma',sequence(45),sep=""), paste('ml',sequence(22),sep=""),paste('mh',sequence(27),sep=""))

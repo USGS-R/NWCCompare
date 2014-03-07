@@ -16,7 +16,7 @@ This function accepts a data frame containing daily data
 and returns the skewness
 }
 \examples{
-qfiletempf<-qfiletempf.RData
+qfiletempf<-qfiletempf
 skew(qfiletempf)
 }
 

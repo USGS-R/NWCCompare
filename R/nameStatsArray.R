@@ -1,3 +1,16 @@
+#' Function to generate names for the stats in tempArrays
+#' 
+#' @param stats string containing stat groups desired
+#' @param sites list of usgs station ids
+#' @param tempArrays list of stats arrays
+#' @return statsout data frame of calculated statistics
+#' @export
+#' @examples
+#' stats<-"magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat"
+#' sites<-"031401020800,031401020800"
+#' sites<-read.csv(header=F,colClasses=c("character"),text=sites)
+#' tempArrays<-getEmptyResultArrayNWCStats(stats, 1, getSupportedStatNames())
+#' nameStatsArray(stats, sites, tempArrays)
 nameStatsArray<-function(stats, sites, tempArrays){
   supportedStats=getSupportedStatNames()
   if (stats=="GoF") {

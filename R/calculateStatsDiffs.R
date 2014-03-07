@@ -1,3 +1,19 @@
+#' Function to calculate the differences in  statistics for given observed and modeled data sets
+#' 
+#' This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
+#' calculated diff statistics
+#' 
+#' @param sites list of usgs station ids
+#' @param startdate startdate for pulling data
+#' @param enddate enddate for pulling data
+#' @param X_DATA_FUN function for pulling data from x_args
+#' @param x_args urls for pulling observed data
+#' @param DRAIN_AREA_FUN function for pulling drainage area
+#' @param drain_args url for pulling drainage area
+#' @param M_DATA_FUN function for pulling modeled data form m_args
+#' @param m_args url for pulling modeled data
+#' @return statsout data frame of calculated statistics
+#' @export
 calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, M_DATA_FUN, m_args) {
   supportedStats=getSupportedStatNames()
   stats="GoF"

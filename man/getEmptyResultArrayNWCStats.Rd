@@ -1,21 +1,25 @@
 \name{getEmptyResultArrayNWCStats}
 \alias{getEmptyResultArrayNWCStats}
-\title{Get Empty Result Arrays}
-\description{Convenience function to get a list of arrays to put results into}
+\title{Function to generate empty list of Arrays to use for stats}
 \usage{
 getEmptyResultArrayNWCStats(stats, numSites, supportedStats)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{stats}{Comma seperated string of stats like: "magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat"}
-  \item{numSites}{Number of sites (rows)}
-  \item{supportedStats}{Response from getSupportedStatNames() function}
-  }
-\value{An empty set of named lists.}
-\references{
-%% ~put references to the literature/web site here ~
+  \item{stats}{string containing stat groups desired}
+
+  \item{numSites}{number of sites in sites string}
+
+  \item{supportedStats}{list of all supported names}
 }
-\author{David Blodgett dblodgett@usgs.gov}
+\value{
+emptyArrays list of empty arrays for use with stats
+}
+\description{
+This function accepts observed and modeled data frames of
+daily flow data and returns a data frame of calculated diff
+statistics
+}
 \examples{
 emptyArrays<-getEmptyResultArrayNWCStats("GoF", 2, getSupportedStatNames())
 }
+

@@ -21,8 +21,8 @@ series and returns the Nash-Sutcliffe value of the natural
 logarithms of the data, with zeros removed.
 }
 \examples{
-obs_data<-obs_data.RData
-mod_data<-mod_data.RData
+obs_data<-obs_data
+mod_data<-mod_data
 timeseries1<-obs_data$discharge
 timeseries2<-mod_data$discharge
 nselog(timeseries1,timeseries2)

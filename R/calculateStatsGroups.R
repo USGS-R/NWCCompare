@@ -1,3 +1,18 @@
+#' Function to calculate the statistics for a given data set
+#' 
+#' This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
+#' calculated diff statistics
+#' 
+#' @param stats string containing stat groups desired
+#' @param sites list of usgs station ids
+#' @param startdate startdate for pulling data
+#' @param enddate enddate for pulling data
+#' @param X_DATA_FUN function for pulling data from x_args
+#' @param x_args urls for pulling observed data
+#' @param DRAIN_AREA_FUN function for pulling drainage area
+#' @param drain_args url for pulling drainage area
+#' @return statsout data frame of calculated statistics
+#' @export
 calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, drain_site_param=NULL) {
   supportedStats=getSupportedStatNames()
   tempArrays<-getEmptyResultArrayNWCStats(stats, length(sites), supportedStats)
