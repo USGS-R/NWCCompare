@@ -12,9 +12,9 @@ Imports:
     chron,
     doBy,
     XML,
-    hydroGOF,
     EflowStats,
-    lmomco
+    lmomco,
+    hydroGOF
 Description: Calculates comparison stats for two timeseries.
 License: file LICENSE
 LazyLoad: yes

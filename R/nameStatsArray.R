@@ -8,7 +8,7 @@
 #' @examples
 #' stats<-"magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat"
 #' sites<-"031401020800,031401020800"
-#' sites<-read.csv(header=F,colClasses=c("character"),text=sites)
+#' sites<-read.csv(header=FALSE,colClasses=c("character"),text=sites)
 #' tempArrays<-getEmptyResultArrayNWCStats(stats, 1, getSupportedStatNames())
 #' nameStatsArray(stats, sites, tempArrays)
 nameStatsArray<-function(stats, sites, tempArrays){

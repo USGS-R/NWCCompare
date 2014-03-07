@@ -7,6 +7,13 @@
 #' @param Modeled data frame of daily flow data
 #' @return Output data frame of calculated statistics
 #' @export
+#' @import hydroGOF
+#' @import XML
+#' @import zoo
+#' @import chron
+#' @import doBy
+#' @import EflowStats
+#' @import lmomco
 #' @examples
 #' load_data<-qfiletempf
 #' load_mod<-qfiletempf

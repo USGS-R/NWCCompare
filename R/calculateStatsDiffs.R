@@ -69,8 +69,8 @@ calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRA
     obs_count <- nrow(obs_data)
     mod_count <- nrow(mod_data)
     cat(paste("dfs created for site",site,obs_count,mod_count,"\n",sep=" "))
-    tempArrays$ObsStats[i, ] <- FlowStatsICP(obs_data)
-    tempArrays$ModStats[i, ] <- FlowStatsICP(mod_data)
+    tempArrays$ObsStats[i, ] <- FlowStatsICP(obs_data,drain_area)
+    tempArrays$ModStats[i, ] <- FlowStatsICP(mod_data,drain_area)
     tempArrays$DiffStats[i, ] <- (tempArrays$ModStats[i, ]-tempArrays$ObsStats[i, ])/tempArrays$ObsStats[i, ]
     cat("diffs calculated \n")
     tempArrays$GoFStats[i, ] <- SiteGoF(obs_data, mod_data)
