@@ -8,10 +8,10 @@
 #' @return nselog Nash-Sutcliffe value between the natural log of the two timeseries
 #' @export
 #' @examples
-#' obs_data<-paste(system.file(package="NWCCompare"),"/data/obs_data.csv",sep="")
-#' mod_data<-paste(system.file(package="NWCCompare"),"/data/mod_data.csv",sep="")
-#' timeseries1<-read.csv(obs_data)$discharge
-#' timeseries2<-read.csv(mod_data)$discharge
+#' obs_data<-obs_data.RData
+#' mod_data<-mod_data.RData
+#' timeseries1<-obs_data$discharge
+#' timeseries2<-mod_data$discharge
 #' nselog(timeseries1,timeseries2)
 nselog<-function(timeseries1,timeseries2) {
   # Count of zeros in dataset

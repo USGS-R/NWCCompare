@@ -6,31 +6,16 @@ Date: 2013-08-08
 Author: Jessica Thompson
 Maintainer: Who to complain to <jlthomps@usgs.gov>
 Depends:
-    R (>= 3.0),
+    R (>= 3.0)
+Imports:
     zoo,
     chron,
     doBy,
     XML,
     hydroGOF,
-    HITHATStats,
+    EflowStats,
     lmomco
 Description: Calculates comparison stats for two timeseries.
 License: file LICENSE
-Collate:
-    'SWE_CSV_IHA.R'
-    'getScenarioSites.R'
-    'nse.R'
-    'nselog.R'
-    'rmse.R'
-    'includedData.R'
-    'skew.R'
-    'MonthlyAnnualGoF.R'
-    'RegionalGoF.R'
-    'SiteGoF.R'
-    'rsr.R'
-    'rmsne.R'
-    'getWFSFieldAsNumeric.R'
-    'getEmptyResultArrayNWCStats.R'
-    'getSupportedStatNames.R'
-    'calculateStatsGroups.R'
-    'nameStatsArray.R'
+LazyLoad: yes
+LazyData: yes

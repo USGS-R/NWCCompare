@@ -17,5 +17,5 @@ getEmptyResultArrayNWCStats(stats, numSites, supportedStats)
 }
 \author{David Blodgett dblodgett@usgs.gov}
 \examples{
-emptyArrays<-getEmptyResultArrayNWCStats("magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat", 2, getSupportedStatNames())
+emptyArrays<-getEmptyResultArrayNWCStats("GoF", 2, getSupportedStatNames())
 }

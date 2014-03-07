@@ -8,10 +8,8 @@
 #' @return Output data frame of calculated statistics
 #' @export
 #' @examples
-#' load_data<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
-#' load_mod<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
-#' Gaged<-read.csv(load_data,stringsAsFactors=FALSE)
-#' Modeled<-read.csv(load_mod,stringsAsFactors=FALSE)
+#' Gaged<-qfiletempf.RData
+#' Modeled<-qfiletempf.RData
 #' MonthlyAnnualGoF(Gaged,Modeled)
 MonthlyAnnualGoF <- function(Gaged,Modeled) {
   NSEv <- vector(length=14)

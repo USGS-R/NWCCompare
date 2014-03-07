@@ -5,15 +5,14 @@
 #' 
 #' @param Gaged data frame of daily flow data
 #' @param Modeled data frame of daily flow data
-#' @param stats list of requested stat groups
 #' @return Output data frame of calculated statistics
 #' @export
 #' @examples
-#' load_data<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
-#' load_mod<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
-#' Gaged<-read.csv(load_data,stringsAsFactors=FALSE)
-#' Modeled<-read.csv(load_mod,stringsAsFactors=FALSE)
-#' SiteGoF(Gaged,Modeled,"GOF,GOFMonth")
+#' load_data<-qfiletempf.RData
+#' load_mod<-qfiletempf.RData
+#' Gaged<-load_data
+#' Modeled<-load_mod
+#' SiteGoF(Gaged,Modeled)
 SiteGoF <- function(Gaged,Modeled) {
   nsev<-nse(Gaged$discharge,Modeled$discharge)
   nselogv<-nselog(Gaged$discharge,Modeled$discharge)
