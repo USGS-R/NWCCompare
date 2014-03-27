@@ -21,6 +21,9 @@ calculateStatsGroups(stats, sites, startdate, enddate, X_DATA_FUN, x_args,
   \item{DRAIN_AREA_FUN}{function for pulling drainage area}
 
   \item{drain_args}{url for pulling drainage area}
+
+  \item{drain_site_param}{string for use w/ multiple drain
+  urls}
 }
 \value{
 statsout data frame of calculated statistics
