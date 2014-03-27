@@ -1,19 +1,27 @@
 \name{nameStatsArray}
 \alias{nameStatsArray}
-\title{Apply names to stats array}
-\description{convenience function.}
-\usage{nameStatsArray(stats, sites, tempArrays)}
-\arguments{
-  \item{stats}{Comma seperated string of stats like: "magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat"}
-  \item{sites}{result of read.csv from a comma sperated list.}
-  \item{tempArrays}{arrays as returned by getEmptyResultArrayNWCStats}
+\title{Function to generate names for the stats in tempArrays}
+\usage{
+nameStatsArray(stats, sites, tempArrays)
 }
-\value{The temp arrays turned into a single response array.}
-\author{David Blodgett dblodgett@usgs.gov}
+\arguments{
+  \item{stats}{string containing stat groups desired}
+
+  \item{sites}{list of usgs station ids}
+
+  \item{tempArrays}{list of stats arrays}
+}
+\value{
+statsout data frame of calculated statistics
+}
+\description{
+Function to generate names for the stats in tempArrays
+}
 \examples{
 stats<-"magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat"
 sites<-"031401020800,031401020800"
-sites<-read.csv(header=F,colClasses=c("character"),text=sites)
+sites<-read.csv(header=FALSE,colClasses=c("character"),text=sites)
 tempArrays<-getEmptyResultArrayNWCStats(stats, 1, getSupportedStatNames())
 nameStatsArray(stats, sites, tempArrays)
 }
+

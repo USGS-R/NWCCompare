@@ -5,17 +5,22 @@
 #' 
 #' @param Gaged data frame of daily flow data
 #' @param Modeled data frame of daily flow data
-#' @param stats list of requested stat groups
 #' @return Output data frame of calculated statistics
 #' @export
+#' @import hydroGOF
+#' @import XML
+#' @import zoo
+#' @import chron
+#' @import doBy
+#' @import EflowStats
+#' @import lmomco
 #' @examples
-#' load_data<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
-#' load_mod<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
-#' Gaged<-read.csv(load_data,stringsAsFactors=FALSE)
-#' Modeled<-read.csv(load_mod,stringsAsFactors=FALSE)
-#' SiteGoF(Gaged,Modeled,"GOF,GOFMonth")
-SiteGoF <- function(Gaged,Modeled,stats="GOF,GOFMonth") {
-  if (grep("GOF",stats)>0) {
+#' load_data<-qfiletempf
+#' load_mod<-qfiletempf
+#' Gaged<-load_data
+#' Modeled<-load_mod
+#' SiteGoF(Gaged,Modeled)
+SiteGoF <- function(Gaged,Modeled) {
   nsev<-nse(Gaged$discharge,Modeled$discharge)
   nselogv<-nselog(Gaged$discharge,Modeled$discharge)
   rmsev<-rmse(Gaged$discharge,Modeled$discharge)
@@ -78,7 +83,7 @@ SiteGoF <- function(Gaged,Modeled,stats="GOF,GOFMonth") {
   spearmanv_25_50 <- cor(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices],method="spearman")
   spearmanv_10_25 <- cor(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices],method="spearman")
   spearmanv_10 <- cor(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices],method="spearman")
-  }
+  
   NSEbyMonth <-vector(length=12)
   NSELOGbyMonth <-vector(length=12)
   RMSEbyMonth <-vector(length=12)
@@ -87,12 +92,12 @@ SiteGoF <- function(Gaged,Modeled,stats="GOF,GOFMonth") {
   BiasbyMonth <-vector(length=12)
   PearsonbyMonth <-vector(length=12)
   SpearmanbyMonth <-vector(length=12)
-  if (grep("GOFMonth",stats)>0) {
+  
   for (m in 1:12) {
     if (m<10) {month <- paste("0",m,sep="")
     } else {month<-paste("",m,sep="")}
-    monthobs<-subset(Gaged,month_val==month)
-    monthmod<-subset(Modeled,month_val==month)
+    monthobs<-subset(Gaged,Gaged$month_val==month)
+    monthmod<-subset(Modeled,Modeled$month_val==month)
     NSEbyMonth[m] <- nse(monthobs$discharge,monthmod$discharge)
     NSELOGbyMonth[m] <- nselog(monthobs$discharge,monthmod$discharge)
     RMSEbyMonth[m] <- rmse(monthobs$discharge,monthmod$discharge)
@@ -102,7 +107,7 @@ SiteGoF <- function(Gaged,Modeled,stats="GOF,GOFMonth") {
     PearsonbyMonth[m] <- cor(monthobs$discharge,monthmod$discharge,method="pearson")
     SpearmanbyMonth[m] <- cor(monthobs$discharge,monthmod$discharge,method="spearman")
   }
-  }
+  
   Output <- c(nsev,nselogv,rmsev,rmsnev,rsrv,pbiasv,pearsonv,spearmanv,
               nsev_90,nsev_75_90,nsev_50_75,nsev_25_50,nsev_10_25,nsev_10,
               rmsev_90,rmsev_75_90,rmsev_50_75,rmsev_25_50,rmsev_10_25,rmsev_10,
