@@ -7,10 +7,10 @@
 #' @return rmsne normalized root mean square error value between the two timeseries
 #' @export
 #' @examples
-#' obs_data<-paste(system.file(package="NWCCompare"),"/data/obs_data.csv",sep="")
-#' mod_data<-paste(system.file(package="NWCCompare"),"/data/mod_data.csv",sep="")
-#' timeseries1<-read.csv(obs_data)$discharge
-#' timeseries2<-read.csv(mod_data)$discharge
+#' obs_data<-obs_data
+#' mod_data<-mod_data
+#' timeseries1<-obs_data$discharge
+#' timeseries2<-mod_data$discharge
 #' rmsne(timeseries1,timeseries2)
 rmsne<-function(timeseries1,timeseries2) {
   sqerror<-((timeseries1-timeseries2)/timeseries1)^2

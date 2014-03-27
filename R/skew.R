@@ -6,8 +6,7 @@
 #' @return skew skewness for the given data frame
 #' @export
 #' @examples
-#' data<-paste(system.file(package="NWCCompare"),"/data/qfiletempf.csv",sep="")
-#' qfiletempf<-read.csv(data,stringsAsFactors=FALSE)
+#' qfiletempf<-qfiletempf
 #' skew(qfiletempf)
 skew <- function(x) {
   x1 <- mean(x$discharge,na.rm=TRUE)
