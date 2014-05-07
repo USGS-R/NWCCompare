@@ -31,6 +31,13 @@ calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_a
     }
     if (nrow(x_data) > 2) {
       flow_data <- get_obsdata(x_data)
+      countbyyr<-aggregate(flow_data$discharge, list(flow_data$wy_val), length)
+      colnames(countbyyr)<-c('wy','num_samples')
+      sub_countbyyr<-subset(countbyyr,num_samples >= 365)
+      if (nrow(sub_countbyyr)==0) {
+        tempArrays$comment[i]<-"No complete water years for site"
+      } else {
+        flow_data<-merge(flow_data,sub_countbyyr,by.x="wy_val",by.y="wy")
       tempArrays$min_date[i] <- as.character(min(flow_data$date))
       tempArrays$max_date[i] <- as.character(max(flow_data$date))
       flow_data <- flow_data[, c("wy_val", "date", "discharge", "month_val", "year_val", "day_val", "jul_val")]
@@ -41,7 +48,7 @@ calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_a
         tempArrays$magnifSevenObs[i, ] <- magnifSeven(flow_data)
       }
       tempArrays$comment <- ""
-    } else {
+    }} else {
       tempArrays$comment[i] <- "No observed data for this site"
     }
     #tempArrays<-runStatsGroups(x_data,tempArrays,i,drain_area)
