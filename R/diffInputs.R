@@ -2,7 +2,7 @@
 #' 
 #' @param stats string of requested stats
 #' @param model_url url for access to modeled discharge data
-#' @return diffInputs data frame of calculated statistics
+#' @return diffInputsv data frame of calculated statistics
 #' @export
 diffInputs<-function(stats, model_url)  {
   
@@ -25,6 +25,6 @@ diffInputs<-function(stats, model_url)  {
   x_urls<-paste(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property, sep = "")
   d_urls<-paste(drainage_url, sites, sep = "")
   m_urls<-paste(model_url,'=',sites,'&observedProperty=',modprop,sep='',collapse=NULL)
-  diffInputs <- list(startdate,enddate,x_urls,d_urls,m_urls,sites)
-  return(diffInputs)
+  diffInputsv <- list(startdate,enddate,x_urls,d_urls,m_urls,sites)
+  return(diffInputsv)
 }

@@ -11,7 +11,7 @@ diffInputs(stats, model_url)
   data}
 }
 \value{
-diffInputs data frame of calculated statistics
+diffInputsv data frame of calculated statistics
 }
 \description{
 Function to return the inputs for the calculate stats diff

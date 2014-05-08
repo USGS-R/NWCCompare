@@ -1,6 +1,6 @@
 
 install.packages(c("zoo","chron","doBy","XML","hydroGOF","lmomco","RCurl"))
-install.packages(c("EflowStats","NWCCompare"),repos="http://usgs-r.github.com")
+install.packages(c("EflowStats","NWCCompare"),repos="http://usgs-r.github.com",type="source")
 
 library(EflowStats)
 library(NWCCompare)
@@ -8,12 +8,12 @@ library(NWCCompare)
 # Run stats and differences on USGS observed and modeled daily discharge data
 stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat"
 model_url="http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE2-2.03.nc?request=GetObservation&service=SOS&version=1.0.0&offering"
-diffInputs <- diffInputs(stats, model_url)
-startdate <- diffInputs[[1]]
-enddate <- diffInputs[[2]]
-x_urls <- diffInputs[[3]]
-d_urls <- diffInputs[[4]]
-m_urls <- diffInputs[[5]]
+diffInputsv <- diffInputs(stats, model_url)
+startdate <- diffInputsv[[1]]
+enddate <- diffInputsv[[2]]
+x_urls <- diffInputsv[[3]]
+d_urls <- diffInputsv[[4]]
+m_urls <- diffInputsv[[5]]
 statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls, SWE_CSV_IHA, m_urls)
 
 # Run stats on modeled huc12s
