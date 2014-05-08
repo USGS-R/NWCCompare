@@ -38,6 +38,7 @@ calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_a
         tempArrays$comment[i]<-"No complete water years for site"
       } else {
         flow_data<-merge(flow_data,sub_countbyyr,by.x="wy_val",by.y="wy")
+        flow_data<-flow_data[order(flow_data$jul_val),]
       tempArrays$min_date[i] <- as.character(min(flow_data$date))
       tempArrays$max_date[i] <- as.character(max(flow_data$date))
       flow_data <- flow_data[, c("wy_val", "date", "discharge", "month_val", "year_val", "day_val", "jul_val")]
