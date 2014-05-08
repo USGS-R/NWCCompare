@@ -13,6 +13,7 @@ enddate <- diffInputsv[[2]]
 x_urls <- diffInputsv[[3]]
 d_urls <- diffInputsv[[4]]
 m_urls <- diffInputsv[[5]]
+sites <- diffInputsv[[6]]
 statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls, SWE_CSV_IHA, m_urls)
 
 # Run stats on modeled huc12s
