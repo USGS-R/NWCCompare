@@ -7,8 +7,8 @@
 #' @return rsr root mean square error/standard deviation for the two timeseries
 #' @export
 #' @examples
-#' obs_data<-obs_data
-#' mod_data<-mod_data
+#' obs_data<-dailyData
+#' mod_data<-dailyData
 #' timeseries1<-obs_data$discharge
 #' timeseries2<-mod_data$discharge
 #' rsr(timeseries1,timeseries2)

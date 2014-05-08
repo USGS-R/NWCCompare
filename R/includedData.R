@@ -12,4 +12,12 @@
 #' @docType data
 #' @author Jessica Thompson \email{jlthomps@@usgs.gov}
 #' @keywords data
+#' @name dailyData
+#' @docType data
+#' @author Jessica Thompson \email{jlthomps@@usgs.gov}
+#' @keywords data
+#' @name sampleData
+#' @docType data
+#' @author Jessica Thompson \email{jlthomps@@usgs.gov}
+#' @keywords data
 NULL

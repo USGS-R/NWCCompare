@@ -15,8 +15,8 @@
 #' @import EflowStats
 #' @import lmomco
 #' @examples
-#' load_data<-qfiletempf
-#' load_mod<-qfiletempf
+#' load_data<-sampleData
+#' load_mod<-sampleData
 #' Gaged<-load_data
 #' Modeled<-load_mod
 #' SiteGoF(Gaged,Modeled)
