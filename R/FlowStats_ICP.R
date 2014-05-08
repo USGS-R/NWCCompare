@@ -10,12 +10,13 @@
 #' @examples
 #' drain_area<-54
 #' qfiletempf<-sampleData
+#' qfiletempf$date<-as.Date(qfiletempf$date,"%m/%d/%y")
 #' FlowStatsICP(qfiletempf,drain_area)
 FlowStatsICP <- function(data,drain_area) {
   dfOut <- vector()
   otherstat <- OtherStatsICP(data)
   dfOut <- c(dfOut,otherstat)
-  magnif7 <- magnifSeven(obs_data)
+  magnif7 <- magnifSeven(data)
   dfOut <- c(dfOut,magnif7)
 
     ma26v<-ma24.35(data)[3,1]

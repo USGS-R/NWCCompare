@@ -2,11 +2,9 @@
 \alias{diffInputs}
 \title{Function to return the inputs for the calculate stats diff function}
 \usage{
-diffInputs(stats, model_url)
+diffInputs(model_url)
 }
 \arguments{
-  \item{stats}{string of requested stats}
-
   \item{model_url}{url for access to modeled discharge
   data}
 }
