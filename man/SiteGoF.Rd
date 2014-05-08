@@ -18,8 +18,8 @@ daily flow data and returns a data frame of calculated GoF
 statistics
 }
 \examples{
-load_data<-qfiletempf
-load_mod<-qfiletempf
+load_data<-sampleData
+load_mod<-sampleData
 Gaged<-load_data
 Modeled<-load_mod
 SiteGoF(Gaged,Modeled)

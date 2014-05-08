@@ -18,8 +18,7 @@ returns a data frame of calculated HIT/HAT statistics
 }
 \examples{
 drain_area<-54
-qfiletempf<-qfiletempf
-qfiletempf$date <- as.Date(qfiletempf$date,"\%m/\%d/\%y")
+qfiletempf<-sampleData
 FlowStatsICP(qfiletempf,drain_area)
 }
 

@@ -18,8 +18,8 @@ daily flow data and returns a data frame of calculated
 monthly annual GoF statistics
 }
 \examples{
-Gaged<-qfiletempf
-Modeled<-qfiletempf
+Gaged<-sampleData
+Modeled<-sampleData
 MonthlyAnnualGoF(Gaged,Modeled)
 }
 

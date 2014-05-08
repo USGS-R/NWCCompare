@@ -10,7 +10,6 @@
 #' @examples
 #' drain_area<-54
 #' qfiletempf<-sampleData
-#' qfiletempf$date <- as.Date(qfiletempf$date,"%m/%d/%y")
 #' FlowStatsICP(qfiletempf,drain_area)
 FlowStatsICP <- function(data,drain_area) {
   dfOut <- vector()
