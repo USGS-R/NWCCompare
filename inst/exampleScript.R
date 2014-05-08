@@ -6,9 +6,8 @@ library(EflowStats)
 library(NWCCompare)
 
 # Run stats and differences on USGS observed and modeled daily discharge data
-stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat"
 model_url="http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE2-2.03.nc?request=GetObservation&service=SOS&version=1.0.0&offering"
-diffInputsv <- diffInputs(stats, model_url)
+diffInputsv <- diffInputs(model_url)
 startdate <- diffInputsv[[1]]
 enddate <- diffInputsv[[2]]
 x_urls <- diffInputsv[[3]]
@@ -35,7 +34,7 @@ statsout <- calculateStatsGroups(stats, sites, startdate, enddate, SWE_CSV_IHA, 
 sites <- '02177000,02178400'
 startdate <- "2008-10-01"
 enddate <- "2013-09-29"
-stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat"
+stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
 nwisDvUrl <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
 offering <- "00003"
 property <- "00060"

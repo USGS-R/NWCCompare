@@ -15,6 +15,8 @@ FlowStatsICP <- function(data,drain_area) {
   dfOut <- vector()
   otherstat <- OtherStatsICP(data)
   dfOut <- c(dfOut,otherstat)
+  magnif7 <- magnifSeven(obs_data)
+  dfOut <- c(dfOut,magnif7)
 
     ma26v<-ma24.35(data)[3,1]
     ma41v<-unlist(ma41.45(data,drain_area)[1])

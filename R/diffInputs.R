@@ -1,10 +1,9 @@
 #' Function to return the inputs for the calculate stats diff function
 #' 
-#' @param stats string of requested stats
 #' @param model_url url for access to modeled discharge data
 #' @return diffInputsv data frame of calculated statistics
 #' @export
-diffInputs<-function(stats, model_url)  {
+diffInputs<-function(model_url)  {
   
   nwisDvUrl <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
   offering <- "00003"
