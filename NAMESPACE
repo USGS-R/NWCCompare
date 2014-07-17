@@ -3,7 +3,6 @@
 export(FlowStatsICP)
 export(MonthlyAnnualGoF)
 export(OtherStatsICP)
-export(RegionalGoF)
 export(SWE_CSV_IHA)
 export(calculateStatsDiffs)
 export(calculateStatsGroups)
