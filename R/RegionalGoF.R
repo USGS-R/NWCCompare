@@ -6,6 +6,13 @@
 #' @param GagedFlowStats data frame of flow stats for observed data
 #' @param ModeledFlowStats data frame of flow stats for modeled data
 #' @return Output data frame of calculated statistics
+#' @import hydroGOF
+#' @import XML
+#' @import zoo
+#' @import chron
+#' @import doBy
+#' @import lmomco
+#' @import EflowStats
 #' @export
 RegionalGoF <- function(GagedFlowStats,ModeledFlowStats) {
   Output<-matrix(nrow=6,ncol=ncol(GagedFlowStats))
