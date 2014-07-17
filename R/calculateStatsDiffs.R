@@ -13,6 +13,13 @@
 #' @param M_DATA_FUN function for pulling modeled data form m_args
 #' @param m_args url for pulling modeled data
 #' @return statsout data frame of calculated statistics
+#' @import hydroGOF
+#' @import XML
+#' @import zoo
+#' @import chron
+#' @import doBy
+#' @import lmomco
+#' @import EflowStats
 #' @export
 calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, M_DATA_FUN, m_args) {
   supportedStats=getSupportedStatNames()
