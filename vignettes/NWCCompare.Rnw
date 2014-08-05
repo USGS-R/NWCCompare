@@ -127,7 +127,7 @@ sites <- sites[1:5]
 @
 Once this information has been obtained, the user runs the calculateStatsDiffs function and maps the result to a named data frame.
 
-<<createstatsoutput, echo=FALSE,eval=TRUE,results='hide'>>=
+<<createstatsoutput, echo=FALSE,eval=TRUE,results="hide">>=
 ###############################################
 # calculate statsout
 statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls, SWE_CSV_IHA, m_urls)
