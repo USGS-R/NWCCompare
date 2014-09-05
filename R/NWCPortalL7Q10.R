@@ -4,12 +4,12 @@
 #' calculated for the National Water Census by a non-standard method.
 #' 
 #' @param qfiletempf data frame containing value data for one of the chosen timeseries
-#' @return l7Q10 l7Q10 value for the given data frame
+#' @return NWCportalL7Q10 l7Q10 value for the given data frame
 #' @export
 #' @examples
 #' qfiletempf<-sampleData
-#' l7Q10(qfiletempf)
-l7Q10 <- function(qfiletempf) {
+#' NWCportalL7Q10(qfiletempf)
+NWCportalL7Q10 <- function(qfiletempf) {
   day7mean <- rollmean(qfiletempf$discharge, 7, align = "right", 
                        na.pad = TRUE)
   day7rollingavg <- data.frame(qfiletempf, day7mean)

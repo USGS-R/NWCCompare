@@ -31,9 +31,9 @@ OtherStatsICP<-function(data)  {
   mean_flow<-round(mean(dfcvbyyrf$meanq,na.rm=TRUE),digits=2)
   med_flow<-round(median(dfcvbyyrf$meanq,na.rm=TRUE),digits=2)
   cv_flow<-round(cv(dfcvbyyrf$meanq),digits=2)
-  l7Q10v<-l7Q10(data)
-  l7Q2v<-l7Q2(data)
-  return_10v<-return_10(data)
+  l7Q10v<-NWCportalL7Q10(data)
+  l7Q2v<-NWCportalL7Q2(data)
+  return_10v<-NWCportalReturn10(data)
   
   obs_percentiles <- flow_perc(data)
   flow_10 <- obs_percentiles[1]

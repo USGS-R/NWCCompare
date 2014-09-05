@@ -4,12 +4,12 @@
 #' calculated for the National Water Census by a non-standard method.
 #' 
 #' @param qfiletempf data frame containing value data for the chosen timeseries
-#' @return return_10 10-year return value for the given data frame
+#' @return NWCportalReturn10 10-year return value for the given data frame
 #' @export
 #' @examples
 #' qfiletempf<-sampleData
-#' return_10(qfiletempf)
-return_10 <- function(qfiletempf) {
+#' NWCportalReturn10(qfiletempf)
+NWCportalReturn10 <- function(qfiletempf) {
   annual_max <- aggregate(qfiletempf$discharge, list(qfiletempf$wy_val), max, na.rm=TRUE)
   sort_annual_max <- sort(annual_max$x)
   rank_10 <- floor(findrank(length(sort_annual_max),0.10))
