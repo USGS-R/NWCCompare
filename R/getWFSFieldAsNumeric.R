@@ -8,10 +8,10 @@
 #' @return drain_area numeric of site drainage area
 #' @export
 #' @examples
-#' wfs_url<-'http://cida.usgs.gov/nwc/geoserver/NHDPlusHUCs/ows'
-#' wfsTypename='NHDPlusHUCs:huc12_SE_Basins_v2'
-#' wfsProperty='NHDPlusHUCs:HUC12'
-#' wfsPropertyname='NHDPlusHUCs:mi2'
+#' wfs_url<-'http://cida.usgs.gov/nwc/geoserver/NWC/ows'
+#' wfsTypename='NWC:huc12_SE_Basins_v2'
+#' wfsProperty='NWC:HUC12'
+#' wfsPropertyname='NWC:mi2'
 #' wfsLiteral='031401020800'
 #' area<-getWFSFieldAsNumeric(wfs_url,wfsTypename,wfsProperty,wfsLiteral,wfsPropertyname)
 getWFSFieldAsNumeric<-function(wfs_url,wfsTypename,wfsProperty,wfsLiteral,wfsPropertyname){
