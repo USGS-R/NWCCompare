@@ -28,6 +28,7 @@
 \newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
 \newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
 \newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
 
 \usepackage{framed}
 \makeatletter
@@ -137,17 +138,13 @@ First, it is a good practice to clear any existing objects from your working env
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlkwd{library}\hlstd{(EflowStats)}
-\hlkwd{library}\hlstd{(NWCCompare)}
 \end{alltt}
 
 
-{\ttfamily\noindent\color{warningcolor}{Warning: replacing previous import by 'hydroGOF::rmse' when loading 'NWCCompare'\\Warning: replacing previous import by 'hydroGOF::rsr' when loading 'NWCCompare'}}
-
-{\ttfamily\noindent\itshape\color{messagecolor}{\\Attaching package: 'NWCCompare'
-
-The following objects are masked from 'package:EflowStats':
-
-\ \ \ \ obs\_data, qfiletempf, sampleData}}\end{kframe}
+{\ttfamily\noindent\itshape\color{messagecolor}{This information is preliminary or provisional and is subject to revision. It is being provided to meet the need for timely best science. The information has not received final approval by the U.S. Geological Survey (USGS) and is provided on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from the authorized or unauthorized use of the information. Although this software program has been used by the USGS, no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.}}\begin{alltt}
+\hlkwd{library}\hlstd{(NWCCompare)}
+\end{alltt}
+\end{kframe}
 \end{knitrout}
 
 To compare modeled and observed data for a USGS model and USGS streamgage(s), enter the model url. then run the diffInputs function to generate the startdate, enddate, site list and necessary urls. 
@@ -158,22 +155,15 @@ To compare modeled and observed data for a USGS model and USGS streamgage(s), en
 \begin{alltt}
 \hlcom{############################################}
 \hlcom{# Run stats and differences on USGS observed and modeled daily discharge data}
-\hlstd{model_url}\hlkwb{=}\hlstr{"http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE2-2.03.nc?request=GetObservation&service=SOS&version=1.0.0&offering"}
-\hlstd{diffInputsv} \hlkwb{<-} \hlkwd{diffInputs}\hlstd{(model_url)}
-\end{alltt}
-\begin{verbatim}
-Retrieving list of sites in scenario from: 
- http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE2-2.03.nc?request=GetCapabilities&service=SOS&version=1.0.0 
-Retrieving start and end dates in scenario from: 
- http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE2-2.03.nc?request=GetCapabilities&service=SOS&version=1.0.0 
-\end{verbatim}
-\begin{alltt}
-\hlstd{startdate} \hlkwb{<-} \hlstd{diffInputsv[[}\hlnum{1}\hlstd{]]}
-\hlstd{enddate} \hlkwb{<-} \hlstd{diffInputsv[[}\hlnum{2}\hlstd{]]}
-\hlstd{x_urls} \hlkwb{<-} \hlstd{diffInputsv[[}\hlnum{3}\hlstd{]]}
-\hlstd{d_urls} \hlkwb{<-} \hlstd{diffInputsv[[}\hlnum{4}\hlstd{]]}
-\hlstd{m_urls} \hlkwb{<-} \hlstd{diffInputsv[[}\hlnum{5}\hlstd{]]}
-\hlstd{sites} \hlkwb{<-} \hlstd{diffInputsv[[}\hlnum{6}\hlstd{]]}
+\hlstd{model_urls}\hlkwb{=}\hlstr{"https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc?request=GetObservation&service=SOS&version=1.0.0&observedProperty=MEAN_streamflow&offering=031601020108"}
+\hlstd{startdate} \hlkwb{<-} \hlstr{"1980-10-01"}
+\hlstd{enddate} \hlkwb{<-} \hlstr{"2010-09-30"}
+\hlstd{nwisDvUrl} \hlkwb{<-} \hlstr{"https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="}
+\hlstd{sites} \hlkwb{<-} \hlstr{"02435020"}
+\hlstd{sites}\hlkwb{<-}\hlkwd{read.csv}\hlstd{(}\hlkwc{header}\hlstd{=F,}\hlkwc{colClasses}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"character"}\hlstd{),}\hlkwc{text}\hlstd{=sites)}
+\hlstd{sites} \hlkwb{<-} \hlkwd{unlist}\hlstd{(sites[}\hlnum{1}\hlstd{,])}
+\hlstd{offering} \hlkwb{<-} \hlstr{"00003"}
+\hlstd{property} \hlkwb{<-} \hlstr{"00060"}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -188,7 +178,7 @@ Once this information has been obtained, the user runs the calculateStatsDiffs f
 \begin{alltt}
 \hlcom{###############################################}
 \hlcom{# calculate statsout}
-\hlstd{statsout} \hlkwb{<-} \hlkwd{calculateStatsDiffs}\hlstd{(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls, SWE_CSV_IHA, m_urls)}
+\hlstd{statsout} \hlkwb{<-} \hlkwd{calculateStatsDiffs}\hlstd{(sites, startdate, enddate, EflowStats}\hlopt{::}\hlstd{getXMLWML1.1Data, x_urls, EflowStats}\hlopt{::}\hlstd{getDrainageArea, sites, SWE_CSV_IHA, m_urls)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -198,12 +188,10 @@ The calculated data is now present as a dataframe called statsout in your R envi
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{verbatim}
-    site_no lam1Obs lam1Mod lam1Diff     nse   rmse pearson
-V1 02186000   176.5   190.3   0.0782 0.55813  142.3  0.7570
-V2 02192000  1495.3  1288.5  -0.1383 0.76862 1103.8  0.8815
-V3 02219000   206.6   167.7  -0.1880 0.81824  145.0  0.9092
-V4 02317500   954.7  1108.7   0.1614 0.01512 1932.2  0.5913
-V5 02329600   361.8   312.3  -0.1369 0.18583  744.5  0.5051
+   site_no lam1Obs lam1Mod   lam1Diff                nse
+1 02435020  334.97  285.96 -0.1463116 -0.239596337760897
+              rmse           pearson
+1 704.613332920482 0.797665920950232
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -255,8 +243,7 @@ The user can also calculate just the EflowStats hydrologic indicators, with no c
 \hlstd{drainage_url} \hlkwb{<-} \hlstr{"http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="}
 \hlstd{sites}\hlkwb{<-}\hlkwd{read.csv}\hlstd{(}\hlkwc{header}\hlstd{=F,}\hlkwc{colClasses}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"character"}\hlstd{),}\hlkwc{text}\hlstd{=sites)}
 \hlstd{x_urls}\hlkwb{<-}\hlkwd{paste}\hlstd{(nwisDvUrl, sites,} \hlstr{"&startDT="}\hlstd{, startdate,} \hlstr{"&endDT="}\hlstd{, enddate,} \hlstr{"&statCd="}\hlstd{, offering,} \hlstr{"&parameterCd="}\hlstd{, property,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{)}
-\hlstd{d_urls}\hlkwb{<-}\hlkwd{paste}\hlstd{(drainage_url, sites,} \hlkwc{sep} \hlstd{=} \hlstr{""}\hlstd{)}
-\hlstd{statsout} \hlkwb{<-} \hlkwd{calculateStatsGroups}\hlstd{(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls)}
+\hlstd{statsout} \hlkwb{<-} \hlkwd{calculateStatsGroups}\hlstd{(stats, sites, startdate, enddate, EflowStats}\hlopt{::}\hlstd{getXMLWML1.1Data, x_urls, EflowStats}\hlopt{::}\hlstd{getDrainageArea, sites)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
@@ -604,7 +591,7 @@ To see the raw code for a particular code, type the name of the function:
 \hlstd{RegionalGoF}
 \end{alltt}
 \begin{verbatim}
-function (GagedFlowStats, ModeledFlowStats) 
+function (ModeledFlowStats, GagedFlowStats) 
 {
     Output <- matrix(nrow = nrow(GagedFlowStats) * 6, ncol = ncol(GagedFlowStats) + 
         1)
@@ -641,6 +628,7 @@ function (GagedFlowStats, ModeledFlowStats)
     a <- colnames(GagedFlowStats)
     a <- c("stat", a)
     colnames(Output) <- (a)
+    Output <- Output[order(as.numeric(Output$site_no)), ]
     return(Output)
 }
 <environment: namespace:EflowStats>

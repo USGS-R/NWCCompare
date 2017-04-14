@@ -106,37 +106,37 @@ To compare modeled and observed data for a USGS model and USGS streamgage(s), en
 <<modelStatsprep, echo=TRUE,eval=TRUE>>=
 ############################################
 # Run stats and differences on USGS observed and modeled daily discharge data
-model_url="http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE2-2.03.nc?request=GetObservation&service=SOS&version=1.0.0&offering"
-diffInputsv <- diffInputs(model_url)
-startdate <- diffInputsv[[1]]
-enddate <- diffInputsv[[2]]
-x_urls <- diffInputsv[[3]]
-d_urls <- diffInputsv[[4]]
-m_urls <- diffInputsv[[5]]
-sites <- diffInputsv[[6]]
+model_urls="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc?request=GetObservation&service=SOS&version=1.0.0&observedProperty=MEAN_streamflow&offering=031601020108"
+startdate <- "1980-10-01"
+enddate <- "2010-09-30"
+nwisDvUrl <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
+sites <- "02435020"
+sites<-read.csv(header=F,colClasses=c("character"),text=sites)
+sites <- unlist(sites[1,])
+offering <- "00003"
+property <- "00060"
 @
 
 <<modelStatschunk, echo=FALSE,eval=TRUE>>=
 ############################################
-startdate <- startdate
-enddate <- enddate
-x_urls <- x_urls[1:5]
-d_urls <- d_urls[1:5]
-m_urls <- m_urls[1:5]
-sites <- sites[1:5]
+x_urls<-paste0(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property)
+drainage_url <- "https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
+d_urls<-paste0(drainage_url, sites)
+m_urls <- read.csv(header=F,colClasses=c("character"),text=model_urls)
+m_urls <- unlist(m_urls[1,])
 @
 Once this information has been obtained, the user runs the calculateStatsDiffs function and maps the result to a named data frame.
 
 <<createstatsoutput, echo=FALSE,eval=TRUE,results="hide">>=
 ###############################################
 # calculate statsout
-statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls, SWE_CSV_IHA, m_urls)
+statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
 @
 
 <<statsoutput, echo=TRUE,eval=FALSE>>=
 ###############################################
 # calculate statsout
-statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls, SWE_CSV_IHA, m_urls)
+statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
 @
 
 The calculated data is now present as a dataframe called statsout in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first few columns is given below.
@@ -184,8 +184,7 @@ property <- "00060"
 drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 sites<-read.csv(header=F,colClasses=c("character"),text=sites)
 x_urls<-paste(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property, sep = "")
-d_urls<-paste(drainage_url, sites, sep = "")
-statsout <- calculateStatsGroups(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls)
+statsout <- calculateStatsGroups(stats, sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites)  
 @
 
 \FloatBarrier

@@ -6,7 +6,8 @@
 #' @return getcap list of sites with data for the chosen model
 #' @export
 #' @examples
-#' scenario_url <- "http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE1-2.03.nc?request=GetCapabilities&service=SOS&version=1.0.0"
+#' scenario_url <- paste0("http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/",
+#' "stats-SE-DENSE1-2.03.nc?request=GetCapabilities&service=SOS&version=1.0.0")
 #' getScenarioSites(scenario_url)
 getScenarioSites <- function(scenario_url){
   cat(paste("Retrieving list of sites in scenario from: \n", scenario_url, "\n", sep=" "))

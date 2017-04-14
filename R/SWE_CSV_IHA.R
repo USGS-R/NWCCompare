@@ -7,7 +7,9 @@
 #' @importFrom XML xpathApply xmlParse xmlValue
 #' @export
 #' @examples
-#' url <- "http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE1-2.03.nc?request=GetObservation&service=SOS&version=1.0.0&offering=02178400&observedProperty=Streamflow"
+#' url <- paste0("http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/",
+#' "stats-SE-DENSE1-2.03.nc?request=GetObservation&service=SOS&",
+#' "version=1.0.0&offering=02178400&observedProperty=Streamflow"
 #' SWE_CSV_IHA(url)
 SWE_CSV_IHA <- function(input) {
   cat(paste("Retrieving data from: \n", input, "\n", 

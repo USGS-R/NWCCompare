@@ -6,7 +6,8 @@
 #' @return getdate list of start and end dates for the chosen model
 #' @export
 #' @examples
-#' scenario_url <- "http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE1-2.03.nc?request=GetCapabilities&service=SOS&version=1.0.0"
+#' scenario_url <- paste0("http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/",
+#' "stats-SE-DENSE1-2.03.nc?request=GetCapabilities&service=SOS&version=1.0.0")
 #' getScenarioDates(scenario_url)
 getScenarioDates <- function(scenario_url){
   cat(paste("Retrieving start and end dates in scenario from: \n", scenario_url, "\n", sep=" "))
