@@ -5,6 +5,7 @@
 #' 
 #' @param data data frame of daily flow data
 #' @return OtherStats data frame of calculated statistics
+#' @importFrom EflowStats flow_perc cv
 #' @export
 #' @examples
 #' timeseries1<-sampleData
