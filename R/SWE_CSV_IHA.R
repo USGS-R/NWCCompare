@@ -4,6 +4,7 @@
 #' 
 #' @param input url for SOS service for desired site data
 #' @return flow data frame containing desired time series
+#' @importFrom XML xpathApply xmlParse xmlValue
 #' @export
 #' @examples
 #' url <- "http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE1-2.03.nc?request=GetObservation&service=SOS&version=1.0.0&offering=02178400&observedProperty=Streamflow"
@@ -29,7 +30,7 @@ SWE_CSV_IHA <- function(input) {
   }
   if (length(sapply(content,nchar))>1) { 
     flow <- read.delim(header = F, comment.char = "", 
-                       as.is = T, sep = ",", text = xpathApply(xmlParse(input), 
+                       as.is = T, sep = ",", text = xpathApply(xmlParse(content), 
                                                                "//swe:values", xmlValue)[[1]])
     nms <- c("date", "discharge")
     names(flow) <- nms

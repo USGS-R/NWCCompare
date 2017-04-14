@@ -26,6 +26,6 @@ getWFSFieldAsNumeric<-function(wfs_url,wfsTypename,wfsProperty,wfsLiteral,wfsPro
   } else {
     wfs_col<-wfsPropertyname
   }
-  drain_area <- as.numeric(read.delim(wfs_url, header=TRUE, sep=",", colClasses=c("character"))[wfs_col]) # Note that this is in square miles as required by underlying package.
+  drain_area <- as.numeric(read.delim(wfs_url, header=TRUE, sep=",", colClasses=c("character"))[wfs_col]) * 0.386102 # Note that this is in square miles as required by underlying package.
   return(drain_area)
 }

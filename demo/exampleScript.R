@@ -6,27 +6,34 @@ library(EflowStats)
 library(NWCCompare)
 
 # Run stats and differences on USGS observed and modeled daily discharge data
-model_url="http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/stats-SE-DENSE2-2.03.nc?request=GetObservation&service=SOS&version=1.0.0&offering"
-diffInputsv <- diffInputs(model_url)
-startdate <- diffInputsv[[1]]
-enddate <- diffInputsv[[2]]
-x_urls <- diffInputsv[[3]]
-d_urls <- diffInputsv[[4]]
-m_urls <- diffInputsv[[5]]
-sites <- diffInputsv[[6]]
-statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls, SWE_CSV_IHA, m_urls)
+# Cooresponds to this page: https://cida.usgs.gov/nwc/#!waterbudget/achuc/031601020108
+model_urls="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc?request=GetObservation&service=SOS&version=1.0.0&observedProperty=MEAN_streamflow&offering=031601020108"
+startdate <- "1980-10-01"
+enddate <- "2010-09-30"
+nwisDvUrl <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
+sites <- "02435020"
+sites<-read.csv(header=F,colClasses=c("character"),text=sites)
+sites <- unlist(sites[1,])
+offering <- "00003"
+property <- "00060"
+x_urls<-paste0(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property)
+drainage_url <- "https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
+d_urls<-paste0(drainage_url, sites)
+m_urls <- read.csv(header=F,colClasses=c("character"),text=model_urls)
+m_urls <- unlist(m_urls[1,])
+statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
 
 # Run stats on modeled huc12s
-sites<-"031401020800"
+sites<-"031601020108"
 startdate <- "2008-10-01"
 enddate <- "2010-09-29"
 stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat"
-sos<-"http://cida-eros-wsqa.er.usgs.gov:8081/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc"
+sos<-"https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc"
 observedProperty="MEAN_streamflow"
-wfsUrl<-'http://cida-eros-wsdev.er.usgs.gov:8081/geoserver/NWC/ows'
-wfsTypename='NWC:huc12_SE_Basins_v2'
-wfsFilterProperty='NWC:HUC12'
-wfsAreaPropertyname='NWC:mi2'
+wfsUrl<-'https://cida.usgs.gov/nwc/geoserver/ows'
+wfsTypename='WBD:huc12'
+wfsFilterProperty='WBD:huc12'
+wfsAreaPropertyname='WBD:areasqkm' ## Note units are wrong now!
 sites<-read.csv(header=F,colClasses=c("character"),text=sites)
 urls<-paste(sos,'?request=GetObservation&service=SOS&version=1.0.0&observedProperty=',observedProperty,'&offering=',sites,sep="")
 statsout <- calculateStatsGroups(stats, sites, startdate, enddate, SWE_CSV_IHA, urls, getWFSFieldAsNumeric, drain_args=list(wfs_url=wfsUrl, wfsTypename=wfsTypename, wfsProperty=wfsFilterProperty, wfsPropertyname=wfsAreaPropertyname), drain_site_param='wfsLiteral')
@@ -42,5 +49,4 @@ property <- "00060"
 drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 sites<-read.csv(header=F,colClasses=c("character"),text=sites)
 x_urls<-paste(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property, sep = "")
-d_urls<-paste(drainage_url, sites, sep = "")
-statsout <- calculateStatsGroups(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, d_urls)
+statsout <- calculateStatsGroups(stats, sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites)  
