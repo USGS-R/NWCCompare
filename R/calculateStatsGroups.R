@@ -13,6 +13,7 @@
 #' @param drain_args url for pulling drainage area
 #' @param drain_site_param string for use w/ multiple drain urls
 #' @return statsout data frame of calculated statistics
+#' @importFrom EflowStats magnifSeven FlowStatsAll
 #' @export
 calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, drain_site_param=NULL) {
   supportedStats=getSupportedStatNames()

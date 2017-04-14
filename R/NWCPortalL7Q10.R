@@ -6,6 +6,7 @@
 #' @param qfiletempf data frame containing value data for one of the chosen timeseries
 #' @return NWCportalL7Q10 l7Q10 value for the given data frame
 #' @export
+#' @importFrom EflowStats findrank
 #' @examples
 #' qfiletempf<-sampleData
 #' NWCportalL7Q10(qfiletempf)
