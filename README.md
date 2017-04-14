@@ -1,10 +1,17 @@
 NWCCompare
 ==========
 
+*NOTICE: NWCCompare is undergoing a complete rewrite. The v4.1 release, which works with EflowStats v4.1.1 is the last release of the v4 generation of the package.*
 
 install this package using the following code:
 
 install.packages("NWCCompare",repos="http://usgs-r.github.com",type="source")
+
+### Contributing
+
+Additional functionality and modifications are welcome via pull request.  
+
+Please follow the tidyverse style guide: http://style.tidyverse.org/
 
 Disclaimer
 ----------
