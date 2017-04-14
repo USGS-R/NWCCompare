@@ -17,7 +17,8 @@ Imports:
     lmomco
 Suggests:
     xtable,
-    knitr
+    knitr,
+    rmarkdown
 Description: Calculates comparison stats for two timeseries.
 License: file LICENSE
 LazyLoad: yes

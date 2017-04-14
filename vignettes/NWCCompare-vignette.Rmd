@@ -1,0 +1,113 @@
+---
+title: "The NWCCompare R package"
+author: "David Blodgett"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{NWCCompare}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# The NWCCompare R package
+
+## Introduction
+
+The NWCCompare was created to work with the existing EflowStats package to simplify the process of comparing observed and modeled daily discharge time series. Hydrologic indicator statistics calculated by EflowStats, as well as frequently used comparison statistics such as Nash-Sutcliffe values, root mean squared error and skewness. It has been specifically designed to work seamlessly with the USGS National Water Census Portal, and can also be used for locally-stored observed and modeled daily discharge timeseries.     
+              
+There is a need to examine goodness of fit for surface-water models, and methods differ depending on the intended use of the model. For ecological stream health considerations, the comparison if hydrologic indicator statistics is one judge of fit. The NWCCompare package allows for easy comparison of modeled and observed daily discharge data through direct data comparison and comparison of calculated indices.  NWCCompare is both directly available as an R package and integrated into the USGS National Water Census Data Platform \url{http://cida.usgs.gov/nwc/}.  Section \ref{sec:exampleWorkflow} provides examples of how one can calculate selected stats comparisons from USGS or other data. 
+              
+For information on getting started in R and installing the package, see (\ref{sec:started}): Getting Started.
+
+## General Workflow
+
+This example vignette first loads the relevant packages, assuming they are already installed.
+
+First, it is a good practice to clear any existing objects from your working environment. In RStudio, in the upper right quadrant, there is a broom icon that says 'Clear'. Click this and select 'Yes' to remove objects. This allows you to being work with a clear workspace, negating the possibility of mis-identified variables. 
+
+
+```{r workflow, echo=TRUE, eval=TRUE}
+library(EflowStats)
+library(NWCCompare)
+```
+To compare modeled and observed data for a USGS model and USGS streamgage(s), enter the model url. then run the diffInputs function to generate the startdate, enddate, site list and necessary urls. 
+
+
+```{r modelStatsprep, echo=TRUE, eval=TRUE}
+# Run stats and differences on USGS observed and modeled daily discharge data
+model_urls="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc?request=GetObservation&service=SOS&version=1.0.0&observedProperty=MEAN_streamflow&offering=031601020108"
+startdate <- "1980-10-01"
+enddate <- "2010-09-30"
+nwisDvUrl <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
+sites <- "02435020"
+sites<-read.csv(header=F,colClasses=c("character"),text=sites)
+sites <- unlist(sites[1,])
+offering <- "00003"
+property <- "00060"
+```
+
+```{r modelStatschunk, echo=FALSE, eval=TRUE}
+x_urls<-paste0(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property)
+drainage_url <- "https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
+d_urls<-paste0(drainage_url, sites)
+m_urls <- read.csv(header=F,colClasses=c("character"),text=model_urls)
+m_urls <- unlist(m_urls[1,])
+```
+Once this information has been obtained, the user runs the calculateStatsDiffs function and maps the result to a named data frame.
+
+```{r createstatsoutput, echo=FALSE, eval=TRUE, results="hidew"}
+###############################################
+# calculate statsout
+statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+```
+
+```{r statsoutput, echo=TRUE, eval=FALSE}
+# calculate statsout
+statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+```
+
+The calculated data is now present as a dataframe called statsout in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first few columns is given below.
+
+```{r viewData, echo=FALSE, eval=TRUE}
+# view a portion of the statsout table
+statsout[,c(1,4,39,74,109,111,115)]
+```
+
+This dataframe may now be used within the R environment or saved as a file as shown.
+
+```{r saveData, echo=TRUE, eval=FALSE}
+# save statsout to a tab-delimited file
+output = "output.txt"
+write.table(statsout, file = output, col.names = TRUE, row.names = FALSE, 
+            quote = FALSE, sep = "\t")
+```
+
+For both modeled and observed daily discharge data not available via web services, statistics can be calculated by loading data into an R dataframe like the example \texttt{"}dailyData\texttt{"}. This dataframe has two columns, the first named date, containing dates as characters in the format \texttt{"}YYYY-MM-DD\texttt{"} and the second column, discharge, containing the numeric discharge. This can be easily accomplished from most text file formats using \texttt{"}read.delim\texttt{"} or \texttt{"}read.table\texttt{"}. Then the user must enter a drainage area and a site id for each site, as well as the stats string.
+
+```{r OtherStats, echo=TRUE, eval=FALSE}
+# calculate stats for data from your own data file
+drain_area=54
+site_id="Test site"
+daily_data<-dailyData
+stats="magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat"
+statsout <- ObservedStatsOther(daily_data,drain_area,site_id,stats)
+```
+
+The generated statsout dataframe has the same characteristics as that shown previously. 
+
+The user can also calculate just the EflowStats hydrologic indicators, with no comparison to modeled data. Using a USGS streamgage, this would be accomplished by entering the necessary site information and requested statistic groups. 
+
+```{r justStats, echo=TRUE, eval=FALSE}
+# Run stats on USGS observed daily discharge data
+sites <- '02177000,02178400'
+startdate <- "2008-10-01"
+enddate <- "2013-09-29"
+stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
+nwisDvUrl <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
+offering <- "00003"
+property <- "00060"
+drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
+sites<-read.csv(header=F,colClasses=c("character"),text=sites)
+x_urls<-paste(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property, sep = "")
+statsout <- calculateStatsGroups(stats, sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites)  
+```
