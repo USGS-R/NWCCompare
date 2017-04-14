@@ -1,6 +1,9 @@
 NWCCompare
 ==========
 
+OS X Tests: [![travis](https://travis-ci.org/USGS-R/NWCCompare.svg?branch=master)](https://travis-ci.org/USGS-R/NWCCompare)
+Code Coverage: [![Coverage Status](https://coveralls.io/repos/github/USGS-R/NWCCompare/badge.svg?branch=master)](https://coveralls.io/github/USGS-R/NWCCompare?branch=master)
+
 *NOTICE: NWCCompare is undergoing a complete rewrite. The v4.1 release, which works with EflowStats v4.1.1 is the last release of the v4 generation of the package.*
 
 install this package using the following code:
