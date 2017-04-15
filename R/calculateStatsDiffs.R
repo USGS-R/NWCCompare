@@ -18,7 +18,6 @@
 #' @import chron
 #' @import doBy
 #' @import lmomco
-#' @importFrom EflowStats get_obsdata SiteGoF
 #' @importFrom stats aggregate
 #' @export
 calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, M_DATA_FUN, m_args) {
