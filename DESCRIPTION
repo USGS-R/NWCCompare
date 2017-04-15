@@ -18,7 +18,8 @@ Imports:
 Suggests:
     xtable,
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 Description: Calculates comparison stats for two timeseries.
 License: file LICENSE
 LazyLoad: yes

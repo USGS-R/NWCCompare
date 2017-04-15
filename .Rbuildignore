@@ -5,3 +5,4 @@ NWCCompare_1.0.tar.gz
 NWCCompare_2.0.tar.gz
 stats_compare_new.r
 stats_observed_new.r
+.travis.yml

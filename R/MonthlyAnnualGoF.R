@@ -6,6 +6,8 @@
 #' @param Gaged data frame of daily flow data
 #' @param Modeled data frame of daily flow data
 #' @return Output data frame of calculated statistics
+#' @importFrom EflowStats nse nselog rmse
+#' @import hydroGOF
 #' @export
 #' @examples
 #' Gaged<-sampleData
@@ -26,8 +28,8 @@ MonthlyAnnualGoF <- function(Gaged,Modeled) {
   NSEv[i] <- nse(GagedTmp[,c],ModeledTmp[,c])
   NSELOGv[i] <- nselog(GagedTmp[,c],ModeledTmp[,c])
   RMSEv[i] <- rmse(GagedTmp[,c],ModeledTmp[,c])
-  PBIASv[i] <- pbias(GagedTmp[,c],ModeledTmp[,c])
-   PEARSONv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="pearson")
+  PBIASv[i] <- hydroGOF::pbias(GagedTmp[,c],ModeledTmp[,c])
+  PEARSONv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="pearson")
   SPEARMANv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="spearman")
   
   i <- 2
