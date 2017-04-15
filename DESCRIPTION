@@ -14,7 +14,8 @@ Imports:
     XML,
     hydroGOF,
     EflowStats,
-    lmomco
+    lmomco,
+    dataRetrieval
 Suggests:
     xtable,
     knitr,
