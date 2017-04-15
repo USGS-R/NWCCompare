@@ -7,6 +7,7 @@
 #' @param Modeled data frame of daily flow data
 #' @return Output data frame of calculated statistics
 #' @importFrom EflowStats nse nselog rmse
+#' @importFrom stats aggregate cor
 #' @import hydroGOF
 #' @export
 #' @examples

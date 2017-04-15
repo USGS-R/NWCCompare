@@ -7,6 +7,7 @@
 #' @return NWCportalL7Q2 l7Q2 value for the given data frame
 #' @export
 #' @importFrom EflowStats findrank
+#' @importFrom stats aggregate
 #' @examples
 #' qfiletempf<-sampleData
 #' NWCportalL7Q2(qfiletempf)

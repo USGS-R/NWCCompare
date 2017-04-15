@@ -6,6 +6,7 @@
 #' @param data data frame of daily flow data
 #' @return OtherStats data frame of calculated statistics
 #' @importFrom EflowStats flow_perc cv
+#' @importFrom stats aggregate median sd
 #' @export
 #' @examples
 #' timeseries1<-sampleData

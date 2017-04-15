@@ -5,6 +5,7 @@
 #' @param input url for SOS service for desired site data
 #' @return flow data frame containing desired time series
 #' @importFrom XML xpathApply xmlParse xmlValue
+#' @importFrom utils capture.output read.delim
 #' @export
 #' @examples
 #' url <- paste0("http://cida.usgs.gov/nwc/thredds/sos/watersmart/stats/",

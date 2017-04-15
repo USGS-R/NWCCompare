@@ -7,6 +7,7 @@
 #' @param wfsPropertyname property name to paste into url
 #' @return drain_area numeric of site drainage area
 #' @export
+#' @importFrom utils read.delim
 #' @examples
 #' wfs_url<-'http://cida.usgs.gov/nwc/geoserver/NWC/ows'
 #' wfsTypename='NWC:huc12_SE_Basins_v2'

@@ -7,6 +7,7 @@
 #' @return NWCportalReturn10 10-year return value for the given data frame
 #' @export
 #' @importFrom EflowStats findrank
+#' @importFrom stats aggregate
 #' @examples
 #' qfiletempf<-sampleData
 #' NWCportalReturn10(qfiletempf)

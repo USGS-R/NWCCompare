@@ -14,6 +14,7 @@
 #' @param drain_site_param string for use w/ multiple drain urls
 #' @return statsout data frame of calculated statistics
 #' @importFrom EflowStats magnifSeven FlowStatsAll
+#' @importFrom stats aggregate
 #' @export
 calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, drain_site_param=NULL) {
   supportedStats=getSupportedStatNames()
@@ -34,7 +35,7 @@ calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_a
       flow_data <- get_obsdata(x_data)
       countbyyr<-aggregate(flow_data$discharge, list(flow_data$wy_val), length)
       colnames(countbyyr)<-c('wy','num_samples')
-      sub_countbyyr<-subset(countbyyr,num_samples >= 365)
+      sub_countbyyr<-subset(countbyyr,countbyyr$num_samples >= 365)
       if (nrow(sub_countbyyr)==0) {
         tempArrays$comment[i]<-"No complete water years for site"
       } else {

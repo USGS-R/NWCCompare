@@ -19,6 +19,7 @@
 #' @import doBy
 #' @import lmomco
 #' @importFrom EflowStats get_obsdata SiteGoF
+#' @importFrom stats aggregate
 #' @export
 calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, M_DATA_FUN, m_args) {
   supportedStats=getSupportedStatNames()
@@ -48,8 +49,8 @@ calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRA
       countbyyr_mod<-aggregate(mod_data$discharge, list(mod_data$wy_val), length)
       colnames(countbyyr)<-c('wy','num_samples')
       colnames(countbyyr_mod)<-c('wy','num_samples')
-      sub_countbyyr<-subset(countbyyr,num_samples >= 365)
-      sub_countbyyr_mod<-subset(countbyyr_mod,num_samples >= 365)
+      sub_countbyyr<-subset(countbyyr,countbyyr$num_samples >= 365)
+      sub_countbyyr_mod<-subset(countbyyr_mod,countbyyr$num_samples >= 365)
       include_yrs<-merge(sub_countbyyr,sub_countbyyr_mod)
       if (nrow(include_yrs)==0) {
         tempArrays$comment[i]<-"No matching complete water years for site"
