@@ -2,9 +2,6 @@
 
 export(FlowStatsICP)
 export(MonthlyAnnualGoF)
-export(NWCportalL7Q10)
-export(NWCportalL7Q2)
-export(NWCportalReturn10)
 export(OtherStatsICP)
 export(SWE_CSV_IHA)
 export(SiteGoF)
