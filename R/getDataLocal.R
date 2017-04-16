@@ -10,7 +10,7 @@
 #' @export
 #' @importFrom utils read.table
 #' @examples
-#' dataPath <- system.file("extdata", package="EflowStats")
+#' dataPath <- system.file("extdata", package="NWCCompare")
 #' dataPath <- paste(dataPath, "modeled", sep="/")
 #' startdate <- "2009"
 #' enddate <- "2013"

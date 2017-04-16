@@ -22,7 +22,7 @@ dataOut data frame containing requested flow data for the stations
 This function accepts a list of sites, start and end date and returns a data frame containing requested flow data
 }
 \examples{
-dataPath <- system.file("extdata", package="EflowStats")
+dataPath <- system.file("extdata", package="NWCCompare")
 dataPath <- paste(dataPath, "modeled", sep="/")
 startdate <- "2009"
 enddate <- "2013"
