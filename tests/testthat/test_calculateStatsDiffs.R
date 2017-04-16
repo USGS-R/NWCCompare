@@ -15,7 +15,7 @@ test_that("Original demo for for diff stats works", {
   d_urls<-paste0(drainage_url, sites)
   m_urls <- read.csv(header=F,colClasses=c("character"),text=model_urls)
   m_urls <- unlist(m_urls[1,])
-  statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+  statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)
   statsout_check <- readRDS("data/test_calculateStatsDiffs_huc_nwis_statsout.rds")
   expect_equal(statsout, statsout_check)
 })

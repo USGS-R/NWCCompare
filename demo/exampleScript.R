@@ -21,7 +21,7 @@ drainage_url <- "https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&s
 d_urls<-paste0(drainage_url, sites)
 m_urls <- read.csv(header=F,colClasses=c("character"),text=model_urls)
 m_urls <- unlist(m_urls[1,])
-statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)
 
 # Run stats on modeled huc12s
 sites<-"031601020108"
@@ -49,4 +49,4 @@ property <- "00060"
 drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 sites<-read.csv(header=F,colClasses=c("character"),text=sites)
 x_urls<-paste(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property, sep = "")
-statsout <- calculateStatsGroups(stats, sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites)  
+statsout <- calculateStatsGroups(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites)  

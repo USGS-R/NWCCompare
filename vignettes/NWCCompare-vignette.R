@@ -22,13 +22,12 @@ m_urls <- read.csv(header=F,colClasses=c("character"),text=model_urls)
 m_urls <- unlist(m_urls[1,])
 
 ## ----createstatsoutput, echo=FALSE, eval=TRUE, results="hidew"-----------
-###############################################
 # calculate statsout
-statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)
 
 ## ----statsoutput, echo=TRUE, eval=FALSE----------------------------------
 #  # calculate statsout
-#  statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+#  statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)
 
 ## ----viewData, echo=FALSE, eval=TRUE-------------------------------------
 # view a portion of the statsout table
@@ -60,5 +59,5 @@ statsout[,c(1,4,39,74,109,111,115)]
 #  drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 #  sites<-read.csv(header=F,colClasses=c("character"),text=sites)
 #  x_urls<-paste(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property, sep = "")
-#  statsout <- calculateStatsGroups(stats, sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites)
+#  statsout <- calculateStatsGroups(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites)
 

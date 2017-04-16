@@ -29,7 +29,7 @@ test_that("Original demo for NWIS works", {
   drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
   sites<-read.csv(header=F,colClasses=c("character"),text=sites)
   x_urls<-paste(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property, sep = "")
-  statsout <- calculateStatsGroups(stats, sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites)  
+  statsout <- calculateStatsGroups(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites)  
   statsout_check <- readRDS("data/test_calculateStatsGroups_nwis_statsout.rds")
   expect_equal(statsout, statsout_check)
 })

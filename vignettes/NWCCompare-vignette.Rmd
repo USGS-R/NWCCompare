@@ -56,14 +56,13 @@ m_urls <- unlist(m_urls[1,])
 Once this information has been obtained, the user runs the calculateStatsDiffs function and maps the result to a named data frame.
 
 ```{r createstatsoutput, echo=FALSE, eval=TRUE, results="hidew"}
-###############################################
 # calculate statsout
-statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)
 ```
 
 ```{r statsoutput, echo=TRUE, eval=FALSE}
 # calculate statsout
-statsout <- calculateStatsDiffs(sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)
 ```
 
 The calculated data is now present as a dataframe called statsout in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first few columns is given below.
@@ -109,5 +108,5 @@ property <- "00060"
 drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 sites<-read.csv(header=F,colClasses=c("character"),text=sites)
 x_urls<-paste(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property, sep = "")
-statsout <- calculateStatsGroups(stats, sites, startdate, enddate, EflowStats::getXMLWML1.1Data, x_urls, EflowStats::getDrainageArea, sites)  
+statsout <- calculateStatsGroups(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites)  
 ```

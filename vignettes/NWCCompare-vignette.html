@@ -12,7 +12,7 @@
 
 <meta name="author" content="David Blodgett" />
 
-<meta name="date" content="2017-04-14" />
+<meta name="date" content="2017-04-15" />
 
 <title>The NWCCompare R package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">The NWCCompare R package</h1>
 <h4 class="author"><em>David Blodgett</em></h4>
-<h4 class="date"><em>2017-04-14</em></h4>
+<h4 class="date"><em>2017-04-15</em></h4>
 
 
 
@@ -88,6 +88,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>First, it is a good practice to clear any existing objects from your working environment. In RStudio, in the upper right quadrant, there is a broom icon that says ‘Clear’. Click this and select ‘Yes’ to remove objects. This allows you to being work with a clear workspace, negating the possibility of mis-identified variables.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(EflowStats)</code></pre></div>
 <pre><code>## This information is preliminary or provisional and is subject to revision. It is being provided to meet the need for timely best science. The information has not received final approval by the U.S. Geological Survey (USGS) and is provided on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from the authorized or unauthorized use of the information. Although this software program has been used by the USGS, no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.</code></pre>
+<pre><code>## 
+## Attaching package: 'EflowStats'</code></pre>
+<pre><code>## The following objects are masked from 'package:NWCCompare':
+## 
+##     SiteGoF, cv, findrank, flow_perc, getDataLocal,
+##     getDrainageArea, getXMLWML1.1Data, get_obsdata, nse, nselog,
+##     obs_data, qfiletempf, rmse, rmsne, rsr, sampleData, sdev</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(NWCCompare)</code></pre></div>
 <p>To compare modeled and observed data for a USGS model and USGS streamgage(s), enter the model url. then run the diffInputs function to generate the startdate, enddate, site list and necessary urls.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run stats and differences on USGS observed and modeled daily discharge data</span>
@@ -116,7 +123,7 @@ property &lt;-<span class="st"> &quot;00060&quot;</span></code></pre></div>
 ## dfs created for site 02435020 8400 8400 
 ## diffs calculated</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate statsout</span>
-statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsDiffs</span>(sites, startdate, enddate, EflowStats<span class="op">::</span>getXMLWML1.1Data, x_urls, EflowStats<span class="op">::</span>getDrainageArea, sites, SWE_CSV_IHA, m_urls)</code></pre></div>
+statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsDiffs</span>(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)</code></pre></div>
 <p>The calculated data is now present as a dataframe called statsout in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first few columns is given below.</p>
 <pre><code>##    site_no lam1Obs lam1Mod   lam1Diff                nse             rmse
 ## 1 02435020  334.97  285.96 -0.1463116 -0.239596337760897 704.613332920482
@@ -147,7 +154,7 @@ property &lt;-<span class="st"> &quot;00060&quot;</span>
 drainage_url &lt;-<span class="st"> &quot;http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&amp;site=&quot;</span>
 sites&lt;-<span class="kw">read.csv</span>(<span class="dt">header=</span>F,<span class="dt">colClasses=</span><span class="kw">c</span>(<span class="st">&quot;character&quot;</span>),<span class="dt">text=</span>sites)
 x_urls&lt;-<span class="kw">paste</span>(nwisDvUrl, sites, <span class="st">&quot;&amp;startDT=&quot;</span>, startdate, <span class="st">&quot;&amp;endDT=&quot;</span>, enddate, <span class="st">&quot;&amp;statCd=&quot;</span>, offering, <span class="st">&quot;&amp;parameterCd=&quot;</span>, property, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)
-statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsGroups</span>(stats, sites, startdate, enddate, EflowStats<span class="op">::</span>getXMLWML1.1Data, x_urls, EflowStats<span class="op">::</span>getDrainageArea, sites)  </code></pre></div>
+statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsGroups</span>(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites)  </code></pre></div>
 </div>
 </div>
 
