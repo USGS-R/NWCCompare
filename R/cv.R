@@ -4,7 +4,6 @@
 #' 
 #' @param x data frame containing value data for the chosen timeseries
 #' @return cv coefficient of variation for the given data frame
-#' @export
 #' @examples
 #' qfiletempf<-sampleData
 #' cv(qfiletempf$discharge)

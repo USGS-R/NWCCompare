@@ -6,7 +6,7 @@
 #' @param data data frame containing value data for the chosen timeseries
 #' @param probs vector containing requested percentile value(s)
 #' @return obs_percentiles requested flow percentiles for the given data frame
-#' @export
+#' @importFrom stats quantile
 #' @examples
 #' qfiletempf<-sampleData
 #' flow_perc(qfiletempf,probs=c(.1,.25,.5,.75))

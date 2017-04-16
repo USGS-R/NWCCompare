@@ -4,7 +4,6 @@
 #' 
 #' @param x data frame containing value data for the chosen timeseries
 #' @return sdev standard deviation for the given data frame
-#' @export
 #' @examples
 #' qfiletempf<-sampleData
 #' sdev(qfiletempf$discharge)

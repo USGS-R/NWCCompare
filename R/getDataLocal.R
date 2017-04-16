@@ -8,6 +8,7 @@
 #' @param sepChar string containing the datafile separator, default is comma
 #' @return dataOut data frame containing requested flow data for the stations
 #' @export
+#' @importFrom utils read.table
 #' @examples
 #' dataPath <- system.file("extdata", package="EflowStats")
 #' dataPath <- paste(dataPath, "modeled", sep="/")

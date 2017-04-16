@@ -5,7 +5,6 @@
 #' @param timeseries1 data frame containing value data for one of the chosen timeseries
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
 #' @return rmsne normalized root mean square error value between the two timeseries
-#' @export
 #' @examples
 #' obs_data<-dailyData
 #' mod_data<-dailyData

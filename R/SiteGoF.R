@@ -12,6 +12,7 @@
 #' @import chron
 #' @import doBy
 #' @import lmomco
+#' @importFrom stats quantile
 #' @examples
 #' load_data<-sampleData
 #' load_mod<-sampleData

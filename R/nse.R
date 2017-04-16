@@ -5,7 +5,6 @@
 #' @param timeseries1 data frame containing value data for one of the chosen timeseries
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
 #' @return nse Nash-Sutcliffe value between the two timeseries
-#' @export
 #' @examples
 #' obs_data<-dailyData
 #' mod_data<-dailyData

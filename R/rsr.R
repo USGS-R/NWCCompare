@@ -5,7 +5,6 @@
 #' @param timeseries1 data frame containing value data for the observed timeseries
 #' @param timeseries2 data frame containing value data for the modeled timeseries
 #' @return rsr root mean square error/standard deviation for the two timeseries
-#' @export
 #' @examples
 #' obs_data<-dailyData
 #' mod_data<-dailyData

@@ -5,7 +5,6 @@
 #' @param n number of values in a data set
 #' @param p percentile desired
 #' @return findrank numeric giving the position in the data set of the percentile
-#' @export
 #' @examples
 #' n<-365
 #' p<-0.05
