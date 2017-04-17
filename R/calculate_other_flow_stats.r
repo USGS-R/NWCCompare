@@ -1,4 +1,5 @@
 #' Function to return the OtherStats statistics for a given data series
+#' 
 #' This is a function to compute the 7 statistics of daily streamflow. Input to the function is a
 #' time series of streamflow with date in the format Y-m-d. Output is a vector of OtherStats 
 #' 1) mean, 2) median, 3) cv, 4) cv daily, 5) l7Q10, 6) l7Q2, 7) return_10 and 8) flow percentiles.
