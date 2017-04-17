@@ -34,13 +34,16 @@ calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRA
       enddate<-max(m_data$date)
       interval<-''
       latest<-''
-      x_data <- X_DATA_FUN(x_args[i])   
+      x_data <- X_DATA_FUN(siteNumber = x_args[i], 
+                           parameterCd = "00060",
+                           startDate = startdate,
+                           endDate = enddate)   
       if (nrow(x_data)>2) {
         obs_data <- get_obsdata(x_data)
-        obs_count<-nrow(x_data)
+        obs_count<-nrow(obs_data)
         cat(paste("get_obsdata run on x_obs for site",site,obs_count,"\n",sep=" "))
         m_data$date <- as.Date(m_data$date,format="%Y-%m-%d")
-        m_data<-m_data[m_data$date>=min(x_data$date) & m_data$date<=max(x_data$date), ]
+        m_data<-m_data[m_data$date>=min(obs_data$date) & m_data$date<=max(obs_data$date), ]
         drain_area<-DRAIN_AREA_FUN(drain_args[i])
         cat(paste("data and drainage area retrieved for site",site,drain_area,"\n",sep=" "))
         mod_data <- get_obsdata(m_data)

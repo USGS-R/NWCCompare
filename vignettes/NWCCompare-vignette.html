@@ -92,23 +92,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## Attaching package: 'NWCCompare'</code></pre>
 <pre><code>## The following objects are masked from 'package:EflowStats':
 ## 
-##     SiteGoF, getDataLocal, getDrainageArea, getXMLWML1.1Data,
-##     get_obsdata, obs_data, qfiletempf, sampleData</code></pre>
+##     SiteGoF, getDataLocal, getDrainageArea, get_obsdata, obs_data,
+##     qfiletempf, sampleData</code></pre>
 <p>To compare modeled and observed data for a USGS model and USGS streamgage(s), enter the model url. then run the diffInputs function to generate the startdate, enddate, site list and necessary urls.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run stats and differences on USGS observed and modeled daily discharge data</span>
 hucs=<span class="st">&quot;031601020108&quot;</span>
 startdate &lt;-<span class="st"> &quot;1980-10-01&quot;</span>
 enddate &lt;-<span class="st"> &quot;2010-09-30&quot;</span>
-nwisDvUrl &lt;-<span class="st"> &quot;https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&amp;sites=&quot;</span>
 sites &lt;-<span class="st"> &quot;02435020&quot;</span>
 sites&lt;-<span class="kw">read.csv</span>(<span class="dt">header=</span>F,<span class="dt">colClasses=</span><span class="kw">c</span>(<span class="st">&quot;character&quot;</span>),<span class="dt">text=</span>sites)
-sites &lt;-<span class="st"> </span><span class="kw">unlist</span>(sites[<span class="dv">1</span>,])
-offering &lt;-<span class="st"> &quot;00003&quot;</span>
-property &lt;-<span class="st"> &quot;00060&quot;</span></code></pre></div>
+sites &lt;-<span class="st"> </span><span class="kw">unlist</span>(sites[<span class="dv">1</span>,])</code></pre></div>
 <p>Once this information has been obtained, the user runs the calculateStatsDiffs function and maps the result to a named data frame.</p>
-<pre><code>## Retrieving data from: 
-##  https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&amp;sites=02435020&amp;startDT=1980-10-01&amp;endDT=2010-09-30&amp;statCd=00003&amp;parameterCd=00060 
-## get_obsdata run on x_obs for site 02435020 8400 
+<pre><code>## get_obsdata run on x_obs for site 02435020 8400 
 ## Retrieving data from USGS site: 
 ##  02435020 
 ## data and drainage area retrieved for site 02435020 233 
@@ -118,7 +113,15 @@ property &lt;-<span class="st"> &quot;00060&quot;</span></code></pre></div>
 ## dfs created for site 02435020 8400 8400 
 ## diffs calculated</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate statsout</span>
-statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsDiffs</span>(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, get_nwc_wb_data, hucs)</code></pre></div>
+statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsDiffs</span>(<span class="dt">sites =</span> sites, 
+                                <span class="dt">startdate =</span> startdate, 
+                                <span class="dt">enddate =</span> enddate, 
+                                <span class="dt">X_DATA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISdv, 
+                                <span class="dt">x_args =</span> sites, 
+                                <span class="dt">DRAIN_AREA_FUN =</span> getDrainageArea, 
+                                <span class="dt">drain_args =</span> sites, 
+                                <span class="dt">M_DATA_FUN =</span> get_nwc_wb_data, 
+                                <span class="dt">m_args =</span> hucs)  </code></pre></div>
 <p>The calculated data is now present as a dataframe called statsout in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first few columns is given below.</p>
 <pre><code>##    site_no lam1Obs lam1Mod   lam1Diff                nse             rmse
 ## 1 02435020  334.97  285.96 -0.1463116 -0.239596337760897 704.613332920482
@@ -143,13 +146,16 @@ sites &lt;-<span class="st"> '02177000,02178400'</span>
 startdate &lt;-<span class="st"> &quot;2008-10-01&quot;</span>
 enddate &lt;-<span class="st"> &quot;2013-09-29&quot;</span>
 stats&lt;-<span class="st">&quot;rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat&quot;</span>
-nwisDvUrl &lt;-<span class="st"> &quot;http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&amp;sites=&quot;</span>
-offering &lt;-<span class="st"> &quot;00003&quot;</span>
-property &lt;-<span class="st"> &quot;00060&quot;</span>
 drainage_url &lt;-<span class="st"> &quot;http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&amp;site=&quot;</span>
 sites&lt;-<span class="kw">read.csv</span>(<span class="dt">header=</span>F,<span class="dt">colClasses=</span><span class="kw">c</span>(<span class="st">&quot;character&quot;</span>),<span class="dt">text=</span>sites)
-x_urls&lt;-<span class="kw">paste</span>(nwisDvUrl, sites, <span class="st">&quot;&amp;startDT=&quot;</span>, startdate, <span class="st">&quot;&amp;endDT=&quot;</span>, enddate, <span class="st">&quot;&amp;statCd=&quot;</span>, offering, <span class="st">&quot;&amp;parameterCd=&quot;</span>, property, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>)
-statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsGroups</span>(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites)  </code></pre></div>
+statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsGroups</span>(<span class="dt">stats =</span> stats, 
+                                 <span class="dt">sites =</span> sites, 
+                                 <span class="dt">startdate =</span> startdate, 
+                                 <span class="dt">enddate =</span> enddate, 
+                                 <span class="dt">X_DATA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISdv, 
+                                 <span class="dt">x_args =</span> sites, 
+                                 <span class="dt">DRAIN_AREA_FUN =</span> getDrainageArea, 
+                                 <span class="dt">drain_args =</span> sites)   </code></pre></div>
 </div>
 </div>
 

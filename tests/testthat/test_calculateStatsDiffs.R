@@ -9,9 +9,6 @@ test_that("Original demo for for diff stats works", {
   sites <- "02435020"
   sites<-read.csv(header=F,colClasses=c("character"),text=sites)
   sites <- unlist(sites[1,])
-  offering <- "00003"
-  property <- "00060"
-  x_urls<-paste0(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property)
   drainage_url <- "https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
   d_urls<-paste0(drainage_url, sites)
   hucs <- read.csv(header=F,colClasses=c("character"),text=hucs)
@@ -19,8 +16,8 @@ test_that("Original demo for for diff stats works", {
   statsout <- calculateStatsDiffs(sites = sites, 
                                   startdate = startdate, 
                                   enddate = enddate, 
-                                  X_DATA_FUN = getXMLWML1.1Data, 
-                                  x_args = x_urls, 
+                                  X_DATA_FUN = dataRetrieval::readNWISdv, 
+                                  x_args = sites, 
                                   DRAIN_AREA_FUN = getDrainageArea, 
                                   drain_args = sites, 
                                   M_DATA_FUN = get_nwc_wb_data, 

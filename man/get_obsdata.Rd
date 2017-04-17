@@ -7,7 +7,7 @@
 get_obsdata(x_obs)
 }
 \arguments{
-\item{x_obs}{data frame pulled from NWIS webservice}
+\item{x_obs}{data frame pulled from dataRetrieval::readNWISdv or NWCCompare::get_nwc_wb_data}
 }
 \value{
 obs_data data frame of observed data for the chosen parameters
@@ -17,16 +17,11 @@ This function accepts a raw data frame pulled from the NWIS webservice and retur
 observed data for use in calculating HIT/HAT statistics
 }
 \examples{
-url<-"http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
-sites<-"02177000"
+site<-"02177000"
 startdate<-"2011-10-01"
 enddate<-"2012-09-30"
-offering<-'00003'
-property<-'00060'
-obs_url<-paste0(url,sites,'&startDT=',startdate,'&endDT=',
-            enddate,'&statCd=',offering,'&parameterCd=',property)
 \dontrun{
-x_obs <- getXMLWML1.1Data(obs_url)
+x_obs <- dataRetrieval::readNWISdv(site)
 obs_data <- get_obsdata(x_obs)
 }
 }

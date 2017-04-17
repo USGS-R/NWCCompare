@@ -21,7 +21,15 @@ calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_a
   tempArrays<-getEmptyResultArrayNWCStats(stats, length(sites), supportedStats)
   for (i in 1:length(sites)) {
     site = sites[i]
-    x_data <- X_DATA_FUN(x_args[i])
+    if(nchar(site) == 12) { # this is a horrible hack this whole thing needs a rewrite.
+      x_data <- X_DATA_FUN(huc = x_args[i],
+                           local = FALSE)
+    } else {
+      x_data <- X_DATA_FUN(siteNumber = x_args[i], 
+                          parameterCd = "00060",
+                          startDate = startdate,
+                          endDate = enddate)
+    }
     if(!is.null(names(x_data$discharge))) {
       x_data <- x_data$discharge
       names(x_data) <- c("date", "discharge")

@@ -7,15 +7,11 @@ library(NWCCompare)
 hucs="031601020108"
 startdate <- "1980-10-01"
 enddate <- "2010-09-30"
-nwisDvUrl <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
 sites <- "02435020"
 sites<-read.csv(header=F,colClasses=c("character"),text=sites)
 sites <- unlist(sites[1,])
-offering <- "00003"
-property <- "00060"
 
 ## ----modelStatschunk, echo=FALSE, eval=TRUE------------------------------
-x_urls<-paste0(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property)
 drainage_url <- "https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 d_urls<-paste0(drainage_url, sites)
 hucs <- read.csv(header=F,colClasses=c("character"),text=hucs)
@@ -23,11 +19,27 @@ hucs <- unlist(hucs[1,])
 
 ## ----createstatsoutput, echo=FALSE, eval=TRUE, results="hidew"-----------
 # calculate statsout
-statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, get_nwc_wb_data, hucs)
+statsout <- calculateStatsDiffs(sites = sites, 
+                                startdate = startdate, 
+                                enddate = enddate, 
+                                X_DATA_FUN = dataRetrieval::readNWISdv, 
+                                x_args = sites, 
+                                DRAIN_AREA_FUN = getDrainageArea, 
+                                drain_args = sites, 
+                                M_DATA_FUN = get_nwc_wb_data, 
+                                m_args = hucs)  
 
 ## ----statsoutput, echo=TRUE, eval=FALSE----------------------------------
 #  # calculate statsout
-#  statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, get_nwc_wb_data, hucs)
+#  statsout <- calculateStatsDiffs(sites = sites,
+#                                  startdate = startdate,
+#                                  enddate = enddate,
+#                                  X_DATA_FUN = dataRetrieval::readNWISdv,
+#                                  x_args = sites,
+#                                  DRAIN_AREA_FUN = getDrainageArea,
+#                                  drain_args = sites,
+#                                  M_DATA_FUN = get_nwc_wb_data,
+#                                  m_args = hucs)
 
 ## ----viewData, echo=FALSE, eval=TRUE-------------------------------------
 # view a portion of the statsout table
@@ -53,11 +65,14 @@ statsout[,c(1,4,39,74,109,111,115)]
 #  startdate <- "2008-10-01"
 #  enddate <- "2013-09-29"
 #  stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
-#  nwisDvUrl <- "http://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
-#  offering <- "00003"
-#  property <- "00060"
 #  drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 #  sites<-read.csv(header=F,colClasses=c("character"),text=sites)
-#  x_urls<-paste(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property, sep = "")
-#  statsout <- calculateStatsGroups(stats, sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites)
+#  statsout <- calculateStatsGroups(stats = stats,
+#                                   sites = sites,
+#                                   startdate = startdate,
+#                                   enddate = enddate,
+#                                   X_DATA_FUN = dataRetrieval::readNWISdv,
+#                                   x_args = sites,
+#                                   DRAIN_AREA_FUN = getDrainageArea,
+#                                   drain_args = sites)
 
