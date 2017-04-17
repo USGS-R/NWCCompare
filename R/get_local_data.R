@@ -14,8 +14,8 @@
 #' dataPath <- paste(dataPath, "modeled", sep="/")
 #' startdate <- "2009"
 #' enddate <- "2013"
-#' localData <- getDataLocal(dataPath,startDt=startdate,endDt=enddate)
-getDataLocal <- function(dataPath,startDt="",endDt="",sepChar=",") {
+#' localData <- get_local_data(dataPath,startDt=startdate,endDt=enddate)
+get_local_data <- function(dataPath,startDt="",endDt="",sepChar=",") {
   if (nchar(startDt)>1) {startdate <- paste(startDt,"10","01",sep="-")}
   if (nchar(endDt)>1) {enddate <- paste(endDt,"09","30",sep="-")}
   fileList <- list.files(path=dataPath)

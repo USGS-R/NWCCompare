@@ -65,7 +65,7 @@ get_nwc_wb_data<-function(huc, local=FALSE) {
 #' @examples
 #' NWCwatershed<-get_nwc_huc(huc="031601030306",local=TRUE)
 #'
-get_nwc_huc<-function(huc,local) {
+get_nwc_huc<-function(huc, local=FALSE) {
   
   baseURL<-"https://cida.usgs.gov/nwc/geoserver/ows"
   

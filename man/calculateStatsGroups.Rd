@@ -5,7 +5,7 @@
 \title{Function to calculate the statistics for a given data set}
 \usage{
 calculateStatsGroups(stats, sites, startdate, enddate, X_DATA_FUN, x_args,
-  DRAIN_AREA_FUN, drain_args, drain_site_param = NULL)
+  DRAIN_AREA_FUN, drain_args)
 }
 \arguments{
 \item{stats}{string containing stat groups desired}
@@ -23,8 +23,6 @@ calculateStatsGroups(stats, sites, startdate, enddate, X_DATA_FUN, x_args,
 \item{DRAIN_AREA_FUN}{function for pulling drainage area}
 
 \item{drain_args}{url for pulling drainage area}
-
-\item{drain_site_param}{string for use w/ multiple drain urls}
 }
 \value{
 statsout data frame of calculated statistics

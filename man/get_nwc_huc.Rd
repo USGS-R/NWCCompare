@@ -4,7 +4,7 @@
 \alias{get_nwc_huc}
 \title{Get WFS polygon for a watershed.}
 \usage{
-get_nwc_huc(huc, local)
+get_nwc_huc(huc, local = FALSE)
 }
 \arguments{
 \item{huc}{The watershed of interest.}

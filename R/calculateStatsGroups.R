@@ -11,12 +11,11 @@
 #' @param x_args urls for pulling observed data
 #' @param DRAIN_AREA_FUN function for pulling drainage area
 #' @param drain_args url for pulling drainage area
-#' @param drain_site_param string for use w/ multiple drain urls
 #' @return statsout data frame of calculated statistics
 #' @importFrom EflowStats magnifSeven FlowStatsAll
 #' @importFrom stats aggregate
 #' @export
-calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, drain_site_param=NULL) {
+calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args) {
   supportedStats=getSupportedStatNames()
   tempArrays<-getEmptyResultArrayNWCStats(stats, length(sites), supportedStats)
   for (i in 1:length(sites)) {
@@ -34,14 +33,14 @@ calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_a
       x_data <- x_data$discharge
       names(x_data) <- c("date", "discharge")
     }
-    if (!is.null(drain_site_param)) { 
-      # In the case that the drainage area function input is multivalued with one that varies. (The url is constructed in the function)
-      drain_args[[drain_site_param]]<-as.character(site)
-      drain_area <- do.call(DRAIN_AREA_FUN,drain_args)
-    } else
-    {
-      # In the case th drainage area function input is single valued (a list of urls)
-      drain_area <- DRAIN_AREA_FUN(drain_args[i])
+    drain_area <- DRAIN_AREA_FUN(drain_args[i])
+    if(!is.null(drain_area$type)) { #horrible hack. This will be refactored out!!!
+      if(length(drain_area$features) == 1) {
+        drain_area <- as.numeric(drain_area$features[[1]]$properties$areasqkm) * 0.386102 # convert to sqmi
+      } else {
+        stop("more than one feature returned for that huc, don't know what to do.")
+      }
+    } else { # nwis
       drain_area <- as.numeric(drain_area$drain_area_va)
     }
     if (nrow(x_data) > 2) {
