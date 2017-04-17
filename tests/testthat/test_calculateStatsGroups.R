@@ -28,7 +28,7 @@ test_that("Original demo for NWIS works", {
                                    enddate = enddate, 
                                    X_DATA_FUN = dataRetrieval::readNWISdv, 
                                    x_args = sites, 
-                                   DRAIN_AREA_FUN = getDrainageArea, 
+                                   DRAIN_AREA_FUN = dataRetrieval::readNWISsite, 
                                    drain_args = sites)  
   statsout_check <- readRDS("data/test_calculateStatsGroups_nwis_statsout.rds")
   expect_equal(statsout, statsout_check)

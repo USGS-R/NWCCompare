@@ -41,7 +41,8 @@ calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_a
     } else
     {
       # In the case th drainage area function input is single valued (a list of urls)
-      drain_area<-DRAIN_AREA_FUN(drain_args[i])
+      drain_area <- DRAIN_AREA_FUN(drain_args[i])
+      drain_area <- as.numeric(drain_area$drain_area_va)
     }
     if (nrow(x_data) > 2) {
       flow_data <- get_obsdata(x_data)

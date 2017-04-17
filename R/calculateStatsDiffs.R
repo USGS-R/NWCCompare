@@ -45,6 +45,7 @@ calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRA
         m_data$date <- as.Date(m_data$date,format="%Y-%m-%d")
         m_data<-m_data[m_data$date>=min(obs_data$date) & m_data$date<=max(obs_data$date), ]
         drain_area<-DRAIN_AREA_FUN(drain_args[i])
+        drain_area <- as.numeric(drain_area$drain_area_va)
         cat(paste("data and drainage area retrieved for site",site,drain_area,"\n",sep=" "))
         mod_data <- get_obsdata(m_data)
         mod_count <- nrow(mod_data)

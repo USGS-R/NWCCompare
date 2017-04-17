@@ -104,8 +104,6 @@ sites&lt;-<span class="kw">read.csv</span>(<span class="dt">header=</span>F,<spa
 sites &lt;-<span class="st"> </span><span class="kw">unlist</span>(sites[<span class="dv">1</span>,])</code></pre></div>
 <p>Once this information has been obtained, the user runs the calculateStatsDiffs function and maps the result to a named data frame.</p>
 <pre><code>## get_obsdata run on x_obs for site 02435020 8400 
-## Retrieving data from USGS site: 
-##  02435020 
 ## data and drainage area retrieved for site 02435020 233 
 ## get_obsdata run on x_mod for site 02435020 8400 
 ## data sets merged for site 02435020 8400 8400 
@@ -118,7 +116,7 @@ statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsDiffs</spa
                                 <span class="dt">enddate =</span> enddate, 
                                 <span class="dt">X_DATA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISdv, 
                                 <span class="dt">x_args =</span> sites, 
-                                <span class="dt">DRAIN_AREA_FUN =</span> getDrainageArea, 
+                                <span class="dt">DRAIN_AREA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISsite, 
                                 <span class="dt">drain_args =</span> sites, 
                                 <span class="dt">M_DATA_FUN =</span> get_nwc_wb_data, 
                                 <span class="dt">m_args =</span> hucs)  </code></pre></div>
@@ -154,7 +152,7 @@ statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsGroups</sp
                                  <span class="dt">enddate =</span> enddate, 
                                  <span class="dt">X_DATA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISdv, 
                                  <span class="dt">x_args =</span> sites, 
-                                 <span class="dt">DRAIN_AREA_FUN =</span> getDrainageArea, 
+                                 <span class="dt">DRAIN_AREA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISsite, 
                                  <span class="dt">drain_args =</span> sites)   </code></pre></div>
 </div>
 </div>

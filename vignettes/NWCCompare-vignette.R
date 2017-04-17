@@ -24,7 +24,7 @@ statsout <- calculateStatsDiffs(sites = sites,
                                 enddate = enddate, 
                                 X_DATA_FUN = dataRetrieval::readNWISdv, 
                                 x_args = sites, 
-                                DRAIN_AREA_FUN = getDrainageArea, 
+                                DRAIN_AREA_FUN = dataRetrieval::readNWISsite, 
                                 drain_args = sites, 
                                 M_DATA_FUN = get_nwc_wb_data, 
                                 m_args = hucs)  
@@ -36,7 +36,7 @@ statsout <- calculateStatsDiffs(sites = sites,
 #                                  enddate = enddate,
 #                                  X_DATA_FUN = dataRetrieval::readNWISdv,
 #                                  x_args = sites,
-#                                  DRAIN_AREA_FUN = getDrainageArea,
+#                                  DRAIN_AREA_FUN = dataRetrieval::readNWISsite,
 #                                  drain_args = sites,
 #                                  M_DATA_FUN = get_nwc_wb_data,
 #                                  m_args = hucs)
@@ -73,6 +73,6 @@ statsout[,c(1,4,39,74,109,111,115)]
 #                                   enddate = enddate,
 #                                   X_DATA_FUN = dataRetrieval::readNWISdv,
 #                                   x_args = sites,
-#                                   DRAIN_AREA_FUN = getDrainageArea,
+#                                   DRAIN_AREA_FUN = dataRetrieval::readNWISsite,
 #                                   drain_args = sites)
 

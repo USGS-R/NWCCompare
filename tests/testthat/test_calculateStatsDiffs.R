@@ -18,7 +18,7 @@ test_that("Original demo for for diff stats works", {
                                   enddate = enddate, 
                                   X_DATA_FUN = dataRetrieval::readNWISdv, 
                                   x_args = sites, 
-                                  DRAIN_AREA_FUN = getDrainageArea, 
+                                  DRAIN_AREA_FUN = dataRetrieval::readNWISsite, 
                                   drain_args = sites, 
                                   M_DATA_FUN = get_nwc_wb_data, 
                                   m_args = hucs)  
