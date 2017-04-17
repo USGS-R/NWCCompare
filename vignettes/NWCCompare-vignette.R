@@ -4,7 +4,7 @@ library(NWCCompare)
 
 ## ----modelStatsprep, echo=TRUE, eval=TRUE--------------------------------
 # Run stats and differences on USGS observed and modeled daily discharge data
-model_urls="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc?request=GetObservation&service=SOS&version=1.0.0&observedProperty=MEAN_streamflow&offering=031601020108"
+hucs="031601020108"
 startdate <- "1980-10-01"
 enddate <- "2010-09-30"
 nwisDvUrl <- "https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&sites="
@@ -18,16 +18,16 @@ property <- "00060"
 x_urls<-paste0(nwisDvUrl, sites, "&startDT=", startdate, "&endDT=", enddate, "&statCd=", offering, "&parameterCd=", property)
 drainage_url <- "https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 d_urls<-paste0(drainage_url, sites)
-m_urls <- read.csv(header=F,colClasses=c("character"),text=model_urls)
-m_urls <- unlist(m_urls[1,])
+hucs <- read.csv(header=F,colClasses=c("character"),text=hucs)
+hucs <- unlist(hucs[1,])
 
 ## ----createstatsoutput, echo=FALSE, eval=TRUE, results="hidew"-----------
 # calculate statsout
-statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, get_nwc_wb_data, hucs)
 
 ## ----statsoutput, echo=TRUE, eval=FALSE----------------------------------
 #  # calculate statsout
-#  statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)
+#  statsout <- calculateStatsDiffs(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, get_nwc_wb_data, hucs)
 
 ## ----viewData, echo=FALSE, eval=TRUE-------------------------------------
 # view a portion of the statsout table

@@ -12,7 +12,7 @@
 
 <meta name="author" content="David Blodgett" />
 
-<meta name="date" content="2017-04-15" />
+<meta name="date" content="2017-04-17" />
 
 <title>The NWCCompare R package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">The NWCCompare R package</h1>
 <h4 class="author"><em>David Blodgett</em></h4>
-<h4 class="date"><em>2017-04-15</em></h4>
+<h4 class="date"><em>2017-04-17</em></h4>
 
 
 
@@ -86,19 +86,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>General Workflow</h2>
 <p>This example vignette first loads the relevant packages, assuming they are already installed.</p>
 <p>First, it is a good practice to clear any existing objects from your working environment. In RStudio, in the upper right quadrant, there is a broom icon that says ‘Clear’. Click this and select ‘Yes’ to remove objects. This allows you to being work with a clear workspace, negating the possibility of mis-identified variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(EflowStats)</code></pre></div>
-<pre><code>## This information is preliminary or provisional and is subject to revision. It is being provided to meet the need for timely best science. The information has not received final approval by the U.S. Geological Survey (USGS) and is provided on the condition that neither the USGS nor the U.S. Government shall be held liable for any damages resulting from the authorized or unauthorized use of the information. Although this software program has been used by the USGS, no warranty, expressed or implied, is made by the USGS or the U.S. Government as to the accuracy and functioning of the program and related program material nor shall the fact of distribution constitute any such warranty, and no responsibility is assumed by the USGS in connection therewith.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(EflowStats)
+<span class="kw">library</span>(NWCCompare)</code></pre></div>
 <pre><code>## 
-## Attaching package: 'EflowStats'</code></pre>
-<pre><code>## The following objects are masked from 'package:NWCCompare':
+## Attaching package: 'NWCCompare'</code></pre>
+<pre><code>## The following objects are masked from 'package:EflowStats':
 ## 
-##     SiteGoF, cv, findrank, flow_perc, getDataLocal,
-##     getDrainageArea, getXMLWML1.1Data, get_obsdata, nse, nselog,
-##     obs_data, qfiletempf, rmse, rmsne, rsr, sampleData, sdev</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(NWCCompare)</code></pre></div>
+##     SiteGoF, getDataLocal, getDrainageArea, getXMLWML1.1Data,
+##     get_obsdata, obs_data, qfiletempf, sampleData</code></pre>
 <p>To compare modeled and observed data for a USGS model and USGS streamgage(s), enter the model url. then run the diffInputs function to generate the startdate, enddate, site list and necessary urls.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run stats and differences on USGS observed and modeled daily discharge data</span>
-model_urls=<span class="st">&quot;https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc?request=GetObservation&amp;service=SOS&amp;version=1.0.0&amp;observedProperty=MEAN_streamflow&amp;offering=031601020108&quot;</span>
+hucs=<span class="st">&quot;031601020108&quot;</span>
 startdate &lt;-<span class="st"> &quot;1980-10-01&quot;</span>
 enddate &lt;-<span class="st"> &quot;2010-09-30&quot;</span>
 nwisDvUrl &lt;-<span class="st"> &quot;https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&amp;sites=&quot;</span>
@@ -109,9 +107,6 @@ offering &lt;-<span class="st"> &quot;00003&quot;</span>
 property &lt;-<span class="st"> &quot;00060&quot;</span></code></pre></div>
 <p>Once this information has been obtained, the user runs the calculateStatsDiffs function and maps the result to a named data frame.</p>
 <pre><code>## Retrieving data from: 
-##  https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc?request=GetObservation&amp;service=SOS&amp;version=1.0.0&amp;observedProperty=MEAN_streamflow&amp;offering=031601020108 
-## Finished!
-## Retrieving data from: 
 ##  https://waterservices.usgs.gov/nwis/dv/?format=waterml,1.1&amp;sites=02435020&amp;startDT=1980-10-01&amp;endDT=2010-09-30&amp;statCd=00003&amp;parameterCd=00060 
 ## get_obsdata run on x_obs for site 02435020 8400 
 ## Retrieving data from USGS site: 
@@ -123,7 +118,7 @@ property &lt;-<span class="st"> &quot;00060&quot;</span></code></pre></div>
 ## dfs created for site 02435020 8400 8400 
 ## diffs calculated</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate statsout</span>
-statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsDiffs</span>(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, SWE_CSV_IHA, m_urls)</code></pre></div>
+statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsDiffs</span>(sites, startdate, enddate, getXMLWML1.1Data, x_urls, getDrainageArea, sites, get_nwc_wb_data, hucs)</code></pre></div>
 <p>The calculated data is now present as a dataframe called statsout in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first few columns is given below.</p>
 <pre><code>##    site_no lam1Obs lam1Mod   lam1Diff                nse             rmse
 ## 1 02435020  334.97  285.96 -0.1463116 -0.239596337760897 704.613332920482

@@ -98,6 +98,7 @@ get_nwc_huc<-function(huc,local) {
 #' @return The NWIS site ID. NULL if none found.
 #' @author David Blodgett \email{dblodgett@usgs.gov}
 #' @importFrom jsonlite fromJSON
+#' @importFrom utils URLencode
 #' @examples
 #' data<-get_nwis_nwc_site(huc="031601030306")
 #'
