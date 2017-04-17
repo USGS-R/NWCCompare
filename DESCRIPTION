@@ -15,7 +15,8 @@ Imports:
     hydroGOF,
     EflowStats,
     lmomco,
-    dataRetrieval
+    dataRetrieval,
+    jsonlite
 Suggests:
     xtable,
     knitr,

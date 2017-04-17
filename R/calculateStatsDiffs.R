@@ -27,6 +27,8 @@ calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRA
   for (i in 1:length(sites)) {
     site = sites[i]
     m_data <- M_DATA_FUN(m_args[i])
+    m_data <- m_data$discharge
+    names(m_data) <- c("date", "discharge")
     if (nrow(m_data)>2) {
       startdate<-min(m_data$date)
       enddate<-max(m_data$date)

@@ -22,6 +22,10 @@ calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_a
   for (i in 1:length(sites)) {
     site = sites[i]
     x_data <- X_DATA_FUN(x_args[i])
+    if(!is.null(names(x_data$discharge))) {
+      x_data <- x_data$discharge
+      names(x_data) <- c("date", "discharge")
+    }
     if (!is.null(drain_site_param)) { 
       # In the case that the drainage area function input is multivalued with one that varies. (The url is constructed in the function)
       drain_args[[drain_site_param]]<-as.character(site)
