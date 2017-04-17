@@ -20,7 +20,7 @@
 #' @import lmomco
 #' @importFrom stats aggregate
 #' @export
-calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, M_DATA_FUN, m_args) {
+calculate_stats_diffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, M_DATA_FUN, m_args) {
   supportedStats=getSupportedStatNames()
   stats="GoF"
   tempArrays<-getEmptyResultArrayNWCStats(stats, length(sites), supportedStats)
@@ -87,7 +87,7 @@ calculateStatsDiffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRA
               tempArrays$ModStats[i, ] <- FlowStatsICP(mod_data,drain_area)
               tempArrays$DiffStats[i, ] <- (tempArrays$ModStats[i, ]-tempArrays$ObsStats[i, ])/tempArrays$ObsStats[i, ]
               cat("diffs calculated \n")
-              t<- SiteGoF(obs_data, mod_data)
+              t<- calculate_GoF_stats(obs_data, mod_data)
               tempArrays$GoFStats[i, ] <- t[,2:ncol(t)]
             }
           }}

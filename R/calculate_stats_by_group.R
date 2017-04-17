@@ -15,7 +15,7 @@
 #' @importFrom EflowStats magnifSeven FlowStatsAll
 #' @importFrom stats aggregate
 #' @export
-calculateStatsGroups<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args) {
+calculate_stats_by_group<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args) {
   supportedStats=getSupportedStatNames()
   tempArrays<-getEmptyResultArrayNWCStats(stats, length(sites), supportedStats)
   for (i in 1:length(sites)) {

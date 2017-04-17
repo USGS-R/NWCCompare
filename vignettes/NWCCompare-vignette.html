@@ -92,8 +92,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## Attaching package: 'NWCCompare'</code></pre>
 <pre><code>## The following objects are masked from 'package:EflowStats':
 ## 
-##     SiteGoF, getDataLocal, getDrainageArea, get_obsdata, obs_data,
-##     qfiletempf, sampleData</code></pre>
+##     get_obsdata, obs_data, qfiletempf, sampleData</code></pre>
 <p>To compare modeled and observed data for a USGS model and USGS streamgage(s), enter the model url. then run the diffInputs function to generate the startdate, enddate, site list and necessary urls.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run stats and differences on USGS observed and modeled daily discharge data</span>
 hucs=<span class="st">&quot;031601020108&quot;</span>
@@ -102,7 +101,7 @@ enddate &lt;-<span class="st"> &quot;2010-09-30&quot;</span>
 sites &lt;-<span class="st"> &quot;02435020&quot;</span>
 sites&lt;-<span class="kw">read.csv</span>(<span class="dt">header=</span>F,<span class="dt">colClasses=</span><span class="kw">c</span>(<span class="st">&quot;character&quot;</span>),<span class="dt">text=</span>sites)
 sites &lt;-<span class="st"> </span><span class="kw">unlist</span>(sites[<span class="dv">1</span>,])</code></pre></div>
-<p>Once this information has been obtained, the user runs the calculateStatsDiffs function and maps the result to a named data frame.</p>
+<p>Once this information has been obtained, the user runs the calculate_stats_diffs function and maps the result to a named data frame.</p>
 <pre><code>## get_obsdata run on x_obs for site 02435020 8400 
 ## data and drainage area retrieved for site 02435020 233 
 ## get_obsdata run on x_mod for site 02435020 8400 
@@ -111,7 +110,7 @@ sites &lt;-<span class="st"> </span><span class="kw">unlist</span>(sites[<span c
 ## dfs created for site 02435020 8400 8400 
 ## diffs calculated</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate statsout</span>
-statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsDiffs</span>(<span class="dt">sites =</span> sites, 
+statsout &lt;-<span class="st"> </span><span class="kw">calculate_stats_diffs</span>(<span class="dt">sites =</span> sites, 
                                 <span class="dt">startdate =</span> startdate, 
                                 <span class="dt">enddate =</span> enddate, 
                                 <span class="dt">X_DATA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISdv, 
@@ -146,7 +145,7 @@ enddate &lt;-<span class="st"> &quot;2013-09-29&quot;</span>
 stats&lt;-<span class="st">&quot;rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat&quot;</span>
 drainage_url &lt;-<span class="st"> &quot;http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&amp;site=&quot;</span>
 sites&lt;-<span class="kw">read.csv</span>(<span class="dt">header=</span>F,<span class="dt">colClasses=</span><span class="kw">c</span>(<span class="st">&quot;character&quot;</span>),<span class="dt">text=</span>sites)
-statsout &lt;-<span class="st"> </span><span class="kw">calculateStatsGroups</span>(<span class="dt">stats =</span> stats, 
+statsout &lt;-<span class="st"> </span><span class="kw">calculate_stats_by_group</span>(<span class="dt">stats =</span> stats, 
                                  <span class="dt">sites =</span> sites, 
                                  <span class="dt">startdate =</span> startdate, 
                                  <span class="dt">enddate =</span> enddate, 

@@ -7,10 +7,10 @@ library(NWCCompare)
 
 # Run stats and differences on USGS observed and modeled daily discharge data
 # Cooresponds to this page: https://cida.usgs.gov/nwc/#!waterbudget/achuc/031601020108
-# See test_calculateStatsDiffs
+# See test_calculate_stats_diffs
 
 # Run stats on modeled huc12s
-# See test_calculateStatsGroups
+# See test_calculate_stats_by_group
 
 # Run stats on USGS observed daily discharge data
-# See test_calculateStatsGroups
+# See test_calculate_stats_by_group

@@ -49,11 +49,11 @@ d_urls<-paste0(drainage_url, sites)
 hucs <- read.csv(header=F,colClasses=c("character"),text=hucs)
 hucs <- unlist(hucs[1,])
 ```
-Once this information has been obtained, the user runs the calculateStatsDiffs function and maps the result to a named data frame.
+Once this information has been obtained, the user runs the calculate_stats_diffs function and maps the result to a named data frame.
 
 ```{r createstatsoutput, echo=FALSE, eval=TRUE, results="hidew"}
 # calculate statsout
-statsout <- calculateStatsDiffs(sites = sites, 
+statsout <- calculate_stats_diffs(sites = sites, 
                                 startdate = startdate, 
                                 enddate = enddate, 
                                 X_DATA_FUN = dataRetrieval::readNWISdv, 
@@ -66,7 +66,7 @@ statsout <- calculateStatsDiffs(sites = sites,
 
 ```{r statsoutput, echo=TRUE, eval=FALSE}
 # calculate statsout
-statsout <- calculateStatsDiffs(sites = sites, 
+statsout <- calculate_stats_diffs(sites = sites, 
                                 startdate = startdate, 
                                 enddate = enddate, 
                                 X_DATA_FUN = dataRetrieval::readNWISdv, 
@@ -116,7 +116,7 @@ enddate <- "2013-09-29"
 stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
 drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 sites<-read.csv(header=F,colClasses=c("character"),text=sites)
-statsout <- calculateStatsGroups(stats = stats, 
+statsout <- calculate_stats_by_group(stats = stats, 
                                  sites = sites, 
                                  startdate = startdate, 
                                  enddate = enddate, 

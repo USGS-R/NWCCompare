@@ -1,4 +1,4 @@
-context("calculateStatsDiffs")
+context("calculate_stats_diffs")
 
 test_that("Original demo for for diff stats works", {
   # Cooresponds to this page: https://cida.usgs.gov/nwc/#!waterbudget/achuc/031601020108
@@ -13,7 +13,7 @@ test_that("Original demo for for diff stats works", {
   d_urls<-paste0(drainage_url, sites)
   hucs <- read.csv(header=F,colClasses=c("character"),text=hucs)
   hucs <- unlist(hucs[1,])
-  statsout <- calculateStatsDiffs(sites = sites, 
+  statsout <- calculate_stats_diffs(sites = sites, 
                                   startdate = startdate, 
                                   enddate = enddate, 
                                   X_DATA_FUN = dataRetrieval::readNWISdv, 
@@ -22,6 +22,6 @@ test_that("Original demo for for diff stats works", {
                                   drain_args = sites, 
                                   M_DATA_FUN = get_nwc_wb_data, 
                                   m_args = hucs)  
-  statsout_check <- readRDS("data/test_calculateStatsDiffs_huc_nwis_statsout.rds")
+  statsout_check <- readRDS("data/test_calculate_stats_diffs_huc_nwis_statsout.rds")
   expect_equal(statsout, statsout_check)
 })

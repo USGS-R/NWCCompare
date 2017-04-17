@@ -218,7 +218,7 @@ get_obsdata <- function(x_obs) {
 #' FlowStatsICP(qfiletempf,drain_area)
 FlowStatsICP <- function(data,drain_area) {
   dfOut <- vector()
-  otherstat <- OtherStatsICP(data)
+  otherstat <- calculate_other_flow_stats(data)
   dfOut <- c(dfOut,otherstat)
   magnif7 <- magnifSeven(data)
   dfOut <- c(dfOut,magnif7)

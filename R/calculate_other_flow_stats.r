@@ -10,8 +10,8 @@
 #' @export
 #' @examples
 #' timeseries1<-sampleData
-#' OtherStatsICP(timeseries1)
-OtherStatsICP<-function(data)  {
+#' calculate_other_flow_stats(timeseries1)
+calculate_other_flow_stats<-function(data)  {
 
   sdbyyr <- aggregate(data$discharge, list(data$wy_val), 
                       sd)

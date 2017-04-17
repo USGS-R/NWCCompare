@@ -12,8 +12,8 @@
 #' @examples
 #' Gaged<-sampleData
 #' Modeled<-sampleData
-#' MonthlyAnnualGoF(Gaged,Modeled)
-MonthlyAnnualGoF <- function(Gaged,Modeled) {
+#' calculate_GoF_summary_stats(Gaged,Modeled)
+calculate_GoF_summary_stats <- function(Gaged,Modeled) {
   NSEv <- vector(length=14)
   NSELOGv <- vector(length=length(NSEv))
   RMSEv <- vector(length=length(NSEv))

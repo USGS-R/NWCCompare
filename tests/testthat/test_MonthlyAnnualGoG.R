@@ -1,9 +1,9 @@
-context("MonthlyAnnualGoF")
+context("calculate_GoF_summary_stats")
 
 test_that("example for characterization", {
   Gaged<-sampleData
   Modeled<-sampleData
-  statsout <- MonthlyAnnualGoF(Gaged,Modeled)
-  statsout_check <- readRDS("data/test_MonthlyAnnualGoF.rds")
+  statsout <- calculate_GoF_summary_stats(Gaged,Modeled)
+  statsout_check <- readRDS("data/test_calculate_GoF_summary_stats.rds")
   expect_equal(statsout, statsout_check)
 })

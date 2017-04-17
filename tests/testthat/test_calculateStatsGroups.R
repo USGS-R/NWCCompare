@@ -1,4 +1,4 @@
-context("calculateStatsGroups")
+context("calculate_stats_by_group")
 
 test_that("Original demo for hucs works", {
   sites<-"031601020108"
@@ -6,7 +6,7 @@ test_that("Original demo for hucs works", {
   enddate <- "2010-09-29"
   stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat"
   sites<-read.csv(header=F,colClasses=c("character"),text=sites)
-  statsout <- calculateStatsGroups(stats = stats, 
+  statsout <- calculate_stats_by_group(stats = stats, 
                                    sites = sites, 
                                    startdate = startdate, 
                                    enddate = enddate, 
@@ -14,7 +14,7 @@ test_that("Original demo for hucs works", {
                                    x_args = sites, 
                                    DRAIN_AREA_FUN = get_nwc_huc, 
                                    drain_args=sites)
-  statsout_check <- readRDS("data/test_calculateStatsGroups_statsout.rds")
+  statsout_check <- readRDS("data/test_calculate_stats_by_group_statsout.rds")
   expect_equal(statsout, statsout_check)
 })
 
@@ -25,7 +25,7 @@ test_that("Original demo for NWIS works", {
   stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
   drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
   sites<-read.csv(header=F,colClasses=c("character"),text=sites)
-  statsout <- calculateStatsGroups(stats = stats, 
+  statsout <- calculate_stats_by_group(stats = stats, 
                                    sites = sites, 
                                    startdate = startdate, 
                                    enddate = enddate, 
@@ -33,6 +33,6 @@ test_that("Original demo for NWIS works", {
                                    x_args = sites, 
                                    DRAIN_AREA_FUN = dataRetrieval::readNWISsite, 
                                    drain_args = sites)  
-  statsout_check <- readRDS("data/test_calculateStatsGroups_nwis_statsout.rds")
+  statsout_check <- readRDS("data/test_calculate_stats_by_group_nwis_statsout.rds")
   expect_equal(statsout, statsout_check)
 })

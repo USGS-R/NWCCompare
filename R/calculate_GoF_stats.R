@@ -18,8 +18,8 @@
 #' load_mod<-sampleData
 #' Gaged<-load_data
 #' Modeled<-load_mod
-#' SiteGoF(Modeled,Gaged)
-SiteGoF <- function(Modeled,Gaged) {
+#' calculate_GoF_stats(Modeled,Gaged)
+calculate_GoF_stats <- function(Modeled,Gaged) {
   Gaged <- Gaged[as.Date(Gaged$date) %in% as.Date(Modeled$date),]
   Modeled <- Modeled[as.Date(Modeled$date) %in% as.Date(Gaged$date),]
   Gaged <- Gaged[order(Gaged$date),]

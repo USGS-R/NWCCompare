@@ -19,7 +19,7 @@ hucs <- unlist(hucs[1,])
 
 ## ----createstatsoutput, echo=FALSE, eval=TRUE, results="hidew"-----------
 # calculate statsout
-statsout <- calculateStatsDiffs(sites = sites, 
+statsout <- calculate_stats_diffs(sites = sites, 
                                 startdate = startdate, 
                                 enddate = enddate, 
                                 X_DATA_FUN = dataRetrieval::readNWISdv, 
@@ -31,7 +31,7 @@ statsout <- calculateStatsDiffs(sites = sites,
 
 ## ----statsoutput, echo=TRUE, eval=FALSE----------------------------------
 #  # calculate statsout
-#  statsout <- calculateStatsDiffs(sites = sites,
+#  statsout <- calculate_stats_diffs(sites = sites,
 #                                  startdate = startdate,
 #                                  enddate = enddate,
 #                                  X_DATA_FUN = dataRetrieval::readNWISdv,
@@ -67,7 +67,7 @@ statsout[,c(1,4,39,74,109,111,115)]
 #  stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
 #  drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
 #  sites<-read.csv(header=F,colClasses=c("character"),text=sites)
-#  statsout <- calculateStatsGroups(stats = stats,
+#  statsout <- calculate_stats_by_group(stats = stats,
 #                                   sites = sites,
 #                                   startdate = startdate,
 #                                   enddate = enddate,
