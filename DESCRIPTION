@@ -16,7 +16,8 @@ Imports:
     EflowStats,
     lmomco,
     dataRetrieval,
-    jsonlite
+    jsonlite,
+    readr
 Suggests:
     xtable,
     knitr,

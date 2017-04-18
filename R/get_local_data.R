@@ -8,56 +8,53 @@
 #' @param sepChar string containing the datafile separator, default is comma
 #' @return dataOut data frame containing requested flow data for the stations
 #' @export
-#' @importFrom utils read.table
+#' @importFrom readr read_delim
 #' @examples
 #' dataPath <- system.file("extdata", package="NWCCompare")
 #' dataPath <- paste(dataPath, "modeled", sep="/")
 #' startdate <- "2009"
 #' enddate <- "2013"
 #' localData <- get_local_data(dataPath,startDt=startdate,endDt=enddate)
-get_local_data <- function(dataPath,startDt="",endDt="",sepChar=",") {
+get_local_data <- function(dataPath, startDt="", endDt="", sepChar=",") {
   if (nchar(startDt)>1) {startdate <- paste(startDt,"10","01",sep="-")}
-  if (nchar(endDt)>1) {enddate <- paste(endDt,"09","30",sep="-")}
-  fileList <- list.files(path=dataPath)
-  for (i in 1:length(fileList)) {
-    fileList[i] <- ifelse(nchar(strsplit(fileList[i],".csv"))<nchar(fileList[i]) | nchar(strsplit(fileList[i],".txt"))<nchar(fileList[i]), fileList[i],NA)
-  }
   
-  dateFormatCheck <- function(date){  # checks for the format YYYY-MM-DD
-    parts <- strsplit(date,"-",fixed=TRUE)
-    condition <- FALSE
-    if (length(parts[[1]])>1) {
-      if (nchar(parts[[1]][1]) == 4 && nchar(parts[[1]][2]) == 2 && nchar(parts[[1]][3]) == 2){
-        testYear <- as.numeric(parts[[1]][1])
-        testMonth <- as.numeric(parts[[1]][2])
-        testDay <- as.numeric(parts[[1]][3])
-        if (!is.na(testYear) && !is.na(testMonth) && !is.na(testDay)){
-          if (testMonth <= 12 && testDay <= 31){
-            condition <- TRUE
-          }        
-        }      
-      }
-    }
-    return(condition)
+  if (nchar(endDt)>1) {enddate <- paste(endDt,"09","30",sep="-")}
+  
+  fileList <- list.files(path=dataPath)
+  
+  for (i in 1:length(fileList)) {
+    fileList[i] <- ifelse(nchar(strsplit(fileList[i], ".csv")) < nchar(fileList[i]) | 
+                            nchar(strsplit(fileList[i],".txt")) < nchar(fileList[i]), 
+                          fileList[i],
+                          NA)
   }
   
   fileList <- fileList[which(!is.na(fileList))]
+  
   drainFile <- fileList[charmatch("drain",fileList)]
+  
   peakFiles <- fileList[charmatch("peak",fileList)]
+  
   if (!is.na(peakFiles)) {
-    sites <- fileList-peakFiles
-    sites <- sites[which(!fileList %in% drainFile)]
-  } else {sites <- fileList[which(!fileList %in% drainFile)]}
-  dataOut <- list()
-  for (i in 1:length(sites)) {
-    x_obs <- read.table(file.path(dataPath,sites[i]),
-                        sep=sepChar,stringsAsFactors=FALSE,
-                        header=TRUE, colClasses = "character")
-    site <- x_obs[1,1]
-    x_obs <- x_obs[,2:3]
-    x_obs[,2] <- as.numeric(x_obs[,2])
+    sites <- fileList - peakFiles
     
-    if(!dateFormatCheck(x_obs[,1])){
+    sites <- sites[which(!fileList %in% drainFile)]
+    
+  } else {
+    sites <- fileList[which(!fileList %in% drainFile)]
+  }
+  dataOut <- list()
+  
+  for (i in 1:length(sites)) {
+    x_obs <- read_delim(file = file.path(dataPath,sites[i]),
+                        delim = sepChar,
+                        col_types = "ccd",
+                        col_names = TRUE)
+    
+    site <- unlist(x_obs[1,1])
+    x_obs <- x_obs[,2:3]
+    
+    if(!dateFormatCheck(unlist(x_obs[,1]))){
       x_obs[,1] <- as.character(as.Date(x_obs[,1],format="%m/%d/%Y"))
     }
     
@@ -86,4 +83,22 @@ get_local_data <- function(dataPath,startDt="",endDt="",sepChar=",") {
     }
   }
   return(dataOut)
+}
+
+dateFormatCheck <- function(date){  # checks for the format YYYY-MM-DD
+  parts <- strsplit(date,"-",fixed=TRUE)
+  condition <- FALSE
+  if (length(parts[[1]])>1) {
+    if (nchar(parts[[1]][1]) == 4 && nchar(parts[[1]][2]) == 2 && nchar(parts[[1]][3]) == 2){
+      testYear <- as.numeric(parts[[1]][1])
+      testMonth <- as.numeric(parts[[1]][2])
+      testDay <- as.numeric(parts[[1]][3])
+      if (!is.na(testYear) && !is.na(testMonth) && !is.na(testDay)){
+        if (testMonth <= 12 && testDay <= 31){
+          condition <- TRUE
+        }        
+      }      
+    }
+  }
+  return(condition)
 }
