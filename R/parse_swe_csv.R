@@ -4,11 +4,11 @@
 #'
 #' @param input url for SOS service for desired site data
 #' @return data frame containing desired time series with names 'date' and 'data'
-#' @importFrom XML xmlTreeParse xpathApply xmlParse xmlValue
+#' @importFrom xml2 read_xml xml_find_first xml_text xml_ns
 #' @importFrom utils read.delim
 #' @export
 #' @examples
-#' parse_swe_csv(system.file('extdata','SWECSVBlock_daymet_example.xml',package='NWCEd'))
+#' parse_swe_csv(system.file('extdata','SWECSVBlock_daymet_example.xml',package='NWCCompare'))
 parse_swe_csv <- function(input) {
   mod_open <- file(input,open="r")
   content<-paste(readLines(mod_open,warn=FALSE))
@@ -17,9 +17,14 @@ parse_swe_csv <- function(input) {
     stop('An invalid parameter error was encountered. The HUC may not exist.')
   }
   if (length(sapply(content,nchar))>1) {
-    dat <- read.delim(header = F, comment.char = "",
-                       as.is = T, sep = ",", text = xpathApply(xmlParse(content),
-                                                               "//swe:values", xmlValue)[[1]])
+    dat <- read_xml(input)
+    dat <- read.delim(header = F, 
+                      comment.char = "", 
+                      as.is = T, 
+                      sep = ",", 
+                      text = xml_text(xml_find_first(dat, 
+                                                     "//swe:values", 
+                                                     xml_ns(dat))))
     names(dat) <- c('date', 'data')
     dat$date <- as.Date(strptime(dat$date, format = "%Y-%m-%dT%H:%M:%SZ"))
     dat$data <- as.numeric(dat$data)

@@ -11,7 +11,7 @@ Imports:
     zoo,
     chron,
     doBy,
-    XML,
+    xml2,
     hydroGOF,
     EflowStats,
     lmomco,

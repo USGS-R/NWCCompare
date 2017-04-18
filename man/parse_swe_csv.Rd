@@ -16,5 +16,5 @@ data frame containing desired time series with names 'date' and 'data'
 This function accepts a url and returns a data frame of data for that SOS request
 }
 \examples{
-parse_swe_csv(system.file('extdata','SWECSVBlock_daymet_example.xml',package='NWCEd'))
+parse_swe_csv(system.file('extdata','SWECSVBlock_daymet_example.xml',package='NWCCompare'))
 }

@@ -13,7 +13,6 @@
 #' @param M_DATA_FUN function for pulling modeled data form m_args
 #' @param m_args url for pulling modeled data
 #' @return statsout data frame of calculated statistics
-#' @import XML
 #' @import zoo
 #' @import chron
 #' @import doBy
