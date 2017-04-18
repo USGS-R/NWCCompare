@@ -1,73 +1,71 @@
-#' Function to calculate the statistics for a given data set
+#' Function to calculate statistics of daily flow by grtoup for many sites
 #' 
-#' This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
-#' calculated diff statistics
+#' This function traverses a collection of daily streamflow data and 
+#' calculate the requested statistics for each site. Available statistics
+#' include those implemented by \link[EflowStats]{hitStats}, 
+#' \link[EflowStats]{magnifSeven}, \link{functioname}
 #' 
 #' @param stats string containing stat groups desired
-#' @param sites list of usgs station ids
-#' @param startdate startdate for pulling data
-#' @param enddate enddate for pulling data
-#' @param X_DATA_FUN function for pulling data from x_args
-#' @param x_args urls for pulling observed data
-#' @param DRAIN_AREA_FUN function for pulling drainage area
-#' @param drain_args url for pulling drainage area
-#' @return statsout data frame of calculated statistics
-#' @importFrom EflowStats magnifSeven FlowStatsAll
+#' @param flow_data A dataframe containing a NWCCompare flow dataset.
+#' @param yearType A charcter of either "water" or "calendar" indicating 
+#' whether to use water years or calendar years, respectively.
+#' @param digits A numeric. Number of digits to round indice values
+#' @return Data frame of calculated statistics. Time series ids are used 
+#' as row names, statistic ids as column names.
+#' @importFrom EflowStats magnifSeven hitStats dataCheck
 #' @importFrom stats aggregate
 #' @export
-calculate_stats_by_group<-function(stats, sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args) {
-  supportedStats=getSupportedStatNames()
-  tempArrays<-getEmptyResultArrayNWCStats(stats, length(sites), supportedStats)
-  for (i in 1:length(sites)) {
-    site = sites[i]
-    if(nchar(site) == 12) { # this is a horrible hack this whole thing needs a rewrite.
-      x_data <- X_DATA_FUN(huc = x_args[i],
-                           local = FALSE)
-    } else {
-      x_data <- X_DATA_FUN(siteNumber = x_args[i], 
-                          parameterCd = "00060",
-                          startDate = startdate,
-                          endDate = enddate)
-    }
-    if(!is.null(names(x_data$discharge))) {
-      x_data <- x_data$discharge
-      names(x_data) <- c("date", "discharge")
-    }
-    drain_area <- DRAIN_AREA_FUN(drain_args[i])
-    if(!is.null(drain_area$type)) { #horrible hack. This will be refactored out!!!
-      if(length(drain_area$features) == 1) {
-        drain_area <- as.numeric(drain_area$features[[1]]$properties$areasqkm) * 0.386102 # convert to sqmi
-      } else {
-        stop("more than one feature returned for that huc, don't know what to do.")
-      }
-    } else { # nwis
-      drain_area <- as.numeric(drain_area$drain_area_va)
-    }
-    if (nrow(x_data) > 2) {
-      flow_data <- get_obsdata(x_data)
-      countbyyr<-aggregate(flow_data$discharge, list(flow_data$wy_val), length)
-      colnames(countbyyr)<-c('wy','num_samples')
-      sub_countbyyr<-subset(countbyyr,countbyyr$num_samples >= 365)
-      if (nrow(sub_countbyyr)==0) {
-        tempArrays$comment[i]<-"No complete water years for site"
-      } else {
-        flow_data<-merge(flow_data,sub_countbyyr,by.x="wy_val",by.y="wy")
-        flow_data<-flow_data[order(flow_data$jul_val),]
-        tempArrays$min_date[i] <- as.character(min(flow_data$date))
-        tempArrays$max_date[i] <- as.character(max(flow_data$date))
-        flow_data <- flow_data[, c("wy_val", "date", "discharge", "month_val", "year_val", "day_val", "jul_val")]
-        if (ncol(tempArrays$ObsFlowStats) > 0) {
-          tempArrays$ObsFlowStats[i, ] <- FlowStatsAll(flow_data, drain_area, stats=stats)
-        }
-        if (ncol(tempArrays$magnifSevenObs) > 0) {
-          tempArrays$magnifSevenObs[i, ] <- magnifSeven(flow_data)
-        }
-        tempArrays$comment <- ""
-      }} else {
-        tempArrays$comment[i] <- "No observed data for this site"
-      }
-    #tempArrays<-runStatsGroups(x_data,tempArrays,i,drain_area)
+#' @examples
+#' sites <- c("02177000","02178400")
+#' startdate <- "2008-10-01"
+#' enddate <- "2013-09-30"
+#' nwis_dataset <- build_nwis_dv_dataset(sites, startdate, enddate)
+#' stats=c("magAverage", "magLow", "magHigh", 
+#'         "frequencyLow", "frequencyHigh", 
+#'         "durationLow", "durationHigh", 
+#'         "timingAverage", "timingLow", "timingHigh", 
+#'         "rateChange", 
+#'         "magnifSeven", "otherStat")
+#' calculate_stats_by_group(stats, nwis_dataset)
+calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits = 3) {
+  
+  if("magnifSeven" %in% stats) {
+    stats <- stats[!stats %in% "magnifSeven"]
+    mag7 <- TRUE
   }
-  statsout<-nameStatsArray(stats, sites, tempArrays)
-  return(statsout)
+  
+  if("otherStat" %in% stats) {
+    stats <- stats[!stats %in% "otherStat"]
+    ostat <- TRUE
+  }
+  
+  supportedStats=getSupportedStatNames()
+  oldstats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
+  refArray <- getEmptyResultArrayNWCStats(oldstats, length(sites), supportedStats)
+  
+  sites <- names(flow_data$daily_streamflow_cfs)
+  
+  init <- TRUE
+  
+  for (site in sites) {
+    
+    drainage_area <- flow_data$drainage_area_sqmi[site][[1]]
+    
+    flood_threshold <- flow_data$peak_threshold_cfs[site][[1]]
+    
+    flow_data_site <- flow_data$daily_streamflow_cfs[site][[1]]
+    
+    hitStats_result <- hitStats(flow_data_site,
+                                drainArea=drainage_area,
+                                floodThreshold=flood_threshold,
+                                stats = stats,
+                                yearType = yearType)
+    
+    min_date <- as.character(min(flow_data_site$date))
+    max_date <- as.character(max(flow_data_site$date))
+    
+    if (mag7) {
+      mag7_result <- magnifSeven(flow_data_site, yearType, digits)
+    }
+  }
 }

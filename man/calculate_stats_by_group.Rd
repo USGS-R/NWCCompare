@@ -2,32 +2,25 @@
 % Please edit documentation in R/calculate_stats_by_group.R
 \name{calculate_stats_by_group}
 \alias{calculate_stats_by_group}
-\title{Function to calculate the statistics for a given data set}
+\title{Function to calculate statistics of daily flow by grtoup for many sites}
 \usage{
-calculate_stats_by_group(stats, sites, startdate, enddate, X_DATA_FUN, x_args,
-  DRAIN_AREA_FUN, drain_args)
+calculate_stats_by_group(stats, flow_data, yearType)
 }
 \arguments{
 \item{stats}{string containing stat groups desired}
 
-\item{sites}{list of usgs station ids}
+\item{flow_data}{A dataframe containing a NWCCompare flow dataset.}
 
-\item{startdate}{startdate for pulling data}
-
-\item{enddate}{enddate for pulling data}
-
-\item{X_DATA_FUN}{function for pulling data from x_args}
-
-\item{x_args}{urls for pulling observed data}
-
-\item{DRAIN_AREA_FUN}{function for pulling drainage area}
-
-\item{drain_args}{url for pulling drainage area}
+\item{yearType}{A charcter of either "water" or "calendar" indicating 
+whether to use water years or calendar years, respectively.}
 }
 \value{
-statsout data frame of calculated statistics
+Data frame of calculated statistics. Time series ids are used 
+as row names, statistic ids as column names.
 }
 \description{
-This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
-calculated diff statistics
+This function traverses a collection of daily streamflow data and 
+calculate the requested statistics for each site. Available statistics
+include those implemented by \link[EflowStats]{hitStats}, 
+\link[EflowStats]{magnifSeven}, \link{functioname}
 }

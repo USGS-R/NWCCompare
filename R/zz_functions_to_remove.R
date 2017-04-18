@@ -210,7 +210,6 @@ get_obsdata <- function(x_obs) {
 #' @param drain_area value of site drainage area
 #' @return Output data frame of calculated statistics
 #' @export
-#' @importFrom EflowStats magnifSeven ma24.35 ma41.45 ml18 ml20 mh1.12 fl1.2 fh6 fh7 dl6 dl13 dl16.17 ta1.2 tl1.2 th1.2 ra5 ra7 ra8.9
 #' @examples
 #' drain_area<-54
 #' qfiletempf<-sampleData
