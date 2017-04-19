@@ -16,32 +16,26 @@ calculate_other_flow_stats<-function(flow_data, digits = 3)  {
   mean_by_year <- aggregate(flow_data$discharge, list(flow_data$year_val), 
                         mean, na.rm=TRUE)[,2]
   
-  mean_flow<-round(mean(mean_by_year, na.rm=TRUE), digits=digits)
-  
   med_flow<-round(median(mean_by_year, na.rm=TRUE), digits=digits)
   
   cv_flow<-round(cv(mean_by_year), digits=digits)
   
-  l7Q10v<-NWCportalL7Q10(flow_data)
-  
-  l7Q2v<-NWCportalL7Q2(flow_data)
-  
-  return_10v<-NWCportalReturn10(flow_data)
+  cv_daily<-round(cv(flow_data$discharge),digits=digits)
   
   obs_percentiles <- flow_perc(flow_data)
-  
   flow_10 <- obs_percentiles[1]
   flow_25 <- obs_percentiles[2]
   flow_50 <- obs_percentiles[3]
   flow_75 <- obs_percentiles[4]
   flow_90 <- obs_percentiles[5]
   flow_15 <- obs_percentiles[6]
-  
-  OtherStatsv <- c(med_flow,cv_flow,l7Q10v,l7Q2v,return_10v,
-                   flow_10,flow_25,flow_50,flow_75,flow_90,flow_15)
 
-  return <- data.frame(indice = c("lam1","tau2","tau3","tau4","ar1","amplitude","phase"),
-                        statistic = c(lam1,tau2,tau3,tau4,ar1v,amplitude,phase),
+  return <- data.frame(indice = c("med_flow", "cv_flow", "cv_daily", 
+                                  "flow_10", "flow_25", "flow_50", 
+                                  "flow_75", "flow_90", "flow_15"),
+                        statistic = c(med_flow,cv_flow,cv_daily,
+                                      flow_10,flow_25,flow_50,
+                                      flow_75,flow_90,flow_15),
                         stringsAsFactors = F)
 }
 

@@ -4,7 +4,7 @@
 \alias{calculate_stats_by_group}
 \title{Function to calculate statistics of daily flow by grtoup for many sites}
 \usage{
-calculate_stats_by_group(stats, flow_data, yearType = "water", digits = 2)
+calculate_stats_by_group(stats, flow_data, yearType = "water", digits = 3)
 }
 \arguments{
 \item{stats}{string containing stat groups desired}

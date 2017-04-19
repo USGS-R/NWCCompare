@@ -27,11 +27,16 @@
 #'         "rateChange", 
 #'         "magnifSeven")
 #' eflow_stats <- calculate_stats_by_group(stats, nwis_dataset)
-calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits = 2) {
+calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits = 3) {
   
   if("magnifSeven" %in% stats) {
     stats <- stats[!stats %in% "magnifSeven"]
     mag7 <- TRUE
+  }
+  
+  if("otherStat" %in% stats) {
+    stats <- stats[!stats %in% "otherStat"]
+    ostat <- TRUE
   }
   
   supportedStats=getSupportedStatNames()
@@ -59,17 +64,49 @@ calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits 
     min_date <- as.character(min(flow_data_site$date))
     max_date <- as.character(max(flow_data_site$date))
     
+    nrows_out <- 2 + nrow(hitStats_result)
+    
     if (mag7) {
       mag7_result <- magnifSeven(flow_data_site, yearType, digits)
+      nrows_out <- nrows_out + nrow(mag7_result)
+    }
+    
+    if (ostat) {
+      ostat_result <- calculate_other_flow_stats(flow_data = flow_data_site, digits = digits)
+      nrows_out <- nrows_out + nrow(ostat_result)
     }
     
     if(init) {
-      output <- rbind(mag7_result, hitStats_result)
-      names(output) <- c("indice", site)
+      output <- data.frame(matrix(ncol = (length(sites) + 1), nrow = nrows_out))
+      names(output) <- c("indice", sites)
+      
+      output[,1:2] <- rbind(min_date, max_date, mag7_result, ostat_result, hitStats_result)
+      
+      output[1:2,1] <- c("min_date", "max_date")
+      
+      # This is for backward compatibility. Remove once tests pass!!!
+      output[3:9,1] <- c("lam1Obs","tau2Obs","tau3Obs",
+                         "tau4Obs","ar1Obs","amplitudeObs","phaseObs")
+      output[10:18,1] <- c("med_flowObs", "cv_flowObs", "cv_dailyObs", 
+                           "flow_10Obs", "flow_25Obs", "flow_50Obs", 
+                           "flow_75Obs", "flow_90Obs", "flow_15Obs")
+      
       init = FALSE
     } else {
-      output[site] <- rbind(mag7_result, hitStats_result)["statistic"]
+      
+      output[site] <- rbind(min_date, max_date, mag7_result, ostat_result, hitStats_result)["statistic"]
+      
     }
   }
-  return(output)
+  
+  statsout <- data.frame(matrix(NA, nrow=length(sites), ncol = (1 + nrow(output) + 1)))
+  names(statsout) <- c("site_no", output[,1], "comment")
+  
+  statsout[,1] <- sites
+  for(i in 1:length(sites)) {
+    statsout[i,2:(length(statsout)-1)] <- output[,(i+1)]
+  }
+  statsout[1,length(statsout)] <- ""
+  
+  return(statsout)
 }
