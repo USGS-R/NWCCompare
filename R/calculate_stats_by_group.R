@@ -25,18 +25,13 @@
 #'         "durationLow", "durationHigh", 
 #'         "timingAverage", "timingLow", "timingHigh", 
 #'         "rateChange", 
-#'         "magnifSeven", "otherStat")
-#' calculate_stats_by_group(stats, nwis_dataset)
-calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits = 3) {
+#'         "magnifSeven")
+#' eflow_stats <- calculate_stats_by_group(stats, nwis_dataset)
+calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits = 2) {
   
   if("magnifSeven" %in% stats) {
     stats <- stats[!stats %in% "magnifSeven"]
     mag7 <- TRUE
-  }
-  
-  if("otherStat" %in% stats) {
-    stats <- stats[!stats %in% "otherStat"]
-    ostat <- TRUE
   }
   
   supportedStats=getSupportedStatNames()
@@ -67,5 +62,14 @@ calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits 
     if (mag7) {
       mag7_result <- magnifSeven(flow_data_site, yearType, digits)
     }
+    
+    if(init) {
+      output <- rbind(mag7_result, hitStats_result)
+      names(output) <- c("indice", site)
+      init = FALSE
+    } else {
+      output[site] <- rbind(mag7_result, hitStats_result)["statistic"]
+    }
   }
+  return(output)
 }

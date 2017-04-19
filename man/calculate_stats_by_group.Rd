@@ -4,7 +4,7 @@
 \alias{calculate_stats_by_group}
 \title{Function to calculate statistics of daily flow by grtoup for many sites}
 \usage{
-calculate_stats_by_group(stats, flow_data, yearType)
+calculate_stats_by_group(stats, flow_data, yearType = "water", digits = 2)
 }
 \arguments{
 \item{stats}{string containing stat groups desired}
@@ -13,6 +13,8 @@ calculate_stats_by_group(stats, flow_data, yearType)
 
 \item{yearType}{A charcter of either "water" or "calendar" indicating 
 whether to use water years or calendar years, respectively.}
+
+\item{digits}{A numeric. Number of digits to round indice values}
 }
 \value{
 Data frame of calculated statistics. Time series ids are used 
@@ -23,4 +25,17 @@ This function traverses a collection of daily streamflow data and
 calculate the requested statistics for each site. Available statistics
 include those implemented by \link[EflowStats]{hitStats}, 
 \link[EflowStats]{magnifSeven}, \link{functioname}
+}
+\examples{
+sites <- c("02177000","02178400")
+startdate <- "2008-10-01"
+enddate <- "2013-09-30"
+nwis_dataset <- build_nwis_dv_dataset(sites, startdate, enddate)
+stats=c("magAverage", "magLow", "magHigh", 
+        "frequencyLow", "frequencyHigh", 
+        "durationLow", "durationHigh", 
+        "timingAverage", "timingLow", "timingHigh", 
+        "rateChange", 
+        "magnifSeven")
+eflow_stats <- calculate_stats_by_group(stats, nwis_dataset)
 }
