@@ -8,11 +8,10 @@ build_nwis_dv_dataset(sites, start_date, end_date)
 }
 \arguments{
 \item{sites}{A character vector of NWIS sites.}
-}
-\value{
-start_date A string representation of the start date in YYYY-MM-DD format.
 
-end_date A string representation of the end date in YYYY-MM-DD format.
+\item{start_date}{A string representation of the start date in YYYY-MM-DD format.}
+
+\item{end_date}{A string representation of the end date in YYYY-MM-DD format.}
 }
 \description{
 Takes a list of sites and a start and end date of interest. Returns

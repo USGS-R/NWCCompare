@@ -7,7 +7,10 @@
 calculate_other_flow_stats(flow_data, digits = 3)
 }
 \arguments{
-\item{data}{data frame of daily flow data}
+\item{flow_data}{A dataframe containing a NWCCompare flow dataset. 
+Should have been cleaned by \link[EflowStats]{dataCheck}}
+
+\item{digits}{A numeric. Number of digits to round indice values}
 }
 \value{
 OtherStats data frame of calculated statistics

@@ -1,12 +1,16 @@
-#' Function to calculate statistics of daily flow by grtoup for many sites
+#' Function to calculate statistics of daily flow by group for many time series
 #' 
 #' This function traverses a collection of daily streamflow data and 
-#' calculate the requested statistics for each site. Available statistics
-#' include those implemented by \link[EflowStats]{hitStats}, 
-#' \link[EflowStats]{magnifSeven}, \link{functioname}
+#' calculates the requested statistics for each time series. Available 
+#' statistics include those implemented by \link[EflowStats]{hitStats}, 
+#' \link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}.
 #' 
-#' @param stats string containing stat groups desired
-#' @param flow_data A dataframe containing a NWCCompare flow dataset.
+#' @param stats string containing stat groups desired. 
+#' options are: "all", "magAverage", "magLow", "magHigh", "frequencyLow", 
+#' "frequencyHigh", "durationLow", "durationHigh", "timingAverage", 
+#' "timingLow", "timingHigh", "rateChange", "magnifSeven", "otherStat"
+#' @param flow_data A dataframe containing a NWCCompare flow dataset. 
+#' Should have been cleaned by \link[EflowStats]{dataCheck}
 #' @param yearType A charcter of either "water" or "calendar" indicating 
 #' whether to use water years or calendar years, respectively.
 #' @param digits A numeric. Number of digits to round indice values
@@ -25,27 +29,28 @@
 #'         "durationLow", "durationHigh", 
 #'         "timingAverage", "timingLow", "timingHigh", 
 #'         "rateChange", 
-#'         "magnifSeven")
+#'         "magnifSeven", "otherStat")
 #' eflow_stats <- calculate_stats_by_group(stats, nwis_dataset)
-calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits = 3) {
+calculate_stats_by_group<-function(stats, flow_data, 
+                                   yearType = "water", digits = 3) {
   
-  if("magnifSeven" %in% stats) {
+  if("magnifSeven" %in% stats || "all" %in% stats) {
     stats <- stats[!stats %in% "magnifSeven"]
     mag7 <- TRUE
   }
   
-  if("otherStat" %in% stats) {
+  if("otherStat" %in% stats || "all" %in% stats) {
     stats <- stats[!stats %in% "otherStat"]
     ostat <- TRUE
   }
   
-  supportedStats=getSupportedStatNames()
-  oldstats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
-  refArray <- getEmptyResultArrayNWCStats(oldstats, length(sites), supportedStats)
-  
   sites <- names(flow_data$daily_streamflow_cfs)
   
   init <- TRUE
+  
+  min_date <- rep("", length(sites))
+  names(min_date) <- sites
+  max_date <- min_date
   
   for (site in sites) {
     
@@ -61,10 +66,10 @@ calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits 
                                 stats = stats,
                                 yearType = yearType)
     
-    min_date <- as.character(min(flow_data_site$date))
-    max_date <- as.character(max(flow_data_site$date))
+    min_date[site] <- as.character(min(flow_data_site$date))
+    max_date[site] <- as.character(max(flow_data_site$date))
     
-    nrows_out <- 2 + nrow(hitStats_result)
+    nrows_out <- nrow(hitStats_result)
     
     if (mag7) {
       mag7_result <- magnifSeven(flow_data_site, yearType, digits)
@@ -80,31 +85,30 @@ calculate_stats_by_group<-function(stats, flow_data, yearType = "water", digits 
       output <- data.frame(matrix(ncol = (length(sites) + 1), nrow = nrows_out))
       names(output) <- c("indice", sites)
       
-      output[,1:2] <- rbind(min_date, max_date, mag7_result, ostat_result, hitStats_result)
+      output[,1:2] <- rbind(mag7_result, ostat_result, hitStats_result)
       
-      output[1:2,1] <- c("min_date", "max_date")
-      
-      # This is for backward compatibility. Remove once tests pass!!!
-      output[3:9,1] <- c("lam1Obs","tau2Obs","tau3Obs",
-                         "tau4Obs","ar1Obs","amplitudeObs","phaseObs")
-      output[10:18,1] <- c("med_flowObs", "cv_flowObs", "cv_dailyObs", 
-                           "flow_10Obs", "flow_25Obs", "flow_50Obs", 
-                           "flow_75Obs", "flow_90Obs", "flow_15Obs")
+      output[1:7,1] <- c("lam1","tau2","tau3",
+                         "tau4","ar1","amplitude","phase")
+      output[8:16,1] <- c("med_flow", "cv_flow", "cv_daily", 
+                           "flow_10", "flow_25", "flow_50", 
+                           "flow_75", "flow_90", "flow_15")
       
       init = FALSE
     } else {
       
-      output[site] <- rbind(min_date, max_date, mag7_result, ostat_result, hitStats_result)["statistic"]
+      output[site] <- rbind(mag7_result, ostat_result, hitStats_result)["statistic"]
       
     }
   }
   
-  statsout <- data.frame(matrix(NA, nrow=length(sites), ncol = (1 + nrow(output) + 1)))
-  names(statsout) <- c("site_no", output[,1], "comment")
+  statsout <- data.frame(matrix(NA, nrow=length(sites), ncol = (3 + nrow(output) + 1)))
+  names(statsout) <- c("site_no", "min_date", "max_date", output[,1], "comment")
   
   statsout[,1] <- sites
+  statsout[,2] <- min_date
+  statsout[,3] <- max_date
   for(i in 1:length(sites)) {
-    statsout[i,2:(length(statsout)-1)] <- output[,(i+1)]
+    statsout[i,4:(length(statsout)-1)] <- output[,(i+1)]
   }
   statsout[1,length(statsout)] <- ""
   

@@ -7,9 +7,10 @@
 flow_perc(flow_data, probs = c(0.1, 0.25, 0.5, 0.75, 0.9, 0.15))
 }
 \arguments{
-\item{probs}{vector containing requested percentile value(s)}
+\item{flow_data}{A dataframe containing a NWCCompare flow dataset. 
+Should have been cleaned by \link[EflowStats]{dataCheck}}
 
-\item{data}{data frame containing value data for the chosen timeseries}
+\item{probs}{vector containing requested percentile value(s)}
 }
 \value{
 obs_percentiles requested flow percentiles for the given data frame
@@ -19,6 +20,6 @@ This function accepts a data frame containing daily data and a list of desired p
 returns a list of the requested percentiles
 }
 \examples{
-qfiletempf<-sampleData
-flow_perc(qfiletempf,probs=c(.1,.25,.5,.75))
+flow_data<-sampleData
+flow_perc(flow_data,probs=c(.1,.25,.5,.75))
 }

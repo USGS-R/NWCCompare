@@ -5,8 +5,8 @@
 #' square miles and cubic feet per second.
 #'
 #' @param sites A character vector of NWIS sites.
-#' @return start_date A string representation of the start date in YYYY-MM-DD format.
-#' @return end_date A string representation of the end date in YYYY-MM-DD format.
+#' @param start_date A string representation of the start date in YYYY-MM-DD format.
+#' @param end_date A string representation of the end date in YYYY-MM-DD format.
 #' @importFrom dataRetrieval readNWISdv readNWISsite readNWISpeak
 #' @importFrom EflowStats dataCheck peakThreshold
 #' @export

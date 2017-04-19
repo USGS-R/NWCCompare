@@ -2,14 +2,18 @@
 % Please edit documentation in R/calculate_stats_by_group.R
 \name{calculate_stats_by_group}
 \alias{calculate_stats_by_group}
-\title{Function to calculate statistics of daily flow by grtoup for many sites}
+\title{Function to calculate statistics of daily flow by group for many time series}
 \usage{
 calculate_stats_by_group(stats, flow_data, yearType = "water", digits = 3)
 }
 \arguments{
-\item{stats}{string containing stat groups desired}
+\item{stats}{string containing stat groups desired. 
+options are: "all", "magAverage", "magLow", "magHigh", "frequencyLow", 
+"frequencyHigh", "durationLow", "durationHigh", "timingAverage", 
+"timingLow", "timingHigh", "rateChange", "magnifSeven", "otherStat"}
 
-\item{flow_data}{A dataframe containing a NWCCompare flow dataset.}
+\item{flow_data}{A dataframe containing a NWCCompare flow dataset. 
+Should have been cleaned by \link[EflowStats]{dataCheck}}
 
 \item{yearType}{A charcter of either "water" or "calendar" indicating 
 whether to use water years or calendar years, respectively.}
@@ -22,9 +26,9 @@ as row names, statistic ids as column names.
 }
 \description{
 This function traverses a collection of daily streamflow data and 
-calculate the requested statistics for each site. Available statistics
-include those implemented by \link[EflowStats]{hitStats}, 
-\link[EflowStats]{magnifSeven}, \link{functioname}
+calculates the requested statistics for each time series. Available 
+statistics include those implemented by \link[EflowStats]{hitStats}, 
+\link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}.
 }
 \examples{
 sites <- c("02177000","02178400")
@@ -36,6 +40,6 @@ stats=c("magAverage", "magLow", "magHigh",
         "durationLow", "durationHigh", 
         "timingAverage", "timingLow", "timingHigh", 
         "rateChange", 
-        "magnifSeven")
+        "magnifSeven", "otherStat")
 eflow_stats <- calculate_stats_by_group(stats, nwis_dataset)
 }

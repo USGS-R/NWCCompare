@@ -36,14 +36,15 @@ findrank <- function(n, p) {
 #' This function accepts a data frame containing daily data and a list of desired percentiles and 
 #' returns a list of the requested percentiles
 #' 
-#' @param data data frame containing value data for the chosen timeseries
+#' @param flow_data A dataframe containing a NWCCompare flow dataset. 
+#' Should have been cleaned by \link[EflowStats]{dataCheck}
 #' @param probs vector containing requested percentile value(s)
 #' @return obs_percentiles requested flow percentiles for the given data frame
 #' @importFrom stats quantile
 #' @examples
-#' qfiletempf<-sampleData
-#' flow_perc(qfiletempf,probs=c(.1,.25,.5,.75))
-flow_perc <- function(flow_data,probs=c(.1,.25,.5,.75,.9,.15)) {
+#' flow_data<-sampleData
+#' flow_perc(flow_data,probs=c(.1,.25,.5,.75))
+flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
   obs_percentiles <- quantile(flow_data$discharge,probs,na.rm=TRUE)
   return(obs_percentiles)
 }
