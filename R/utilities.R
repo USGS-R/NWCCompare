@@ -43,8 +43,8 @@ findrank <- function(n, p) {
 #' @examples
 #' qfiletempf<-sampleData
 #' flow_perc(qfiletempf,probs=c(.1,.25,.5,.75))
-flow_perc <- function(data,probs=c(.1,.25,.5,.75,.9,.15)) {
-  obs_percentiles <- quantile(data$discharge,probs,na.rm=TRUE)
+flow_perc <- function(flow_data,probs=c(.1,.25,.5,.75,.9,.15)) {
+  obs_percentiles <- quantile(flow_data$discharge,probs,na.rm=TRUE)
   return(obs_percentiles)
 }
 

@@ -4,12 +4,12 @@
 \alias{flow_perc}
 \title{Function to return the requested flow percentiles for a given data series}
 \usage{
-flow_perc(data, probs = c(0.1, 0.25, 0.5, 0.75, 0.9, 0.15))
+flow_perc(flow_data, probs = c(0.1, 0.25, 0.5, 0.75, 0.9, 0.15))
 }
 \arguments{
-\item{data}{data frame containing value data for the chosen timeseries}
-
 \item{probs}{vector containing requested percentile value(s)}
+
+\item{data}{data frame containing value data for the chosen timeseries}
 }
 \value{
 obs_percentiles requested flow percentiles for the given data frame

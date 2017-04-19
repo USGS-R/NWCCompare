@@ -4,7 +4,7 @@
 \alias{calculate_other_flow_stats}
 \title{Function to return the OtherStats statistics for a given data series}
 \usage{
-calculate_other_flow_stats(data)
+calculate_other_flow_stats(flow_data, digits = 3)
 }
 \arguments{
 \item{data}{data frame of daily flow data}

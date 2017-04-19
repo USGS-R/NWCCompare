@@ -4,10 +4,10 @@
 \alias{NWCportalReturn10}
 \title{Function to return the 10 year return value for a given data series}
 \usage{
-NWCportalReturn10(qfiletempf)
+NWCportalReturn10(flow_data)
 }
 \arguments{
-\item{qfiletempf}{data frame containing value data for the chosen timeseries}
+\item{flow_data}{data frame containing value data for the chosen timeseries}
 }
 \value{
 NWCportalReturn10 10-year return value for the given data frame
@@ -17,6 +17,6 @@ This function accepts a data frame containing daily data and returns the 10 year
 calculated for the National Water Census by a non-standard method.
 }
 \examples{
-qfiletempf<-sampleData
-NWCportalReturn10(qfiletempf)
+flow_data<-sampleData
+NWCportalReturn10(flow_data)
 }
