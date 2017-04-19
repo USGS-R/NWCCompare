@@ -18,7 +18,7 @@ before_install:
   - ./travis-tool.sh bootstrap
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh github_package jimhester/covr
-  - ./travis-tool.sh github_package USGS-R/EflowStats@v4.1.1
+  - ./travis-tool.sh github_package USGS-R/EflowStats
 
 after_failure:
   ./travis-tool.sh dump_logs
