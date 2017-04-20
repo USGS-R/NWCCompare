@@ -9,6 +9,7 @@
 #' @param digits A numeric. Number of digits to round indice values
 #' @return OtherStats data frame of calculated statistics
 #' @importFrom stats aggregate median sd
+#' @importFrom EflowStats cv
 #' @export
 #' @examples
 #' timeseries1<-sampleData

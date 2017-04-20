@@ -7,12 +7,8 @@
 #' @param Gaged data frame of daily flow data
 #' @return Output data frame of calculated statistics
 #' @export
-#' @import hydroGOF
-#' @import zoo
-#' @import chron
-#' @import doBy
-#' @import lmomco
-#' @importFrom stats quantile
+#' @importFrom hydroGOF rmse rsr pbias
+#' @importFrom stats quantile cor
 #' @examples
 #' load_data<-sampleData
 #' load_mod<-sampleData
@@ -26,9 +22,6 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
   Gaged <- Gaged[order(Gaged$date),]
   Modeled <- Modeled[order(Modeled$date),]
   
-  if (nrow(Modeled)>1) {
-    site_no <- Gaged[1,1]
-    
     nsev <- nse(Gaged$discharge,Modeled$discharge)
     nselogv <- nselog(Gaged$discharge,Modeled$discharge)
     rmsev <- rmse(Gaged$discharge,Modeled$discharge)
@@ -158,7 +151,7 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
       SpearmanbyMonth[m] <- cor(monthobs$discharge,monthmod$discharge,method="spearman")
     }
     
-    Output <- c(site_no, nsev,nselogv,rmsev,rmsnev,rsrv,pbiasv,pearsonv,spearmanv,
+    Output <- c(nsev,nselogv,rmsev,rmsnev,rsrv,pbiasv,pearsonv,spearmanv,
                 nsev_90,nsev_75_90,nsev_50_75,nsev_25_50,nsev_10_25,nsev_10,
                 rmsev_90,rmsev_75_90,rmsev_50_75,rmsev_25_50,rmsev_10_25,rmsev_10,
                 rmsnev_90,rmsnev_75_90,rmsnev_50_75,rmsnev_25_50,rmsnev_10_25,rmsnev_10,
@@ -170,7 +163,7 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
     
     Output <- as.data.frame(t(Output),stringsAsFactors=FALSE)
     
-    colnames(Output) <- c("site_no","nse","nselog","rmse","rmsne","rsr","pbias","pearson","spearman",'nse_90','nse_75_90','nse_50_75','nse_25_50','nse_10_25',
+    colnames(Output) <- c("nse","nselog","rmse","rmsne","rsr","pbias","pearson","spearman",'nse_90','nse_75_90','nse_50_75','nse_25_50','nse_10_25',
                           'nse_10','rmse_90','rmse_75_90','rmse_50_75','rmse_25_50','rmse_10_25','rmse_10','rmsne_90','rmsne_75_90','rmsne_50_75',
                           'rmsne_25_50','rmsne_10_25','rmsne_10','rsr_90','rsr_75_90','rsr_50_75','rsr_25_50','rsr_10_25','rsr_10','pbias_90',
                           'pbias_75_90','pbias_50_75','pbias_25_50','pbias_10_25','pbias_10','pearson_90','pearson_75_90','pearson_50_75',
@@ -191,9 +184,5 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
                           'SpearmanbyMonthJan','SpearmanbyMonthFeb','SpearmanbyMonthMar','SpearmanbyMonthApr','SpearmanbyMonthMay',
                           'SpearmanbyMonthJun','SpearmanbyMonthJul','SpearmanbyMonthAug','SpearmanbyMonthSep','SpearmanbyMonthOct',
                           'SpearmanbyMonthNov','SpearmanbyMonthDec')
-  } else {
-    Output <- NA
-    cat("No matching discharge days available")
-  }
   return(Output)
 }
