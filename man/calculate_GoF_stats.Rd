@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_GoF_stats.R
 \name{calculate_GoF_stats}
 \alias{calculate_GoF_stats}
-\title{Function to calculate GoF statistics for given observed and modeled data sets}
+\title{Function to calculate Goodness of Fit statistics}
 \usage{
 calculate_GoF_stats(Modeled, Gaged)
 }
@@ -15,8 +15,8 @@ calculate_GoF_stats(Modeled, Gaged)
 Output data frame of calculated statistics
 }
 \description{
-This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
-calculated GoF statistics
+This function accepts observed and modeled data frames of daily flow 
+data and returns a data frame of calculated GoF statistics
 }
 \examples{
 load_data<-sampleData

@@ -1,7 +1,7 @@
-#' Function to calculate monthly annual GoF statistics for given observed and modeled data sets
+#' Function to calculate monthly annual GoF statistics
 #' 
-#' This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
-#' calculated monthly annual GoF statistics
+#' This function accepts observed and modeled data frames of daily flow data 
+#' and returns a data frame of calculated monthly annual GoF statistics
 #' 
 #' @param Gaged data frame of daily flow data
 #' @param Modeled data frame of daily flow data
@@ -13,6 +13,8 @@
 #' Gaged<-sampleData
 #' Modeled<-sampleData
 #' calculate_GoF_summary_stats(Gaged,Modeled)
+# This function should  @importFrom hydrGOF rmse pbias but 
+# something is wrong with the rmse function.
 calculate_GoF_summary_stats <- function(Gaged,Modeled) {
   NSEv <- vector(length=14)
   NSELOGv <- vector(length=length(NSEv))
@@ -28,7 +30,7 @@ calculate_GoF_summary_stats <- function(Gaged,Modeled) {
   NSEv[i] <- nse(GagedTmp[,c],ModeledTmp[,c])
   NSELOGv[i] <- nselog(GagedTmp[,c],ModeledTmp[,c])
   RMSEv[i] <- rmse(GagedTmp[,c],ModeledTmp[,c])
-  PBIASv[i] <- hydroGOF::pbias(GagedTmp[,c],ModeledTmp[,c])
+  PBIASv[i] <- pbias(GagedTmp[,c],ModeledTmp[,c])
   PEARSONv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="pearson")
   SPEARMANv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="spearman")
   

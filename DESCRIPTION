@@ -8,18 +8,13 @@ Maintainer: Who to complain to <dblodgett@usgs.gov>
 Depends:
     R (>= 3.0)
 Imports:
-    zoo,
-    chron,
-    doBy,
     xml2,
     hydroGOF,
     EflowStats,
-    lmomco,
     dataRetrieval,
     jsonlite,
     readr
 Suggests:
-    xtable,
     knitr,
     rmarkdown,
     testthat

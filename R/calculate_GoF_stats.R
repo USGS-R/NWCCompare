@@ -1,7 +1,7 @@
-#' Function to calculate GoF statistics for given observed and modeled data sets
+#' Function to calculate Goodness of Fit statistics
 #' 
-#' This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
-#' calculated GoF statistics
+#' This function accepts observed and modeled data frames of daily flow 
+#' data and returns a data frame of calculated GoF statistics
 #' 
 #' @param Modeled data frame of daily flow data
 #' @param Gaged data frame of daily flow data

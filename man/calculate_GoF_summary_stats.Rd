@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_GoF_summary_stats.R
 \name{calculate_GoF_summary_stats}
 \alias{calculate_GoF_summary_stats}
-\title{Function to calculate monthly annual GoF statistics for given observed and modeled data sets}
+\title{Function to calculate monthly annual GoF statistics}
 \usage{
 calculate_GoF_summary_stats(Gaged, Modeled)
 }
@@ -15,8 +15,8 @@ calculate_GoF_summary_stats(Gaged, Modeled)
 Output data frame of calculated statistics
 }
 \description{
-This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
-calculated monthly annual GoF statistics
+This function accepts observed and modeled data frames of daily flow data 
+and returns a data frame of calculated monthly annual GoF statistics
 }
 \examples{
 Gaged<-sampleData
