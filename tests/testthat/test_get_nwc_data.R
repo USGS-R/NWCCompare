@@ -10,6 +10,8 @@ test_that("Test that the function returns the expected number of time series", {
   expect_equal(length(names(outData)),2)
   expect_error(get_nwc_wb_data("03160103", local=FALSE),
                "Total upstream HUC08 watersheds are not available yet.")
+  outData<-get_nwc_wb_data("031601030306", return_var = "prcp")
+  expect_equal(names(outData), "prcp")
 })
 
 test_that("Test that a HUC with NWIS data comes back as such.",{

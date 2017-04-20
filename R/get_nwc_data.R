@@ -4,6 +4,10 @@
 #'
 #' @param huc The watershed of interest.
 #' @param local TRUE/FALSE to request local watershed or total upstream watershed data.
+#' @param return_var A character vector specifying which variables are of interest.
+#' Choose from "all", "et", "prcp", "discharge", and "streamflow". Discharge is
+#' the modeled discharge for the HUC. Streamflow, if available is monitored streamflow 
+#' near the outlet of the HUC.
 #' @return The data.
 #' @author David Blodgett \email{dblodgett@usgs.gov}
 #' @importFrom dataRetrieval readNWISdv
@@ -11,7 +15,7 @@
 #' @examples
 #' NWCdata<-get_nwc_wb_data(huc="031601030306")
 #'
-get_nwc_wb_data<-function(huc, local=FALSE) {
+get_nwc_wb_data<-function(huc, local=FALSE, return_var = "all") {
   urls<-list(huc12=list(et="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_eta.nc",
                         prcp="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_daymet.nc"),
              huc12agg=list(et="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_eta_agg.nc",
@@ -19,7 +23,11 @@ get_nwc_wb_data<-function(huc, local=FALSE) {
                         MEAN_streamflow="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_Q.nc"),
              huc08=list(et="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC08_data/HUC08_eta.nc",
                         prcp="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC08_data/HUC08_daymet.nc"))
+  
+  if("discharge" %in% return_var) return_var[which(return_var == "discharge")] <- "MEAN_streamflow"
+  
   nwisSite<-FALSE
+  
   if(nchar(huc)==12 && local) {
     urlList<-urls['huc12'][[1]]
   } else if(nchar(huc)==12 && !local) {
@@ -32,23 +40,37 @@ get_nwc_wb_data<-function(huc, local=FALSE) {
   } else { # Will implement huc08 here too.
     stop('must pass in an 8 or 12 digit HUC identifier')
   }
+  
   dataOut<-list()
-  for (name in names(urlList)) {
-    if(grepl(pattern = 'nwc/thredds/sos', x = urlList[name])) {
-    url<-paste0(urlList[name],'?request=GetObservation&service=SOS&version=1.0.0&observedProperty=',
-                name,'&offering=',huc)
-    # This is valid but not used now: ,'&eventTime=',startdate,'T00:00:00Z/', enddate,'T00:00:00Z'
-    ts<-parse_swe_csv(url)
-    if (is.data.frame(ts)) {dataOut[name]<-list(ts)}
+  
+  for (var_name in names(urlList)) {
+    if(grepl(pattern = 'nwc/thredds/sos', x = urlList[var_name]) && 
+       (var_name %in% return_var || "all" %in% return_var)) {
+      
+      url<-paste0(urlList[var_name],'?request=GetObservation&service=SOS&version=1.0.0&observedProperty=',
+                var_name,'&offering=',huc)
+                # This is valid but not used now: ,'&eventTime=',startdate,'T00:00:00Z/', enddate,'T00:00:00Z'
+      ts<-parse_swe_csv(url)
+    
+    if (is.data.frame(ts)) {dataOut[var_name]<-list(ts)}
     }
   }
-  if(is.character(nwisSite)) {
+  
+  if(is.character(nwisSite) && 
+     ("streamflow" %in% return_var || "all" %in% return_var)) {
     dataOut['streamflow']<-list(readNWISdv(nwisSite,'00060'))
+    
     names(dataOut$streamflow)[4]<-'data_00060_00003'
+    
     names(dataOut$streamflow)[5]<-'cd_00060_00003'
   }
-  dataOut$prcp$data[which(dataOut$prcp$data < 0)] <- NA
-  try(names(dataOut)[which(names(dataOut) %in% 'MEAN_streamflow')]<-'discharge',silent = TRUE)
+  
+  if("prcp" %in% return_var || "all" %in% return_var){
+    dataOut$prcp$data[which(dataOut$prcp$data < 0)] <- NA
+  }
+  
+  try(names(dataOut)[which(names(dataOut) %in% "MEAN_streamflow")]<-"discharge",silent = TRUE)
+  
   return(dataOut)
 }
 

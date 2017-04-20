@@ -4,12 +4,17 @@
 \alias{get_nwc_wb_data}
 \title{Get data from an NWC source.}
 \usage{
-get_nwc_wb_data(huc, local = FALSE)
+get_nwc_wb_data(huc, local = FALSE, return_var = "all")
 }
 \arguments{
 \item{huc}{The watershed of interest.}
 
 \item{local}{TRUE/FALSE to request local watershed or total upstream watershed data.}
+
+\item{return_var}{A character vector specifying which variables are of interest.
+Choose from "all", "et", "prcp", "discharge", and "streamflow". Discharge is
+the modeled discharge for the HUC. Streamflow, if available is monitored streamflow 
+near the outlet of the HUC.}
 }
 \value{
 The data.
