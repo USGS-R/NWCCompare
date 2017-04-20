@@ -4,10 +4,15 @@
 \alias{get_nwc_wb_data}
 \title{Get data from an NWC source.}
 \usage{
-get_nwc_wb_data(huc, local = FALSE, return_var = "all")
+get_nwc_wb_data(huc, start_date = "1980-09-30", end_date = "2010-10-01",
+  local = FALSE, return_var = "all")
 }
 \arguments{
 \item{huc}{The watershed of interest.}
+
+\item{start_date}{A string representation of the start date in YYYY-MM-DD format.}
+
+\item{end_date}{A string representation of the end date in YYYY-MM-DD format.}
 
 \item{local}{TRUE/FALSE to request local watershed or total upstream watershed data.}
 

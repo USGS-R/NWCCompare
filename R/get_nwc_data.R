@@ -3,6 +3,8 @@
 #' This function builds a request and returns the the data in question.
 #'
 #' @param huc The watershed of interest.
+#' @param start_date A string representation of the start date in YYYY-MM-DD format.
+#' @param end_date A string representation of the end date in YYYY-MM-DD format.
 #' @param local TRUE/FALSE to request local watershed or total upstream watershed data.
 #' @param return_var A character vector specifying which variables are of interest.
 #' Choose from "all", "et", "prcp", "discharge", and "streamflow". Discharge is
@@ -15,7 +17,7 @@
 #' @examples
 #' NWCdata<-get_nwc_wb_data(huc="031601030306")
 #'
-get_nwc_wb_data<-function(huc, local=FALSE, return_var = "all") {
+get_nwc_wb_data<-function(huc, start_date="1980-09-30", end_date="2010-10-01", local=FALSE, return_var = "all") {
   urls<-list(huc12=list(et="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_eta.nc",
                         prcp="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_daymet.nc"),
              huc12agg=list(et="https://cida.usgs.gov/nwc/thredds/sos/watersmart/HUC12_data/HUC12_eta_agg.nc",
@@ -48,8 +50,7 @@ get_nwc_wb_data<-function(huc, local=FALSE, return_var = "all") {
        (var_name %in% return_var || "all" %in% return_var)) {
       
       url<-paste0(urlList[var_name],'?request=GetObservation&service=SOS&version=1.0.0&observedProperty=',
-                var_name,'&offering=',huc)
-                # This is valid but not used now: ,'&eventTime=',startdate,'T00:00:00Z/', enddate,'T00:00:00Z'
+                var_name,'&offering=',huc,'&eventTime=',start_date,'T00:00:00Z/', end_date,'T00:00:00Z')
       ts<-parse_swe_csv(url)
     
     if (is.data.frame(ts)) {dataOut[var_name]<-list(ts)}

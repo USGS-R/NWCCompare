@@ -14,7 +14,7 @@
 #' start_date <- "2008-10-01"
 #' end_date <- "2010-09-30"
 #' build_nwc_flow_dataset(hucs, start_date, end_date)
-build_nwc_flow_dataset <- function(hucs, start_date, end_date) {
+build_nwc_flow_dataset <- function(hucs, start_date="1980-10-01", end_date="2010-09-30") {
   
   if(any(nchar(hucs)!=12)) stop("Must submit 12-digit HUC ids")
   
@@ -28,7 +28,8 @@ build_nwc_flow_dataset <- function(hucs, start_date, end_date) {
   names(peak_threshold) <- hucs
   
   for(huc in hucs) {
-    streamflow <- get_nwc_wb_data(huc, local = FALSE, return_var = "discharge")
+    streamflow <- get_nwc_wb_data(huc, start_date = start_date, end_date = end_date,
+                                  local = FALSE, return_var = "discharge")
     
     fData <- dataCheck(streamflow$discharge[c("date", "data")],yearType="water")
     nwc_dataset[huc] <- list(fData)

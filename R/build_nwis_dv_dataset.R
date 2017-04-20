@@ -37,7 +37,7 @@ build_nwis_dv_dataset <- function(sites, start_date, end_date) {
     
     drainage_area_sqmi[site] <- as.numeric(readNWISsite(site)$drain_area_va)
   
-    peakFlows <- readNWISpeak(siteNumber = site,
+    peakFlows <- readNWISpeak(siteNumbers = site,
                               startDate = start_date,
                               endDate = end_date)
     

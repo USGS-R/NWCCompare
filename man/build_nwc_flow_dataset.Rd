@@ -4,7 +4,8 @@
 \alias{build_nwc_flow_dataset}
 \title{Builds a date, streamflow, drainage area dataset of NWC modeled data.}
 \usage{
-build_nwc_flow_dataset(hucs, start_date, end_date)
+build_nwc_flow_dataset(hucs, start_date = "1980-10-01",
+  end_date = "2010-09-30")
 }
 \arguments{
 \item{hucs}{A character vector of 12-digit HUCs.}

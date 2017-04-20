@@ -4,27 +4,20 @@
 \alias{calculate_stats_diffs}
 \title{Function to calculate the differences in  statistics for given observed and modeled data sets}
 \usage{
-calculate_stats_diffs(sites, startdate, enddate, X_DATA_FUN, x_args,
-  DRAIN_AREA_FUN, drain_args, M_DATA_FUN, m_args)
+calculate_stats_diffs(sites, flow_data_a, flow_data_b)
 }
 \arguments{
-\item{sites}{list of usgs station ids}
+\item{sites}{A two column dataframe containing site names for flow_data_a
+and flow_data_b flow data.}
 
-\item{startdate}{startdate for pulling data}
+\item{flow_data_a}{A dataframe containing a NWCCompare flow dataset. 
+Should have been cleaned by \link[EflowStats]{dataCheck}}
 
-\item{enddate}{enddate for pulling data}
+\item{flow_data_b}{A second NWCCompare flow dataset to be compared
+to flow_data_a.}
 
-\item{X_DATA_FUN}{function for pulling data from x_args}
-
-\item{x_args}{urls for pulling observed data}
-
-\item{DRAIN_AREA_FUN}{function for pulling drainage area}
-
-\item{drain_args}{url for pulling drainage area}
-
-\item{M_DATA_FUN}{function for pulling modeled data form m_args}
-
-\item{m_args}{url for pulling modeled data}
+\item{flow_data_b}{A second NWCCompare flow dataset to be compared
+to flow_data_a.}
 }
 \value{
 statsout data frame of calculated statistics
@@ -32,4 +25,14 @@ statsout data frame of calculated statistics
 \description{
 This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
 calculated diff statistics
+}
+\examples{
+# https://cida.usgs.gov/nwc/#!waterbudget/achuc/031300011004
+nwis <- "02335757"
+huc <- "031300011004"
+sites <- data.frame(a=nwis, b=huc)
+flow_data_a <- build_nwis_dv_dataset(nwis, start_date = "2004-10-01", end_date = "2010-09-30")
+flow_data_b <- build_nwc_flow_dataset(huc, start_date = "2004-10-01", end_date = "2010-09-30")
+
+
 }

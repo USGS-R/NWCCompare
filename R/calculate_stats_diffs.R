@@ -3,26 +3,25 @@
 #' This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
 #' calculated diff statistics
 #' 
-#' @param sites list of usgs station ids
-#' @param startdate startdate for pulling data
-#' @param enddate enddate for pulling data
-#' @param X_DATA_FUN function for pulling data from x_args
-#' @param x_args urls for pulling observed data
-#' @param DRAIN_AREA_FUN function for pulling drainage area
-#' @param drain_args url for pulling drainage area
-#' @param M_DATA_FUN function for pulling modeled data form m_args
-#' @param m_args url for pulling modeled data
+#' @param sites A two column dataframe containing site names for flow_data_a
+#' and flow_data_b flow data.
+#' @param flow_data_a A dataframe containing a NWCCompare flow dataset. 
+#' Should have been cleaned by \link[EflowStats]{dataCheck}
+#' @param flow_data_b A second NWCCompare flow dataset to be compared
+#' to flow_data_a. 
 #' @return statsout data frame of calculated statistics
-#' @import zoo
-#' @import chron
-#' @import doBy
-#' @import lmomco
 #' @importFrom stats aggregate
 #' @export
-calculate_stats_diffs<-function(sites, startdate, enddate, X_DATA_FUN, x_args, DRAIN_AREA_FUN, drain_args, M_DATA_FUN, m_args) {
-  supportedStats=getSupportedStatNames()
-  stats="GoF"
-  tempArrays<-getEmptyResultArrayNWCStats(stats, length(sites), supportedStats)
+#' @examples
+#' # https://cida.usgs.gov/nwc/#!waterbudget/achuc/031300011004
+#' nwis <- "02335757"
+#' huc <- "031300011004"
+#' sites <- data.frame(a=nwis, b=huc)
+#' flow_data_a <- build_nwis_dv_dataset(nwis, start_date = "2004-10-01", end_date = "2010-09-30")
+#' flow_data_b <- build_nwc_flow_dataset(huc, start_date = "2004-10-01", end_date = "2010-09-30")
+#' 
+#' 
+calculate_stats_diffs<-function(sites, flow_data_a, flow_data_b) {
   for (i in 1:length(sites)) {
     site = sites[i]
     m_data <- M_DATA_FUN(m_args[i])
