@@ -131,6 +131,8 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
     } else {
       month<-paste("",m,sep="")
     }
+    Gaged$month_val <- format(Gaged$date, "%m")
+    Modeled$month_val <- format(Gaged$date, "%m")
     monthobs <- subset(Gaged,Gaged$month_val==month)
     monthmod <- subset(Modeled,Modeled$month_val==month)
     monthobs <- monthobs[order(monthobs$date),]

@@ -15,5 +15,5 @@ test_that("Original demo for for diff stats works", {
                                     yearType = "water", 
                                     digits = 2)  
   statsout_check <- readRDS("data/test_calculate_stats_diffs_huc_nwis_statsout.rds")
-  expect_equal(statsout, statsout_check)
+  expect_equal(diff_statsout, statsout_check)
 })

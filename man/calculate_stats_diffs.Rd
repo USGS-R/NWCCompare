@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculate_stats_diffs.R
 \name{calculate_stats_diffs}
 \alias{calculate_stats_diffs}
-\title{Function to calculate the differences in  statistics for given observed and modeled data sets}
+\title{Function to calculate the differences in statistics for two given datasets.}
 \usage{
 calculate_stats_diffs(sites, flow_data_a, flow_data_b, yearType = "water",
   digits = 3)
@@ -27,8 +27,10 @@ whether to use water years or calendar years, respectively.}
 statsout data frame of calculated statistics
 }
 \description{
-This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
-calculated diff statistics
+This function accepts two data frames of daily flow data and returns a data frame of 
+calculated difference statistics from \link[EflowStats]{hitStats}, 
+\link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}, and \link{calculate_GoF_stats}.
+HitStats, magnifSeven, and other_flow_stats are differented as \code{(a-b)/a}
 }
 \details{
 Assumptions:
@@ -39,8 +41,14 @@ Dates must match between the two data sources.
 nwis <- "02335757"
 huc <- "031300011004"
 sites <- data.frame(a=nwis, b=huc, stringsAsFactors = FALSE)
-flow_data_a <- build_nwis_dv_dataset(nwis, start_date = "2004-10-01", end_date = "2010-09-30")
-flow_data_b <- build_nwc_flow_dataset(huc, start_date = "2004-10-01", end_date = "2010-09-30")
-
+start_date <- "2004-10-01"
+end_date <- "2010-09-30"
+flow_data_a <- build_nwis_dv_dataset(nwis, start_date, end_date)
+flow_data_b <- build_nwc_flow_dataset(huc, start_date, end_date)
+diff_statsout <- calculate_stats_diffs(sites = sites, 
+  flow_data_a = flow_data_a, 
+  flow_data_b = flow_data_b, 
+  yearType = "water",
+  digits = 2) 
 
 }

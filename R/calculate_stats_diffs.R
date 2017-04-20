@@ -1,7 +1,9 @@
-#' Function to calculate the differences in  statistics for given observed and modeled data sets
+#' Function to calculate the differences in statistics for two given datasets.
 #' 
-#' This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
-#' calculated diff statistics
+#' This function accepts two data frames of daily flow data and returns a data frame of 
+#' calculated difference statistics from \link[EflowStats]{hitStats}, 
+#' \link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}, and \link{calculate_GoF_stats}.
+#' HitStats, magnifSeven, and other_flow_stats are differented as \code{(a-b)/a} 
 #' 
 #' Assumptions:
 #' Dates must match between the two data sources.
@@ -24,9 +26,15 @@
 #' nwis <- "02335757"
 #' huc <- "031300011004"
 #' sites <- data.frame(a=nwis, b=huc, stringsAsFactors = FALSE)
-#' flow_data_a <- build_nwis_dv_dataset(nwis, start_date = "2004-10-01", end_date = "2010-09-30")
-#' flow_data_b <- build_nwc_flow_dataset(huc, start_date = "2004-10-01", end_date = "2010-09-30")
-#' 
+#' start_date <- "2004-10-01"
+#' end_date <- "2010-09-30"
+#' flow_data_a <- build_nwis_dv_dataset(nwis, start_date, end_date)
+#' flow_data_b <- build_nwc_flow_dataset(huc, start_date, end_date)
+#' diff_statsout <- calculate_stats_diffs(sites = sites, 
+#'   flow_data_a = flow_data_a, 
+#'   flow_data_b = flow_data_b, 
+#'   yearType = "water",
+#'   digits = 2) 
 #' 
 calculate_stats_diffs<-function(sites, flow_data_a, flow_data_b, 
                                 yearType = "water", digits = 3) {
@@ -53,29 +61,25 @@ calculate_stats_diffs<-function(sites, flow_data_a, flow_data_b,
                                                 flow_data = flow_data_b, 
                                                 yearType = yearType, 
                                                 digits = digits)
-  # Includes: otherstats 
-  # EflowStats: magnifSeven ma24.35 ma41.45 ml18 ml20 mh1.12 fl1.2 fh6 fh7 dl6 dl13 dl16.17 ta1.2 tl1.2 th1.2 ra5 ra7 ra8.9
-  # Still need to calculate GoF stats.
+  
+  GoFstats_results <- rep(list(list()), nrow(sites))
   for (i in 1:nrow(sites)) {
 
     site_a <- sites[i,1]
     site_b <- sites[i,2]
 
-  #   tempArrays$DiffStats[i, ] <- (tempArrays$ModStats[i, ]-tempArrays$ObsStats[i, ])/tempArrays$ObsStats[i, ]
-  #   
-  #   t<- calculate_GoF_stats(obs_data, mod_data)
-  #   
-  #   tempArrays$GoFStats[i, ] <- t[,2:ncol(t)]
+
+    GoFstats_results_site <- calculate_GoF_stats(flow_data_b$daily_streamflow_cfs[site_b][[1]],
+                                                 flow_data_a$daily_streamflow_cfs[site_a][[1]])
     if(i==1) {
-      statsout <- hitStats_result_a
+      statsout <- cbind(hitStats_result_a,GoFstats_results_site)
       init <- FALSE
     }
     
-    statsout[i,4:(ncol(statsout)-1)] <- (hitStats_result_a[i,4:(ncol(statsout)-1)] - 
-                                               hitStats_result_b[i,4:(ncol(statsout)-1)]) / 
-                                              hitStats_result_a[i,4:(ncol(statsout)-1)]
+    statsout[i,4:(ncol(hitStats_result_a)-1)] <- (hitStats_result_a[i,4:(ncol(hitStats_result_a)-1)] - 
+                                               hitStats_result_b[i,4:(ncol(hitStats_result_a)-1)]) / 
+                                              hitStats_result_a[i,4:(ncol(hitStats_result_a)-1)]
+    statsout[i,(ncol(hitStats_result_a)+1):ncol(statsout)] <- GoFstats_results_site
   }
-  # statsout<-nameStatsArray("GoF", sites, tempArrays)
-  
   return(statsout)
 }
