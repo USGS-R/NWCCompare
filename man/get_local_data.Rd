@@ -4,27 +4,28 @@
 \alias{get_local_data}
 \title{Function to return flow data from a locally stored file}
 \usage{
-get_local_data(dataPath, startDt = "", endDt = "", sepChar = ",")
+get_local_data(data_path, start_year = "", end_year = "", sep_char = ",")
 }
 \arguments{
-\item{dataPath}{path to directory containing data files}
+\item{data_path}{path to directory containing data files}
 
-\item{startDt}{beginning water year, will be translated to 10/01}
+\item{start_year}{beginning water year, will be translated to 10/01}
 
-\item{endDt}{ending water year, will be translated to 09/30}
+\item{end_year}{ending water year, will be translated to 09/30}
 
-\item{sepChar}{string containing the datafile separator, default is comma}
+\item{sep_char}{string containing the datafile separator, default is comma}
 }
 \value{
 dataOut data frame containing requested flow data for the stations
 }
 \description{
-This function accepts a list of sites, start and end date and returns a data frame containing requested flow data
+This function accepts a list of sites, start and end years 
+and returns a data frame containing requested flow data
 }
 \examples{
-dataPath <- system.file("extdata", package="NWCCompare")
-dataPath <- paste(dataPath, "modeled", sep="/")
-startdate <- "2009"
-enddate <- "2013"
-localData <- get_local_data(dataPath,startDt=startdate,endDt=enddate)
+data_path <- system.file("extdata", package="NWCCompare")
+data_path <- paste(data_path, "modeled", sep="/")
+start_year <- "2007"
+end_year <- "2010"
+localData <- get_local_data(data_path,start_year=start_year,end_year=end_year)
 }
