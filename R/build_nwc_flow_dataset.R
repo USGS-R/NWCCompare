@@ -31,26 +31,26 @@ build_nwc_flow_dataset <- function(hucs, start_date="1980-10-01", end_date="2010
     streamflow <- get_nwc_wb_data(huc, start_date = start_date, end_date = end_date,
                                   local = FALSE, return_var = "discharge")
     
-    fData <- dataCheck(streamflow$discharge[c("date", "data")],yearType="water")
-    nwc_dataset[huc] <- list(fData)
+    fdata <- dataCheck(streamflow$discharge[c("date", "data")],yearType="water")
+    nwc_dataset[huc] <- list(fdata)
     
     drainage_area_sqmi[huc] <- as.numeric(get_nwc_huc(huc)$features[[1]]$properties$areasqkm) * 0.386102 # convert to sqmi
     
-    year_vals <-unique(fData$year_val)
+    year_vals <-unique(fdata$year_val)
     peak_flows <- data.frame(peak_date = rep(as.Date("1970-01-01"), length(year_vals)),
                              peak_cfs = rep(NA, length(year_vals)))
     
     for(i in 1:length(year_vals)) {
-      year_data <- fData[c("date", "discharge")][which(fData$year_val == year_vals[i]),]
+      year_data <- fdata[c("date", "discharge")][which(fdata$year_val == year_vals[i]),]
       peak_inds <- which(year_data$discharge == max(year_data$discharge))
       if(length(peak_inds) > 1) warning(paste("Flow peaks found on more than one dates:\n", 
-                                              paste(fData$date[peak_inds], collapse = ", "), 
+                                              paste(fdata$date[peak_inds], collapse = ", "), 
                                               "\n The first peak will be used."))
       peak_flows$peak_cfs[i] <- year_data$discharge[peak_inds[1]]
       peak_flows$peak_date[i] <- year_data$date[peak_inds[1]]
     }
 
-    peak_threshold[huc] <- peakThreshold(fData[c("date","discharge")],
+    peak_threshold[huc] <- peakThreshold(fdata[c("date","discharge")],
                                           peak_flows[c("peak_date","peak_cfs")])
   }
   

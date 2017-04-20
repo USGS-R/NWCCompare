@@ -4,20 +4,24 @@
 \alias{calculate_stats_diffs}
 \title{Function to calculate the differences in  statistics for given observed and modeled data sets}
 \usage{
-calculate_stats_diffs(sites, flow_data_a, flow_data_b)
+calculate_stats_diffs(sites, flow_data_a, flow_data_b, yearType = "water",
+  digits = 3)
 }
 \arguments{
 \item{sites}{A two column dataframe containing site names for flow_data_a
 and flow_data_b flow data.}
 
 \item{flow_data_a}{A dataframe containing a NWCCompare flow dataset. 
-Should have been cleaned by \link[EflowStats]{dataCheck}}
+Should have been cleaned by \link[EflowStats]{dataCheck} and constructed by
+a build dataset function from this package.}
 
 \item{flow_data_b}{A second NWCCompare flow dataset to be compared
 to flow_data_a.}
 
-\item{flow_data_b}{A second NWCCompare flow dataset to be compared
-to flow_data_a.}
+\item{yearType}{A charcter of either "water" or "calendar" indicating 
+whether to use water years or calendar years, respectively.}
+
+\item{digits}{A numeric. Number of digits to round indice values}
 }
 \value{
 statsout data frame of calculated statistics
@@ -26,11 +30,15 @@ statsout data frame of calculated statistics
 This function accepts observed and modeled data frames of daily flow data and returns a data frame of 
 calculated diff statistics
 }
+\details{
+Assumptions:
+Dates must match between the two data sources.
+}
 \examples{
 # https://cida.usgs.gov/nwc/#!waterbudget/achuc/031300011004
 nwis <- "02335757"
 huc <- "031300011004"
-sites <- data.frame(a=nwis, b=huc)
+sites <- data.frame(a=nwis, b=huc, stringsAsFactors = FALSE)
 flow_data_a <- build_nwis_dv_dataset(nwis, start_date = "2004-10-01", end_date = "2010-09-30")
 flow_data_b <- build_nwc_flow_dataset(huc, start_date = "2004-10-01", end_date = "2010-09-30")
 
