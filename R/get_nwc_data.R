@@ -123,8 +123,9 @@ get_nwc_huc<-function(huc, local=FALSE) {
 #' @importFrom jsonlite fromJSON
 #' @importFrom utils URLencode
 #' @examples
+#' \dontrun{
 #' data<-get_nwis_nwc_site(huc="031601030306")
-#'
+#'}
 get_nwis_nwc_site<-function(huc) {
   # Note that this file is available here: https://cida.usgs.gov/nwc/json/watershed_gages.json
   lookup<-fromJSON(txt=readLines(system.file('extdata','watershed_gages.json',package='NWCCompare')))

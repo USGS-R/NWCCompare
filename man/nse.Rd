@@ -18,7 +18,9 @@ nse Nash-Sutcliffe value between the two timeseries
 This function accepts two data frames containing daily data series and returns the Nash-Sutcliffe value
 }
 \examples{
+\dontrun{
 obs_data<-obs_data
 mod_data<-mod_data
 nse(obs_data$discharge,mod_data$discharge)
+}
 }

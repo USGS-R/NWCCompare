@@ -21,6 +21,7 @@ time series of streamflow with date in the format Y-m-d. Output is a vector of O
 1) mean, 2) median, 3) cv, 4) cv daily, 5) l7Q10, 6) l7Q2, 7) return_10 and 8) flow percentiles.
 }
 \examples{
+library(EflowStats)
 flow_data<-obs_data
 flow_data$date <- as.Date(flow_data$date)
 flow_data <- dataCheck(flow_data, yearType = "water")

@@ -19,6 +19,7 @@ This function accepts observed and modeled data frames of daily flow
 data and returns a data frame of calculated GoF statistics
 }
 \examples{
+library(EflowStats)
 Gaged <- obs_data
 Gaged$date <- as.Date(Gaged$date)
 Gaged <- dataCheck(Gaged, yearType = "water")

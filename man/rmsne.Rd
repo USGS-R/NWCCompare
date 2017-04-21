@@ -18,7 +18,9 @@ rmsne normalized root mean square error value between the two timeseries
 This function accepts two data frames containing daily data series and returns the normalized root mean square error
 }
 \examples{
+\dontrun{
 obs_data<-obs_data
 mod_data<-mod_data
 rmsne(obs_data$discharge,mod_data$discharge)
+}
 }

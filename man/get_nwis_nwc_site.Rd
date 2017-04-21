@@ -16,8 +16,9 @@ The NWIS site ID. NULL if none found.
 Given a HUC, this function checks if an NWIS site is available.
 }
 \examples{
+\dontrun{
 data<-get_nwis_nwc_site(huc="031601030306")
-
+}
 }
 \author{
 David Blodgett \email{dblodgett@usgs.gov}

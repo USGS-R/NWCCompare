@@ -18,7 +18,9 @@ findrank numeric giving the position in the data set of the percentile
 This function accepts the number of values in a data set and the desired percentile and then calculates the rank
 }
 \examples{
+\dontrun{
 n<-365
 p<-0.05
 findrank(n, p)
+}
 }

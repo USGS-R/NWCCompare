@@ -19,7 +19,9 @@ This function accepts two data frames containing daily data series and returns t
 logarithms of the data, with zeros removed.
 }
 \examples{
+\dontrun{
 obs_data<-obs_data
 mod_data<-mod_data
 nselog(obs_data$discharge,mod_data$discharge)
+}
 }

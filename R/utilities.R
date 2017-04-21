@@ -6,9 +6,11 @@
 #' @param p percentile desired
 #' @return findrank numeric giving the position in the data set of the percentile
 #' @examples
+#' \dontrun{
 #' n<-365
 #' p<-0.05
 #' findrank(n, p)
+#' }
 findrank <- function(n, p) {
   r <- (1 - p) * (n + 1)
   findrank <- floor(r)
@@ -26,10 +28,13 @@ findrank <- function(n, p) {
 #' @return obs_percentiles requested flow percentiles for the given data frame
 #' @importFrom stats quantile
 #' @examples
+#' \dontrun{
+#' library(EflowStats)
 #' flow_data<-obs_data
 #' flow_data$date <- as.Date(flow_data$date)
 #' flow_data <- dataCheck(flow_data, yearType = "water")
 #' flow_perc(flow_data, probs=c(.1,.25,.5,.75))
+#' }
 flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
   obs_percentiles <- quantile(flow_data$discharge,probs,na.rm=TRUE)
   return(obs_percentiles)
@@ -43,9 +48,11 @@ flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
 #' @return nse Nash-Sutcliffe value between the two timeseries
 #' @examples
+#' \dontrun{
 #' obs_data<-obs_data
 #' mod_data<-mod_data
 #' nse(obs_data$discharge,mod_data$discharge)
+#' }
 nse<-function(timeseries1,timeseries2) {
   if (length(timeseries1)>1) {
     numerat<-sum((timeseries1-timeseries2)^2,na.rm=TRUE)
@@ -64,9 +71,11 @@ nse<-function(timeseries1,timeseries2) {
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
 #' @return nselog Nash-Sutcliffe value between the natural log of the two timeseries
 #' @examples
+#' \dontrun{
 #' obs_data<-obs_data
 #' mod_data<-mod_data
 #' nselog(obs_data$discharge,mod_data$discharge)
+#' }
 nselog<-function(timeseries1,timeseries2) {
   # Count of zeros in dataset
   sszeros<-subset(timeseries1,timeseries1==0)
@@ -101,9 +110,11 @@ nselog<-function(timeseries1,timeseries2) {
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
 #' @return rmsne normalized root mean square error value between the two timeseries
 #' @examples
+#' \dontrun{
 #' obs_data<-obs_data
 #' mod_data<-mod_data
 #' rmsne(obs_data$discharge,mod_data$discharge)
+#' }
 rmsne<-function(timeseries1,timeseries2) {
   if (length(timeseries1)>1) {
     sqerror<-((timeseries1-timeseries2)/timeseries1)^2
@@ -121,8 +132,10 @@ rmsne<-function(timeseries1,timeseries2) {
 #' @param x data frame containing value data for the chosen timeseries
 #' @return sdev standard deviation for the given data frame
 #' @examples
+#' \dontrun{
 #' obs_data<-obs_data
 #' sdev(obs_data$discharge)
+#' }
 sdev <- function(x) {
   sdev <- sd(x,na.rm=TRUE)
   return(sdev)

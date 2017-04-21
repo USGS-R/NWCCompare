@@ -16,6 +16,8 @@ sdev standard deviation for the given data frame
 This function accepts a data frame containing daily data and returns the standard deviation
 }
 \examples{
+\dontrun{
 obs_data<-obs_data
 sdev(obs_data$discharge)
+}
 }

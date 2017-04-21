@@ -12,6 +12,7 @@
 #' @importFrom EflowStats cv
 #' @export
 #' @examples
+#' library(EflowStats)
 #' flow_data<-obs_data
 #' flow_data$date <- as.Date(flow_data$date)
 #' flow_data <- dataCheck(flow_data, yearType = "water")

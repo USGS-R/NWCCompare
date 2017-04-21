@@ -10,6 +10,7 @@
 #' @importFrom hydroGOF rmse rsr pbias
 #' @importFrom stats quantile cor
 #' @examples
+#' library(EflowStats)
 #' Gaged <- obs_data
 #' Gaged$date <- as.Date(Gaged$date)
 #' Gaged <- dataCheck(Gaged, yearType = "water")

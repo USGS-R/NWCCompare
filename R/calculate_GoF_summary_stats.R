@@ -10,6 +10,7 @@
 #' @import hydroGOF
 #' @export
 #' @examples
+#' library(EflowStats)
 #' Gaged <- obs_data
 #' Gaged$date <- as.Date(Gaged$date)
 #' Gaged <- dataCheck(Gaged, yearType = "water")
