@@ -1,22 +1,3 @@
-#' Function to return the rank of a given value
-#' 
-#' This function accepts the number of values in a data set and the desired percentile and then calculates the rank 
-#' 
-#' @param n number of values in a data set
-#' @param p percentile desired
-#' @return findrank numeric giving the position in the data set of the percentile
-#' @examples
-#' \dontrun{
-#' n<-365
-#' p<-0.05
-#' findrank(n, p)
-#' }
-findrank <- function(n, p) {
-  r <- (1 - p) * (n + 1)
-  findrank <- floor(r)
-  return(findrank)
-}
-
 #' Function to return the requested flow percentiles for a given data series
 #' 
 #' This function accepts a data frame containing daily data and a list of desired percentiles and 
@@ -27,15 +8,15 @@ findrank <- function(n, p) {
 #' @param probs vector containing requested percentile value(s)
 #' @return obs_percentiles requested flow percentiles for the given data frame
 #' @importFrom stats quantile
+#' @export
 #' @examples
-#' \dontrun{
 #' library(EflowStats)
 #' flow_data<-obs_data
 #' flow_data$date <- as.Date(flow_data$date)
 #' flow_data <- dataCheck(flow_data, yearType = "water")
-#' flow_perc(flow_data, probs=c(.1,.25,.5,.75))
-#' }
-flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
+#' calculate_stat_flow_perc(flow_data, probs=c(.1,.25,.5,.75))
+#' 
+calculate_stat_flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
   obs_percentiles <- quantile(flow_data$discharge,probs,na.rm=TRUE)
   return(obs_percentiles)
 }
@@ -47,13 +28,13 @@ flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
 #' @param timeseries1 data frame containing value data for one of the chosen timeseries
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
 #' @return nse Nash-Sutcliffe value between the two timeseries
+#' @export
 #' @examples
-#' \dontrun{
 #' obs_data<-obs_data
 #' mod_data<-mod_data
-#' nse(obs_data$discharge,mod_data$discharge)
-#' }
-nse<-function(timeseries1,timeseries2) {
+#' calculate_stat_nse(obs_data$discharge,mod_data$discharge)
+#' 
+calculate_stat_nse <-function(timeseries1,timeseries2) {
   if (length(timeseries1)>1) {
     numerat<-sum((timeseries1-timeseries2)^2,na.rm=TRUE)
     denomin<-sum((timeseries1-mean(timeseries1,na.rm=TRUE))^2,na.rm=TRUE)  #6/18/11: NSE value calculation has been fixed
@@ -70,13 +51,13 @@ nse<-function(timeseries1,timeseries2) {
 #' @param timeseries1 data frame containing value data for one of the chosen timeseries
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
 #' @return nselog Nash-Sutcliffe value between the natural log of the two timeseries
+#' @export
 #' @examples
-#' \dontrun{
 #' obs_data<-obs_data
 #' mod_data<-mod_data
-#' nselog(obs_data$discharge,mod_data$discharge)
-#' }
-nselog<-function(timeseries1,timeseries2) {
+#' calculate_stat_nselog(obs_data$discharge,mod_data$discharge)
+#' 
+calculate_stat_nselog<-function(timeseries1,timeseries2) {
   # Count of zeros in dataset
   sszeros<-subset(timeseries1,timeseries1==0)
   czeros<-length(sszeros)
@@ -109,13 +90,13 @@ nselog<-function(timeseries1,timeseries2) {
 #' @param timeseries1 data frame containing value data for one of the chosen timeseries
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
 #' @return rmsne normalized root mean square error value between the two timeseries
+#' @export
 #' @examples
-#' \dontrun{
 #' obs_data<-obs_data
 #' mod_data<-mod_data
-#' rmsne(obs_data$discharge,mod_data$discharge)
-#' }
-rmsne<-function(timeseries1,timeseries2) {
+#' calculate_stat_rmsne(obs_data$discharge,mod_data$discharge)
+#' 
+calculate_stat_rmsne<-function(timeseries1,timeseries2) {
   if (length(timeseries1)>1) {
     sqerror<-((timeseries1-timeseries2)/timeseries1)^2
     sumsqerr<-sum(sqerror)
@@ -125,18 +106,56 @@ rmsne<-function(timeseries1,timeseries2) {
   return(rmsne)
 }
 
-#' Function to return the standard deviation for a given data series
+#' Function to find peak flow and date of peak flow in a time series.
 #' 
-#' This function accepts a data frame containing daily data and returns the standard deviation
+#' Accepts a \code{data.frame} as returned by \link[EflowStats]{dataCheck}
 #' 
-#' @param x data frame containing value data for the chosen timeseries
-#' @return sdev standard deviation for the given data frame
+#' @param x data frame with date, discharge, year_val, and day columns. 
+#' Can be constructed with \link[EflowStats]{dataCheck}
+#' @param choose character with options "first" and "last". If multiple 
+#' equal peaks are found the function will choose the first or last if
+#' this is set. Otherwise, an error is returned for multiple peaks.
+#' @return a \code{data.frame} with `peak` and `date` columns.
+#' @export
 #' @examples
-#' \dontrun{
-#' obs_data<-obs_data
-#' sdev(obs_data$discharge)
-#' }
-sdev <- function(x) {
-  sdev <- sd(x,na.rm=TRUE)
-  return(sdev)
+#' library(EflowStats)
+#' obs_data <- obs_data
+#' obs_data$date <- as.Date(obs_data$date)
+#' obs_data<-dataCheck(obs_data, yearType = "water")
+#' find_peak_flow(obs_data)
+#' 
+find_peak_flow <- function(x, choose = "no") {
+  year_vals <-unique(x$year_val)
+  
+  peak_flows <- data.frame(date = rep(as.Date("1970-01-01"), length(year_vals)),
+                           peak = rep(NA, length(year_vals)))
+  
+  for(i in 1:length(year_vals)) {
+    year_data <- x[c("date", "discharge")][which(x$year_val == year_vals[i]),]
+    peak_inds <- which(year_data$discharge == max(year_data$discharge))
+    if(length(peak_inds) > 1) {
+      if(choose == "first") {
+        warning(paste("Flow peaks found on more than one dates:\n", 
+                      paste(x$date[peak_inds], collapse = ", "), 
+                      "\n The first peak will be used."))
+        peak_flows$peak[i] <- year_data$discharge[peak_inds[1]]
+        peak_flows$date[i] <- year_data$date[peak_inds[1]]
+      } else if(choose == "last") {
+        warning(paste("Flow peaks found on more than one dates:\n", 
+                      paste(x$date[peak_inds], collapse = ", "), 
+                      "\n The last peak will be used."))
+        peak_flows$peak[i] <- year_data$discharge[peak_inds[length(peak_inds)]]
+        peak_flows$date[i] <- year_data$date[peak_inds[length(peak_inds)]]
+      } else {
+        stop(paste("Flow peaks found on more than one dates:\n", 
+                   paste(x$date[peak_inds], collapse = ", "), 
+                   "\n use choose input to select first or last."))
+      }
+    } else {
+      peak_flows$peak[i] <- year_data$discharge[peak_inds]
+      peak_flows$date[i] <- year_data$date[peak_inds]
+    }
+  }
+  return(peak_flows)
 }
+

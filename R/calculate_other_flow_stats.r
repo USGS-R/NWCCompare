@@ -28,7 +28,7 @@ calculate_other_flow_stats<-function(flow_data, digits = 3)  {
   
   cv_daily<-round(cv(flow_data$discharge),digits=digits)
   
-  obs_percentiles <- flow_perc(flow_data)
+  obs_percentiles <- calculate_stat_flow_perc(flow_data)
   flow_10 <- obs_percentiles[1]
   flow_25 <- obs_percentiles[2]
   flow_50 <- obs_percentiles[3]

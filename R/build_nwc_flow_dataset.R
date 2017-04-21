@@ -5,8 +5,9 @@
 #' square miles and cubic feet per second.
 #'
 #' @param hucs A character vector of 12-digit HUCs.
-#' @param start_date A string representation of the start date in YYYY-MM-DD format.
-#' @param end_date A string representation of the end date in YYYY-MM-DD format.
+#' @param start_date character representation of the start date in YYYY-MM-DD format.
+#' @param end_date character representation of the end date in YYYY-MM-DD format.
+#' @param choose character as required by \link{find_peak_flow}
 #' @importFrom EflowStats dataCheck peakThreshold
 #' @export
 #' @examples
@@ -14,7 +15,8 @@
 #' start_date <- "2008-10-01"
 #' end_date <- "2010-09-30"
 #' build_nwc_flow_dataset(hucs, start_date, end_date)
-build_nwc_flow_dataset <- function(hucs, start_date="1980-10-01", end_date="2010-09-30") {
+build_nwc_flow_dataset <- function(hucs, start_date="1980-10-01", 
+                                   end_date="2010-09-30", choose = "no") {
   
   if(any(nchar(hucs)!=12)) stop("Must submit 12-digit HUC ids")
   
@@ -36,22 +38,10 @@ build_nwc_flow_dataset <- function(hucs, start_date="1980-10-01", end_date="2010
     
     drainage_area_sqmi[huc] <- as.numeric(get_nwc_huc(huc)$features[[1]]$properties$areasqkm) * 0.386102 # convert to sqmi
     
-    year_vals <-unique(fdata$year_val)
-    peak_flows <- data.frame(peak_date = rep(as.Date("1970-01-01"), length(year_vals)),
-                             peak_cfs = rep(NA, length(year_vals)))
+    peak_flows <- find_peak_flow(fdata, choose = choose)
     
-    for(i in 1:length(year_vals)) {
-      year_data <- fdata[c("date", "discharge")][which(fdata$year_val == year_vals[i]),]
-      peak_inds <- which(year_data$discharge == max(year_data$discharge))
-      if(length(peak_inds) > 1) warning(paste("Flow peaks found on more than one dates:\n", 
-                                              paste(fdata$date[peak_inds], collapse = ", "), 
-                                              "\n The first peak will be used."))
-      peak_flows$peak_cfs[i] <- year_data$discharge[peak_inds[1]]
-      peak_flows$peak_date[i] <- year_data$date[peak_inds[1]]
-    }
-
     peak_threshold[huc] <- peakThreshold(fdata[c("date","discharge")],
-                                          peak_flows[c("peak_date","peak_cfs")])
+                                          peak_flows[c("date","peak")])
   }
   
   output <- list(daily_streamflow_cfs = nwc_dataset, 
