@@ -13,115 +13,140 @@ vignette: >
 
 ## Introduction
 
-The NWCCompare was created to work with the existing EflowStats package to simplify the process of comparing observed and modeled daily discharge time series. Hydrologic indicator statistics calculated by EflowStats, as well as frequently used comparison statistics such as Nash-Sutcliffe values, root mean squared error and skewness. It has been specifically designed to work seamlessly with the USGS National Water Census Portal, and can also be used for locally-stored observed and modeled daily discharge timeseries.     
+The NWCCompare package was created to work with the existing EflowStats package to simplify the process of comparing observed and modeled daily discharge time series. Hydrologic indicator statistics calculated by EflowStats, as well as frequently used comparison statistics such as Nash-Sutcliffe values, root mean squared error and skewness. It has been specifically designed to work seamlessly with the USGS National Water Census Portal, and can also be used for locally-stored observed and modeled daily discharge timeseries.     
               
 There is a need to examine goodness of fit for surface-water models, and methods differ depending on the intended use of the model. For ecological stream health considerations, the comparison if hydrologic indicator statistics is one judge of fit. The NWCCompare package allows for easy comparison of modeled and observed daily discharge data through direct data comparison and comparison of calculated indices.  NWCCompare is both directly available as an R package and integrated into the USGS National Water Census Data Platform \url{http://cida.usgs.gov/nwc/}.  Section \ref{sec:exampleWorkflow} provides examples of how one can calculate selected stats comparisons from USGS or other data. 
-              
-For information on getting started in R and installing the package, see (\ref{sec:started}): Getting Started.
 
-## General Workflow
+## Loading Data:
 
-This example vignette first loads the relevant packages, assuming they are already installed.
+There are three ways to load data for use with NWCCompare. From the National Water Information System observation (NWIS) archives, from the National Water Census (NWC) model archives, or from local files. The first two have "build" functions included in NWCCompare, the third is a little more involved. First, we'll show how to get NWIS and NWC data. For this example, we'll use NWIS gage ["02335757"](https://waterdata.usgs.gov/nwis/inventory/?site_no=02335757) which is close to the outlet of HUC ["031300011004"](https://cida.usgs.gov/nwc/#!waterbudget/achuc/031300011004).
 
-First, it is a good practice to clear any existing objects from your working environment. In RStudio, in the upper right quadrant, there is a broom icon that says 'Clear'. Click this and select 'Yes' to remove objects. This allows you to being work with a clear workspace, negating the possibility of mis-identified variables. 
-
-
-```{r workflow, echo=TRUE, eval=TRUE}
-library(EflowStats)
+```{r loadWebServiceData, echo=TRUE, eval=TRUE}
 library(NWCCompare)
-```
-To compare modeled and observed data for a USGS model and USGS streamgage(s), enter the model url. then run the diffInputs function to generate the startdate, enddate, site list and necessary urls. 
-
-
-```{r modelStatsprep, echo=TRUE, eval=TRUE}
-# Run stats and differences on USGS observed and modeled daily discharge data
-hucs="031601020108"
-startdate <- "1980-10-01"
-enddate <- "2010-09-30"
-sites <- "02435020"
-sites<-read.csv(header=F,colClasses=c("character"),text=sites)
-sites <- unlist(sites[1,])
+# First we set out site ids.
+nwis <- "02335757"
+huc <- "031300011004"
+# Then set our start and end dates. Note these define water years.
+start_date <- "2004-10-01"
+end_date <- "2010-09-30"
+flow_data_nwis <- build_nwis_dv_dataset(nwis, start_date, end_date)
+flow_data_nwc <- build_nwc_flow_dataset(huc, start_date, end_date)
+str(flow_data_nwis)
 ```
 
-```{r modelStatschunk, echo=FALSE, eval=TRUE}
-drainage_url <- "https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
-d_urls<-paste0(drainage_url, sites)
-hucs <- read.csv(header=F,colClasses=c("character"),text=hucs)
-hucs <- unlist(hucs[1,])
-```
-Once this information has been obtained, the user runs the calculate_stats_diffs function and maps the result to a named data frame.
+As can be seen here, the dataset returned by the build functions is a list with three named elements: `daily_streamflow_cfs`, `drainage_area_sqmi`, and `peak_threshold_cfs`. The daily_streamflow_cfs element contains a `data.frame` with `date`, `discharge`, `year_val`, and `day` columns that is ready to be passed to EflowStats functions. The drainage area and peak flow elements of the flow data list contain one drainage area value and one peak threshold value per site. The peak threshold value is derived with the EflowStats function `peakThreshold` function.  
 
-```{r createstatsoutput, echo=FALSE, eval=TRUE, results="hidew"}
-# calculate statsout
-statsout <- calculate_stats_diffs(sites = sites, 
-                                startdate = startdate, 
-                                enddate = enddate, 
-                                X_DATA_FUN = dataRetrieval::readNWISdv, 
-                                x_args = sites, 
-                                DRAIN_AREA_FUN = dataRetrieval::readNWISsite, 
-                                drain_args = sites, 
-                                M_DATA_FUN = get_nwc_wb_data, 
-                                m_args = hucs)  
+Local data can also be loaded into a similar list. While a bit more involved than getting NWIS or NWC data, it's not hard. The NWCCompare function `get_local_data` can be used to get started if you have files in the format shown [here](https://github.com/USGS-R/NWCCompare/tree/master/inst/extdata/modeled) and [here](https://github.com/USGS-R/NWCCompare/tree/master/inst/extdata/observed). File names must start with `mod` or `obs`, have a site id after the prefix, and end in `.csv`. or `.txt`. Each file should contain three columns: site number, date, and discharge. The file should use column headings with values `siteNo`, `date`, and `discharge`. The date format should be YYYY-MM-DD. 
+
+```{r getLocalData, echo=TRUE, eval=TRUE}
+data_path <- system.file("extdata", package="NWCCompare")
+data_path <- paste(data_path, "modeled", sep="/")
+# Note this data path is sample data in the package. 
+# You would set the path to the folder containing your streamflow data.
+start_year <- "2007"
+end_year <- "2010"
+localData <- get_local_data(data_path,start_year=start_year,end_year=end_year)
+str(localData[1])
 ```
 
-```{r statsoutput, echo=TRUE, eval=FALSE}
-# calculate statsout
-statsout <- calculate_stats_diffs(sites = sites, 
-                                startdate = startdate, 
-                                enddate = enddate, 
-                                X_DATA_FUN = dataRetrieval::readNWISdv, 
-                                x_args = sites, 
-                                DRAIN_AREA_FUN = dataRetrieval::readNWISsite, 
-                                drain_args = sites, 
-                                M_DATA_FUN = get_nwc_wb_data, 
-                                m_args = hucs)  
+If you don't have data in the format required for `get_local_data`, don't worry. As long as you can get the data loaded into a `data.frame` with two collumns: `date` and `discharge`, you can build your own NWCCompare stream flow data frame using the approach shown below. This example starts with the `mod_data` sample data from the package but you would read the data into R using one of the normal R data loading methods.
+
+```{r getfYourOwn, echo=TRUE, eval=TRUE}
+# Here you would load your data. It should have two columns, the first for date
+# the second for discharge. A sample is printed below. We also need the EflowStats
+# function dataCheck for this example.
+library(EflowStats)
+Modeled<-mod_data
+str(mod_data)
+Modeled$date <- as.Date(Modeled$date)
+Modeled <- dataCheck(Modeled, yearType = "water")
+str(Modeled)
 ```
 
-The calculated data is now present as a dataframe called statsout in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first few columns is given below.
+With your local data loaded up and run through dataCheck, or loaded with get_local_data, you are ready to build an NWCCompare data frame. For this example, we use the `localData` loaded above. It has five sites worth of data. [drainarea.csv used below can be seen here.](https://github.com/USGS-R/NWCCompare/blob/master/inst/extdata/observed/drainarea.csv) The `find_peak_flow` function can be used to help find the annual peak flow for each site and the EflowStats function `peakThreshold` can be used to get the peak threshold for each site's time series.
+
+```{r buildfYourOwn, echo=TRUE, eval=TRUE}
+sites <- names(localData)
+
+da <- read.csv(file = (file.path(data_path, "drainarea.csv")),
+               colClasses = c("character","integer"))
+
+drainage_area_sqmi <- da$darea
+names(drainage_area_sqmi) <- da$siteNo
+
+peak_threshold <- rep(0, length(sites))
+names(peak_threshold) <- sites
+
+for(site in sites) {
+  fd <- localData[site][[1]]
+  peaks <- find_peak_flow(fd)
+  peak_threshold[site] <- peakThreshold(fd, peaks, perc = 0.6, yearType = "water")
+}
+
+flow_data_local <- list(daily_streamflow_cfs = localData,
+                           drainage_area_sqmi = drainage_area_sqmi,
+                           peak_threshold_cfs = peak_threshold)
+```
+
+## Calculating Summary and Difference Statistics
+
+Now that we have some data to work with, we can calculate a suite of hydro statistics for one of the datasets.
+
+```{r justStats, echo=TRUE, eval=TRUE}
+stats=c("magAverage", "magLow", "magHigh",
+        "frequencyLow", "frequencyHigh",
+        "durationLow", "durationHigh",
+        "timingAverage", "timingLow", "timingHigh",
+        "rateChange",
+        "magnifSeven", "otherStat")
+eflow_stats <- calculate_stats_by_group(stats, flow_data_nwis)
+str(eflow_stats, list.len = "10")
+```
+
+Note that we can do the same for any of the flow datasets created above like this:
+
+```{r justStatsAny, echo=TRUE, eval=FALSE}
+eflow_stats <- calculate_stats_by_group(stats, flow_data_nwc)
+
+eflow_stats <- calculate_stats_by_group(stats, flow_data_local)
+```
+
+To compare two flow datasets, the calculate_stats_diffs function can be run like this. Note that we have to create a data frame of site pairs to pass in. The names of this dataframe aren't important as long as the first collumn is names for the `flow_data_a` input and the second column is names for the `flow_data_b` collumn. Here we use data that was retrieved in the first block of code above.
+
+```{r createstatsdiffs, echo=TRUE, eval=TRUE}
+# Note this could contain many site pairs. 
+sites <- data.frame(nwis_sites=nwis, b=huc, stringsAsFactors = FALSE)
+diff_stats <- calculate_stats_diffs(sites = sites,
+                                       flow_data_a = flow_data_nwis,
+                                       flow_data_b = flow_data_nwc,
+                                       yearType = "water",
+                                       digits = 2)
+str(diff_stats, list.len = "10")
+```
+
+The calculated data is now present as a dataframe in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first ten variables (columns) of the data frame are shown above and looks like this as a table.
 
 ```{r viewData, echo=FALSE, eval=TRUE}
-# view a portion of the statsout table
-statsout[,c(1,4,39,74,109,111,115)]
+diff_stats[,c(1:10)]
 ```
 
 This dataframe may now be used within the R environment or saved as a file as shown.
 
 ```{r saveData, echo=TRUE, eval=FALSE}
-# save statsout to a tab-delimited file
-output = "output.txt"
-write.table(statsout, file = output, col.names = TRUE, row.names = FALSE, 
-            quote = FALSE, sep = "\t")
+write.table(diff_stats, 
+            file = "diffstats_output.txt", 
+            col.names = TRUE, 
+            row.names = FALSE, 
+            quote = FALSE, 
+            sep = "\t")
 ```
 
-For both modeled and observed daily discharge data not available via web services, statistics can be calculated by loading data into an R dataframe like the example \texttt{"}dailyData\texttt{"}. This dataframe has two columns, the first named date, containing dates as characters in the format \texttt{"}YYYY-MM-DD\texttt{"} and the second column, discharge, containing the numeric discharge. This can be easily accomplished from most text file formats using \texttt{"}read.delim\texttt{"} or \texttt{"}read.table\texttt{"}. Then the user must enter a drainage area and a site id for each site, as well as the stats string.
+This package includes a number of other stats calculating functions. The goodness of fit statistics functions can be used by passing in two flow time series like were passed to `calculate_diff_stats` above but only passing in one site of data.
 
-```{r OtherStats, echo=TRUE, eval=FALSE}
-# calculate stats for data from your own data file
-drain_area=54
-site_id="Test site"
-daily_data<-dailyData
-stats="magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat"
-statsout <- ObservedStatsOther(daily_data,drain_area,site_id,stats)
-```
-
-The generated statsout dataframe has the same characteristics as that shown previously. 
-
-The user can also calculate just the EflowStats hydrologic indicators, with no comparison to modeled data. Using a USGS streamgage, this would be accomplished by entering the necessary site information and requested statistic groups. 
-
-```{r justStats, echo=TRUE, eval=FALSE}
-# Run stats on USGS observed daily discharge data
-sites <- '02177000,02178400'
-startdate <- "2008-10-01"
-enddate <- "2013-09-29"
-stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
-drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
-sites<-read.csv(header=F,colClasses=c("character"),text=sites)
-statsout <- calculate_stats_by_group(stats = stats, 
-                                 sites = sites, 
-                                 startdate = startdate, 
-                                 enddate = enddate, 
-                                 X_DATA_FUN = dataRetrieval::readNWISdv, 
-                                 x_args = sites, 
-                                 DRAIN_AREA_FUN = dataRetrieval::readNWISsite, 
-                                 drain_args = sites)   
+```{r GoFstats, echo=TRUE, eval=TRUE}
+Gaged <- flow_data_nwis$daily_streamflow_cfs["02335757"][[1]]
+Modeled <- flow_data_nwc$daily_streamflow_cfs["031300011004"][[1]]
+GoF_stats <- calculate_GoF_stats(Gaged, Modeled)
+GoF_anmon_stats <- calculate_GoF_summary_stats(Gaged, Modeled)
+str(GoF_stats, list.len = "10")
 ```

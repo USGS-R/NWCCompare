@@ -69,6 +69,8 @@ calculate_GoF_summary_stats <- function(Gaged,Modeled) {
     SPEARMANv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="spearman")
   }
   
-  Output <- c(NSEv,NSELOGv,RMSEv,PBIASv,PEARSONv,SPEARMANv)
+  Output <- data.frame(NSEv=NSEv,NSELOGv=NSELOGv,
+                       RMSEv=RMSEv,PBIASv=PBIASv,
+                       PEARSONv=PEARSONv,SPEARMANv=SPEARMANv)
   return(Output)
 }

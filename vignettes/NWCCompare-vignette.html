@@ -12,7 +12,7 @@
 
 <meta name="author" content="David Blodgett" />
 
-<meta name="date" content="2017-04-17" />
+<meta name="date" content="2017-04-21" />
 
 <title>The NWCCompare R package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">The NWCCompare R package</h1>
 <h4 class="author"><em>David Blodgett</em></h4>
-<h4 class="date"><em>2017-04-17</em></h4>
+<h4 class="date"><em>2017-04-21</em></h4>
 
 
 
@@ -78,81 +78,167 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>The NWCCompare R package</h1>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>The NWCCompare was created to work with the existing EflowStats package to simplify the process of comparing observed and modeled daily discharge time series. Hydrologic indicator statistics calculated by EflowStats, as well as frequently used comparison statistics such as Nash-Sutcliffe values, root mean squared error and skewness. It has been specifically designed to work seamlessly with the USGS National Water Census Portal, and can also be used for locally-stored observed and modeled daily discharge timeseries.</p>
+<p>The NWCCompare package was created to work with the existing EflowStats package to simplify the process of comparing observed and modeled daily discharge time series. Hydrologic indicator statistics calculated by EflowStats, as well as frequently used comparison statistics such as Nash-Sutcliffe values, root mean squared error and skewness. It has been specifically designed to work seamlessly with the USGS National Water Census Portal, and can also be used for locally-stored observed and modeled daily discharge timeseries.</p>
 <p>There is a need to examine goodness of fit for surface-water models, and methods differ depending on the intended use of the model. For ecological stream health considerations, the comparison if hydrologic indicator statistics is one judge of fit. The NWCCompare package allows for easy comparison of modeled and observed daily discharge data through direct data comparison and comparison of calculated indices. NWCCompare is both directly available as an R package and integrated into the USGS National Water Census Data Platform . Section  provides examples of how one can calculate selected stats comparisons from USGS or other data.</p>
-<p>For information on getting started in R and installing the package, see (): Getting Started.</p>
 </div>
-<div id="general-workflow" class="section level2">
-<h2>General Workflow</h2>
-<p>This example vignette first loads the relevant packages, assuming they are already installed.</p>
-<p>First, it is a good practice to clear any existing objects from your working environment. In RStudio, in the upper right quadrant, there is a broom icon that says ‘Clear’. Click this and select ‘Yes’ to remove objects. This allows you to being work with a clear workspace, negating the possibility of mis-identified variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(EflowStats)
-<span class="kw">library</span>(NWCCompare)</code></pre></div>
-<pre><code>## 
-## Attaching package: 'NWCCompare'</code></pre>
-<pre><code>## The following objects are masked from 'package:EflowStats':
-## 
-##     get_obsdata, obs_data, qfiletempf, sampleData</code></pre>
-<p>To compare modeled and observed data for a USGS model and USGS streamgage(s), enter the model url. then run the diffInputs function to generate the startdate, enddate, site list and necessary urls.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run stats and differences on USGS observed and modeled daily discharge data</span>
-hucs=<span class="st">&quot;031601020108&quot;</span>
-startdate &lt;-<span class="st"> &quot;1980-10-01&quot;</span>
-enddate &lt;-<span class="st"> &quot;2010-09-30&quot;</span>
-sites &lt;-<span class="st"> &quot;02435020&quot;</span>
-sites&lt;-<span class="kw">read.csv</span>(<span class="dt">header=</span>F,<span class="dt">colClasses=</span><span class="kw">c</span>(<span class="st">&quot;character&quot;</span>),<span class="dt">text=</span>sites)
-sites &lt;-<span class="st"> </span><span class="kw">unlist</span>(sites[<span class="dv">1</span>,])</code></pre></div>
-<p>Once this information has been obtained, the user runs the calculate_stats_diffs function and maps the result to a named data frame.</p>
-<pre><code>## get_obsdata run on x_obs for site 02435020 8400 
-## data and drainage area retrieved for site 02435020 233 
-## get_obsdata run on x_mod for site 02435020 8400 
-## data sets merged for site 02435020 8400 8400 
-## dates calculated for site 02435020 
-## dfs created for site 02435020 8400 8400 
-## diffs calculated</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate statsout</span>
-statsout &lt;-<span class="st"> </span><span class="kw">calculate_stats_diffs</span>(<span class="dt">sites =</span> sites, 
-                                <span class="dt">startdate =</span> startdate, 
-                                <span class="dt">enddate =</span> enddate, 
-                                <span class="dt">X_DATA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISdv, 
-                                <span class="dt">x_args =</span> sites, 
-                                <span class="dt">DRAIN_AREA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISsite, 
-                                <span class="dt">drain_args =</span> sites, 
-                                <span class="dt">M_DATA_FUN =</span> get_nwc_wb_data, 
-                                <span class="dt">m_args =</span> hucs)  </code></pre></div>
-<p>The calculated data is now present as a dataframe called statsout in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first few columns is given below.</p>
-<pre><code>##    site_no lam1Obs lam1Mod   lam1Diff                nse             rmse
-## 1 02435020  334.97  285.96 -0.1463116 -0.239596337760897 704.613332920482
-##             pearson
-## 1 0.797665920950232</code></pre>
+<div id="loading-data" class="section level2">
+<h2>Loading Data:</h2>
+<p>There are three ways to load data for use with NWCCompare. From the National Water Information System observation (NWIS) archives, from the National Water Census (NWC) model archives, or from local files. The first two have “build” functions included in NWCCompare, the third is a little more involved. First, we’ll show how to get NWIS and NWC data. For this example, we’ll use NWIS gage <a href="https://waterdata.usgs.gov/nwis/inventory/?site_no=02335757">“02335757”</a> which is close to the outlet of HUC <a href="https://cida.usgs.gov/nwc/#!waterbudget/achuc/031300011004">“031300011004”</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(NWCCompare)
+<span class="co"># First we set out site ids.</span>
+nwis &lt;-<span class="st"> &quot;02335757&quot;</span>
+huc &lt;-<span class="st"> &quot;031300011004&quot;</span>
+<span class="co"># Then set our start and end dates. Note these define water years.</span>
+start_date &lt;-<span class="st"> &quot;2004-10-01&quot;</span>
+end_date &lt;-<span class="st"> &quot;2010-09-30&quot;</span>
+flow_data_nwis &lt;-<span class="st"> </span><span class="kw">build_nwis_dv_dataset</span>(nwis, start_date, end_date)
+flow_data_nwc &lt;-<span class="st"> </span><span class="kw">build_nwc_flow_dataset</span>(huc, start_date, end_date)
+<span class="kw">str</span>(flow_data_nwis)</code></pre></div>
+<pre><code>## List of 3
+##  $ daily_streamflow_cfs:List of 1
+##   ..$ 02335757:'data.frame': 2191 obs. of  4 variables:
+##   .. ..$ date     : Date[1:2191], format: &quot;2004-10-01&quot; ...
+##   .. ..$ discharge: num [1:2191] 132 110 98.7 97.4 82.9 75.5 73.4 72.6 70 71.3 ...
+##   .. ..$ year_val : int [1:2191] 2005 2005 2005 2005 2005 2005 2005 2005 2005 2005 ...
+##   .. ..$ day      : num [1:2191] 1 2 3 4 5 6 7 8 9 10 ...
+##  $ drainage_area_sqmi  : Named num 103
+##   ..- attr(*, &quot;names&quot;)= chr &quot;02335757&quot;
+##  $ peak_threshold_cfs  : Named num 1983
+##   ..- attr(*, &quot;names&quot;)= chr &quot;02335757&quot;</code></pre>
+<p>As can be seen here, the dataset returned by the build functions is a list with three named elements: <code>daily_streamflow_cfs</code>, <code>drainage_area_sqmi</code>, and <code>peak_threshold_cfs</code>. The daily_streamflow_cfs element contains a <code>data.frame</code> with <code>date</code>, <code>discharge</code>, <code>year_val</code>, and <code>day</code> columns that is ready to be passed to EflowStats functions. The drainage area and peak flow elements of the flow data list contain one drainage area value and one peak threshold value per site. The peak threshold value is derived with the EflowStats function <code>peakThreshold</code> function.</p>
+<p>Local data can also be loaded into a similar list. While a bit more involved than getting NWIS or NWC data, it’s not hard. The NWCCompare function <code>get_local_data</code> can be used to get started if you have files in the format shown <a href="https://github.com/USGS-R/NWCCompare/tree/master/inst/extdata/modeled">here</a> and <a href="https://github.com/USGS-R/NWCCompare/tree/master/inst/extdata/observed">here</a>. File names must start with <code>mod</code> or <code>obs</code>, have a site id after the prefix, and end in <code>.csv</code>. or <code>.txt</code>. Each file should contain three columns: site number, date, and discharge. The file should use column headings with values <code>siteNo</code>, <code>date</code>, and <code>discharge</code>. The date format should be YYYY-MM-DD.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_path &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="dt">package=</span><span class="st">&quot;NWCCompare&quot;</span>)
+data_path &lt;-<span class="st"> </span><span class="kw">paste</span>(data_path, <span class="st">&quot;modeled&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;/&quot;</span>)
+<span class="co"># Note this data path is sample data in the package. </span>
+<span class="co"># You would set the path to the folder containing your streamflow data.</span>
+start_year &lt;-<span class="st"> &quot;2007&quot;</span>
+end_year &lt;-<span class="st"> &quot;2010&quot;</span>
+localData &lt;-<span class="st"> </span><span class="kw">get_local_data</span>(data_path,<span class="dt">start_year=</span>start_year,<span class="dt">end_year=</span>end_year)
+<span class="kw">str</span>(localData[<span class="dv">1</span>])</code></pre></div>
+<pre><code>## List of 1
+##  $ 02192000:'data.frame':    1096 obs. of  4 variables:
+##   ..$ date     : Date[1:1096], format: &quot;2007-10-01&quot; ...
+##   ..$ discharge: num [1:1096] 50.8 45.1 12.7 16.6 43.4 ...
+##   ..$ year_val : int [1:1096] 2008 2008 2008 2008 2008 2008 2008 2008 2008 2008 ...
+##   ..$ day      : num [1:1096] 1 2 3 4 5 6 7 8 9 10 ...</code></pre>
+<p>If you don’t have data in the format required for <code>get_local_data</code>, don’t worry. As long as you can get the data loaded into a <code>data.frame</code> with two collumns: <code>date</code> and <code>discharge</code>, you can build your own NWCCompare stream flow data frame using the approach shown below. This example starts with the <code>mod_data</code> sample data from the package but you would read the data into R using one of the normal R data loading methods.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Here you would load your data. It should have two columns, the first for date</span>
+<span class="co"># the second for discharge. A sample is printed below. We also need the EflowStats</span>
+<span class="co"># function dataCheck for this example.</span>
+<span class="kw">library</span>(EflowStats)
+Modeled&lt;-mod_data
+<span class="kw">str</span>(mod_data)</code></pre></div>
+<pre><code>## 'data.frame':    730 obs. of  2 variables:
+##  $ date     : chr  &quot;2008-10-01&quot; &quot;2008-10-02&quot; &quot;2008-10-03&quot; &quot;2008-10-04&quot; ...
+##  $ discharge: num  36.5 34.7 33.1 32.6 32.1 ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Modeled<span class="op">$</span>date &lt;-<span class="st"> </span><span class="kw">as.Date</span>(Modeled<span class="op">$</span>date)
+Modeled &lt;-<span class="st"> </span><span class="kw">dataCheck</span>(Modeled, <span class="dt">yearType =</span> <span class="st">&quot;water&quot;</span>)
+<span class="kw">str</span>(Modeled)</code></pre></div>
+<pre><code>## 'data.frame':    730 obs. of  4 variables:
+##  $ date     : Date, format: &quot;2008-10-01&quot; &quot;2008-10-02&quot; ...
+##  $ discharge: num  36.5 34.7 33.1 32.6 32.1 ...
+##  $ year_val : int  2009 2009 2009 2009 2009 2009 2009 2009 2009 2009 ...
+##  $ day      : num  1 2 3 4 5 6 7 8 9 10 ...</code></pre>
+<p>With your local data loaded up and run through dataCheck, or loaded with get_local_data, you are ready to build an NWCCompare data frame. For this example, we use the <code>localData</code> loaded above. It has five sites worth of data. <a href="https://github.com/USGS-R/NWCCompare/blob/master/inst/extdata/observed/drainarea.csv">drainarea.csv used below can be seen here.</a> The <code>find_peak_flow</code> function can be used to help find the annual peak flow for each site and the EflowStats function <code>peakThreshold</code> can be used to get the peak threshold for each site’s time series.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sites &lt;-<span class="st"> </span><span class="kw">names</span>(localData)
+
+da &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> (<span class="kw">file.path</span>(data_path, <span class="st">&quot;drainarea.csv&quot;</span>)),
+               <span class="dt">colClasses =</span> <span class="kw">c</span>(<span class="st">&quot;character&quot;</span>,<span class="st">&quot;integer&quot;</span>))
+
+drainage_area_sqmi &lt;-<span class="st"> </span>da<span class="op">$</span>darea
+<span class="kw">names</span>(drainage_area_sqmi) &lt;-<span class="st"> </span>da<span class="op">$</span>siteNo
+
+peak_threshold &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">length</span>(sites))
+<span class="kw">names</span>(peak_threshold) &lt;-<span class="st"> </span>sites
+
+<span class="cf">for</span>(site <span class="cf">in</span> sites) {
+  fd &lt;-<span class="st"> </span>localData[site][[<span class="dv">1</span>]]
+  peaks &lt;-<span class="st"> </span><span class="kw">find_peak_flow</span>(fd)
+  peak_threshold[site] &lt;-<span class="st"> </span><span class="kw">peakThreshold</span>(fd, peaks, <span class="dt">perc =</span> <span class="fl">0.6</span>, <span class="dt">yearType =</span> <span class="st">&quot;water&quot;</span>)
+}
+
+flow_data_local &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">daily_streamflow_cfs =</span> localData,
+                           <span class="dt">drainage_area_sqmi =</span> drainage_area_sqmi,
+                           <span class="dt">peak_threshold_cfs =</span> peak_threshold)</code></pre></div>
+</div>
+<div id="calculating-summary-and-difference-statistics" class="section level2">
+<h2>Calculating Summary and Difference Statistics</h2>
+<p>Now that we have some data to work with, we can calculate a suite of hydro statistics for one of the datasets.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stats=<span class="kw">c</span>(<span class="st">&quot;magAverage&quot;</span>, <span class="st">&quot;magLow&quot;</span>, <span class="st">&quot;magHigh&quot;</span>,
+        <span class="st">&quot;frequencyLow&quot;</span>, <span class="st">&quot;frequencyHigh&quot;</span>,
+        <span class="st">&quot;durationLow&quot;</span>, <span class="st">&quot;durationHigh&quot;</span>,
+        <span class="st">&quot;timingAverage&quot;</span>, <span class="st">&quot;timingLow&quot;</span>, <span class="st">&quot;timingHigh&quot;</span>,
+        <span class="st">&quot;rateChange&quot;</span>,
+        <span class="st">&quot;magnifSeven&quot;</span>, <span class="st">&quot;otherStat&quot;</span>)
+eflow_stats &lt;-<span class="st"> </span><span class="kw">calculate_stats_by_group</span>(stats, flow_data_nwis)
+<span class="kw">str</span>(eflow_stats, <span class="dt">list.len =</span> <span class="st">&quot;10&quot;</span>)</code></pre></div>
+<pre><code>## 'data.frame':    1 obs. of  191 variables:
+##  $ site_no  : chr &quot;02335757&quot;
+##  $ min_date : chr &quot;2004-10-01&quot;
+##  $ max_date : chr &quot;2010-09-30&quot;
+##  $ lam1     : num 163
+##  $ tau2     : num 0.6
+##  $ tau3     : num 0.58
+##  $ tau4     : num 0.43
+##  $ ar1      : num 0.718
+##  $ amplitude: num 0.22
+##  $ phase    : num 27.9
+##   [list output truncated]</code></pre>
+<p>Note that we can do the same for any of the flow datasets created above like this:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">eflow_stats &lt;-<span class="st"> </span><span class="kw">calculate_stats_by_group</span>(stats, flow_data_nwc)
+
+eflow_stats &lt;-<span class="st"> </span><span class="kw">calculate_stats_by_group</span>(stats, flow_data_local)</code></pre></div>
+<p>To compare two flow datasets, the calculate_stats_diffs function can be run like this. Note that we have to create a data frame of site pairs to pass in. The names of this dataframe aren’t important as long as the first collumn is names for the <code>flow_data_a</code> input and the second column is names for the <code>flow_data_b</code> collumn. Here we use data that was retrieved in the first block of code above.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Note this could contain many site pairs. </span>
+sites &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">nwis_sites=</span>nwis, <span class="dt">b=</span>huc, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)
+diff_stats &lt;-<span class="st"> </span><span class="kw">calculate_stats_diffs</span>(<span class="dt">sites =</span> sites,
+                                       <span class="dt">flow_data_a =</span> flow_data_nwis,
+                                       <span class="dt">flow_data_b =</span> flow_data_nwc,
+                                       <span class="dt">yearType =</span> <span class="st">&quot;water&quot;</span>,
+                                       <span class="dt">digits =</span> <span class="dv">2</span>)
+<span class="kw">str</span>(diff_stats, <span class="dt">list.len =</span> <span class="st">&quot;10&quot;</span>)</code></pre></div>
+<pre><code>## 'data.frame':    1 obs. of  337 variables:
+##  $ site_no           : chr &quot;02335757&quot;
+##  $ min_date          : chr &quot;2004-10-01&quot;
+##  $ max_date          : chr &quot;2010-09-30&quot;
+##  $ lam1              : num 0.194
+##  $ tau2              : num -0.183
+##  $ tau3              : num -0.0517
+##  $ tau4              : num 0.0465
+##  $ ar1               : num -0.111
+##  $ amplitude         : num 0.0455
+##  $ phase             : num 0.0878
+##   [list output truncated]</code></pre>
+<p>The calculated data is now present as a dataframe in your R environment. This data frame has one row for each gage and one column for each statistic. An example of the first ten variables (columns) of the data frame are shown above and looks like this as a table.</p>
+<pre><code>##    site_no   min_date   max_date      lam1       tau2        tau3
+## 1 02335757 2004-10-01 2010-09-30 0.1937012 -0.1833333 -0.05172414
+##         tau4        ar1  amplitude      phase
+## 1 0.04651163 -0.1111111 0.04545455 0.08784511</code></pre>
 <p>This dataframe may now be used within the R environment or saved as a file as shown.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># save statsout to a tab-delimited file</span>
-output =<span class="st"> &quot;output.txt&quot;</span>
-<span class="kw">write.table</span>(statsout, <span class="dt">file =</span> output, <span class="dt">col.names =</span> <span class="ot">TRUE</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>, 
-            <span class="dt">quote =</span> <span class="ot">FALSE</span>, <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</code></pre></div>
-<p>For both modeled and observed daily discharge data not available via web services, statistics can be calculated by loading data into an R dataframe like the example dailyData. This dataframe has two columns, the first named date, containing dates as characters in the format YYYY-MM-DD and the second column, discharge, containing the numeric discharge. This can be easily accomplished from most text file formats using read.delim or read.table. Then the user must enter a drainage area and a site id for each site, as well as the stats string.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># calculate stats for data from your own data file</span>
-drain_area=<span class="dv">54</span>
-site_id=<span class="st">&quot;Test site&quot;</span>
-daily_data&lt;-dailyData
-stats=<span class="st">&quot;magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat&quot;</span>
-statsout &lt;-<span class="st"> </span><span class="kw">ObservedStatsOther</span>(daily_data,drain_area,site_id,stats)</code></pre></div>
-<p>The generated statsout dataframe has the same characteristics as that shown previously.</p>
-<p>The user can also calculate just the EflowStats hydrologic indicators, with no comparison to modeled data. Using a USGS streamgage, this would be accomplished by entering the necessary site information and requested statistic groups.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Run stats on USGS observed daily discharge data</span>
-sites &lt;-<span class="st"> '02177000,02178400'</span>
-startdate &lt;-<span class="st"> &quot;2008-10-01&quot;</span>
-enddate &lt;-<span class="st"> &quot;2013-09-29&quot;</span>
-stats&lt;-<span class="st">&quot;rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat&quot;</span>
-drainage_url &lt;-<span class="st"> &quot;http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&amp;site=&quot;</span>
-sites&lt;-<span class="kw">read.csv</span>(<span class="dt">header=</span>F,<span class="dt">colClasses=</span><span class="kw">c</span>(<span class="st">&quot;character&quot;</span>),<span class="dt">text=</span>sites)
-statsout &lt;-<span class="st"> </span><span class="kw">calculate_stats_by_group</span>(<span class="dt">stats =</span> stats, 
-                                 <span class="dt">sites =</span> sites, 
-                                 <span class="dt">startdate =</span> startdate, 
-                                 <span class="dt">enddate =</span> enddate, 
-                                 <span class="dt">X_DATA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISdv, 
-                                 <span class="dt">x_args =</span> sites, 
-                                 <span class="dt">DRAIN_AREA_FUN =</span> dataRetrieval<span class="op">::</span>readNWISsite, 
-                                 <span class="dt">drain_args =</span> sites)   </code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">write.table</span>(diff_stats, 
+            <span class="dt">file =</span> <span class="st">&quot;diffstats_output.txt&quot;</span>, 
+            <span class="dt">col.names =</span> <span class="ot">TRUE</span>, 
+            <span class="dt">row.names =</span> <span class="ot">FALSE</span>, 
+            <span class="dt">quote =</span> <span class="ot">FALSE</span>, 
+            <span class="dt">sep =</span> <span class="st">&quot;</span><span class="ch">\t</span><span class="st">&quot;</span>)</code></pre></div>
+<p>This package includes a number of other stats calculating functions. The goodness of fit statistics functions can be used by passing in two flow time series like were passed to <code>calculate_diff_stats</code> above but only passing in one site of data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Gaged &lt;-<span class="st"> </span>flow_data_nwis<span class="op">$</span>daily_streamflow_cfs[<span class="st">&quot;02335757&quot;</span>][[<span class="dv">1</span>]]
+Modeled &lt;-<span class="st"> </span>flow_data_nwc<span class="op">$</span>daily_streamflow_cfs[<span class="st">&quot;031300011004&quot;</span>][[<span class="dv">1</span>]]
+GoF_stats &lt;-<span class="st"> </span><span class="kw">calculate_GoF_stats</span>(Gaged, Modeled)
+GoF_anmon_stats &lt;-<span class="st"> </span><span class="kw">calculate_GoF_summary_stats</span>(Gaged, Modeled)
+<span class="kw">str</span>(GoF_stats, <span class="dt">list.len =</span> <span class="st">&quot;10&quot;</span>)</code></pre></div>
+<pre><code>## 'data.frame':    1 obs. of  146 variables:
+##  $ nse               : num 0.707
+##  $ nselog            : num 0.517
+##  $ rmse              : num 184
+##  $ rmsne             : num 5.18
+##  $ rsr               : num 0.61
+##  $ pbias             : num 24
+##  $ pearson           : num 0.847
+##  $ spearman          : num 0.902
+##  $ nse_90            : num 0.592
+##  $ nse_75_90         : num -4.18
+##   [list output truncated]</code></pre>
 </div>
 </div>
 

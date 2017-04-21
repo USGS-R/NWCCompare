@@ -1,78 +1,98 @@
-## ----workflow, echo=TRUE, eval=TRUE--------------------------------------
-library(EflowStats)
+## ----loadWebServiceData, echo=TRUE, eval=TRUE----------------------------
 library(NWCCompare)
+# First we set out site ids.
+nwis <- "02335757"
+huc <- "031300011004"
+# Then set our start and end dates. Note these define water years.
+start_date <- "2004-10-01"
+end_date <- "2010-09-30"
+flow_data_nwis <- build_nwis_dv_dataset(nwis, start_date, end_date)
+flow_data_nwc <- build_nwc_flow_dataset(huc, start_date, end_date)
+str(flow_data_nwis)
 
-## ----modelStatsprep, echo=TRUE, eval=TRUE--------------------------------
-# Run stats and differences on USGS observed and modeled daily discharge data
-hucs="031601020108"
-startdate <- "1980-10-01"
-enddate <- "2010-09-30"
-sites <- "02435020"
-sites<-read.csv(header=F,colClasses=c("character"),text=sites)
-sites <- unlist(sites[1,])
+## ----getLocalData, echo=TRUE, eval=TRUE----------------------------------
+data_path <- system.file("extdata", package="NWCCompare")
+data_path <- paste(data_path, "modeled", sep="/")
+# Note this data path is sample data in the package. 
+# You would set the path to the folder containing your streamflow data.
+start_year <- "2007"
+end_year <- "2010"
+localData <- get_local_data(data_path,start_year=start_year,end_year=end_year)
+str(localData[1])
 
-## ----modelStatschunk, echo=FALSE, eval=TRUE------------------------------
-drainage_url <- "https://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
-d_urls<-paste0(drainage_url, sites)
-hucs <- read.csv(header=F,colClasses=c("character"),text=hucs)
-hucs <- unlist(hucs[1,])
+## ----getfYourOwn, echo=TRUE, eval=TRUE-----------------------------------
+# Here you would load your data. It should have two columns, the first for date
+# the second for discharge. A sample is printed below. We also need the EflowStats
+# function dataCheck for this example.
+library(EflowStats)
+Modeled<-mod_data
+str(mod_data)
+Modeled$date <- as.Date(Modeled$date)
+Modeled <- dataCheck(Modeled, yearType = "water")
+str(Modeled)
 
-## ----createstatsoutput, echo=FALSE, eval=TRUE, results="hidew"-----------
-# calculate statsout
-statsout <- calculate_stats_diffs(sites = sites, 
-                                startdate = startdate, 
-                                enddate = enddate, 
-                                X_DATA_FUN = dataRetrieval::readNWISdv, 
-                                x_args = sites, 
-                                DRAIN_AREA_FUN = dataRetrieval::readNWISsite, 
-                                drain_args = sites, 
-                                M_DATA_FUN = get_nwc_wb_data, 
-                                m_args = hucs)  
+## ----buildfYourOwn, echo=TRUE, eval=TRUE---------------------------------
+sites <- names(localData)
 
-## ----statsoutput, echo=TRUE, eval=FALSE----------------------------------
-#  # calculate statsout
-#  statsout <- calculate_stats_diffs(sites = sites,
-#                                  startdate = startdate,
-#                                  enddate = enddate,
-#                                  X_DATA_FUN = dataRetrieval::readNWISdv,
-#                                  x_args = sites,
-#                                  DRAIN_AREA_FUN = dataRetrieval::readNWISsite,
-#                                  drain_args = sites,
-#                                  M_DATA_FUN = get_nwc_wb_data,
-#                                  m_args = hucs)
+da <- read.csv(file = (file.path(data_path, "drainarea.csv")),
+               colClasses = c("character","integer"))
+
+drainage_area_sqmi <- da$darea
+names(drainage_area_sqmi) <- da$siteNo
+
+peak_threshold <- rep(0, length(sites))
+names(peak_threshold) <- sites
+
+for(site in sites) {
+  fd <- localData[site][[1]]
+  peaks <- find_peak_flow(fd)
+  peak_threshold[site] <- peakThreshold(fd, peaks, perc = 0.6, yearType = "water")
+}
+
+flow_data_local <- list(daily_streamflow_cfs = localData,
+                           drainage_area_sqmi = drainage_area_sqmi,
+                           peak_threshold_cfs = peak_threshold)
+
+## ----justStats, echo=TRUE, eval=TRUE-------------------------------------
+stats=c("magAverage", "magLow", "magHigh",
+        "frequencyLow", "frequencyHigh",
+        "durationLow", "durationHigh",
+        "timingAverage", "timingLow", "timingHigh",
+        "rateChange",
+        "magnifSeven", "otherStat")
+eflow_stats <- calculate_stats_by_group(stats, flow_data_nwis)
+str(eflow_stats, list.len = "10")
+
+## ----justStatsAny, echo=TRUE, eval=FALSE---------------------------------
+#  eflow_stats <- calculate_stats_by_group(stats, flow_data_nwc)
+#  
+#  eflow_stats <- calculate_stats_by_group(stats, flow_data_local)
+
+## ----createstatsdiffs, echo=TRUE, eval=TRUE------------------------------
+# Note this could contain many site pairs. 
+sites <- data.frame(nwis_sites=nwis, b=huc, stringsAsFactors = FALSE)
+diff_stats <- calculate_stats_diffs(sites = sites,
+                                       flow_data_a = flow_data_nwis,
+                                       flow_data_b = flow_data_nwc,
+                                       yearType = "water",
+                                       digits = 2)
+str(diff_stats, list.len = "10")
 
 ## ----viewData, echo=FALSE, eval=TRUE-------------------------------------
-# view a portion of the statsout table
-statsout[,c(1,4,39,74,109,111,115)]
+diff_stats[,c(1:10)]
 
 ## ----saveData, echo=TRUE, eval=FALSE-------------------------------------
-#  # save statsout to a tab-delimited file
-#  output = "output.txt"
-#  write.table(statsout, file = output, col.names = TRUE, row.names = FALSE,
-#              quote = FALSE, sep = "\t")
+#  write.table(diff_stats,
+#              file = "diffstats_output.txt",
+#              col.names = TRUE,
+#              row.names = FALSE,
+#              quote = FALSE,
+#              sep = "\t")
 
-## ----OtherStats, echo=TRUE, eval=FALSE-----------------------------------
-#  # calculate stats for data from your own data file
-#  drain_area=54
-#  site_id="Test site"
-#  daily_data<-dailyData
-#  stats="magnifSeven,magStat,flowStat,durStat,timStat,rateStat,otherStat"
-#  statsout <- ObservedStatsOther(daily_data,drain_area,site_id,stats)
-
-## ----justStats, echo=TRUE, eval=FALSE------------------------------------
-#  # Run stats on USGS observed daily discharge data
-#  sites <- '02177000,02178400'
-#  startdate <- "2008-10-01"
-#  enddate <- "2013-09-29"
-#  stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat,otherStat"
-#  drainage_url <- "http://waterservices.usgs.gov/nwis/site/?siteOutput=Expanded&site="
-#  sites<-read.csv(header=F,colClasses=c("character"),text=sites)
-#  statsout <- calculate_stats_by_group(stats = stats,
-#                                   sites = sites,
-#                                   startdate = startdate,
-#                                   enddate = enddate,
-#                                   X_DATA_FUN = dataRetrieval::readNWISdv,
-#                                   x_args = sites,
-#                                   DRAIN_AREA_FUN = dataRetrieval::readNWISsite,
-#                                   drain_args = sites)
+## ----GoFstats, echo=TRUE, eval=TRUE--------------------------------------
+Gaged <- flow_data_nwis$daily_streamflow_cfs["02335757"][[1]]
+Modeled <- flow_data_nwc$daily_streamflow_cfs["031300011004"][[1]]
+GoF_stats <- calculate_GoF_stats(Gaged, Modeled)
+GoF_anmon_stats <- calculate_GoF_summary_stats(Gaged, Modeled)
+str(GoF_stats, list.len = "10")
 
