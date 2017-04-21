@@ -3,11 +3,8 @@
 \docType{data}
 \name{obs_data}
 \alias{obs_data}
-\title{This is data to be included in my package}
+\title{Sample observed data for demonstration purposes}
 \description{
-This is data to be included in my package
-}
-\author{
-Jessica Thompson \email{jlthomps@usgs.gov}
+Sample observed data for demonstration purposes
 }
 \keyword{data}

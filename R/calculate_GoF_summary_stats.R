@@ -10,9 +10,13 @@
 #' @import hydroGOF
 #' @export
 #' @examples
-#' Gaged<-sampleData
-#' Modeled<-sampleData
-#' calculate_GoF_summary_stats(Gaged,Modeled)
+#' Gaged <- obs_data
+#' Gaged$date <- as.Date(Gaged$date)
+#' Gaged <- dataCheck(Gaged, yearType = "water")
+#' Modeled<-mod_data
+#' Modeled$date <- as.Date(Modeled$date)
+#' Modeled <- dataCheck(Modeled, yearType = "water")
+#' GoFstats <- calculate_GoF_stats(Modeled,Gaged)
 # This function should  @importFrom hydrGOF rmse pbias but 
 # something is wrong with the rmse function.
 calculate_GoF_summary_stats <- function(Gaged,Modeled) {
@@ -36,6 +40,8 @@ calculate_GoF_summary_stats <- function(Gaged,Modeled) {
   
   i <- 2
   c <- 3
+  Gaged$month_val <- format(Gaged$date, "%m")
+  Modeled$month_val <- format(Gaged$date, "%m")
   GagedTmp <- aggregate(Gaged$discharge, list(Gaged$year_val,Gaged$month_val), FUN = mean, na.rm=TRUE)
   ModeledTmp <- aggregate(Modeled$discharge, list(Modeled$year_val,Modeled$month_val), FUN = mean, na.rm=TRUE)
   NSEv[i] <- nse(GagedTmp[,c],ModeledTmp[,c])

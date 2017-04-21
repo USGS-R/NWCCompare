@@ -10,10 +10,12 @@
 #' @importFrom hydroGOF rmse rsr pbias
 #' @importFrom stats quantile cor
 #' @examples
-#' load_data<-sampleData
-#' load_mod<-sampleData
-#' Gaged<-load_data
-#' Modeled<-load_mod
+#' Gaged <- obs_data
+#' Gaged$date <- as.Date(Gaged$date)
+#' Gaged <- dataCheck(Gaged, yearType = "water")
+#' Modeled<-mod_data
+#' Modeled$date <- as.Date(Modeled$date)
+#' Modeled <- dataCheck(Modeled, yearType = "water")
 #' calculate_GoF_stats(Modeled,Gaged)
 calculate_GoF_stats <- function(Modeled,Gaged) {
   

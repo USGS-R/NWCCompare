@@ -19,9 +19,11 @@ This function accepts observed and modeled data frames of daily flow
 data and returns a data frame of calculated GoF statistics
 }
 \examples{
-load_data<-sampleData
-load_mod<-sampleData
-Gaged<-load_data
-Modeled<-load_mod
+Gaged <- obs_data
+Gaged$date <- as.Date(Gaged$date)
+Gaged <- dataCheck(Gaged, yearType = "water")
+Modeled<-mod_data
+Modeled$date <- as.Date(Modeled$date)
+Modeled <- dataCheck(Modeled, yearType = "water")
 calculate_GoF_stats(Modeled,Gaged)
 }

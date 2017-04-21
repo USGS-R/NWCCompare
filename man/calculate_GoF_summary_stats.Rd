@@ -19,7 +19,11 @@ This function accepts observed and modeled data frames of daily flow data
 and returns a data frame of calculated monthly annual GoF statistics
 }
 \examples{
-Gaged<-sampleData
-Modeled<-sampleData
-calculate_GoF_summary_stats(Gaged,Modeled)
+Gaged <- obs_data
+Gaged$date <- as.Date(Gaged$date)
+Gaged <- dataCheck(Gaged, yearType = "water")
+Modeled<-mod_data
+Modeled$date <- as.Date(Modeled$date)
+Modeled <- dataCheck(Modeled, yearType = "water")
+GoFstats <- calculate_GoF_stats(Modeled,Gaged)
 }

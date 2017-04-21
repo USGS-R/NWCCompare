@@ -19,9 +19,7 @@ This function accepts two data frames containing daily data series and returns t
 logarithms of the data, with zeros removed.
 }
 \examples{
-obs_data<-dailyData
-mod_data<-dailyData
-timeseries1<-obs_data$discharge
-timeseries2<-mod_data$discharge
-nselog(timeseries1,timeseries2)
+obs_data<-obs_data
+mod_data<-mod_data
+nselog(obs_data$discharge,mod_data$discharge)
 }

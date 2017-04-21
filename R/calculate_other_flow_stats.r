@@ -12,8 +12,10 @@
 #' @importFrom EflowStats cv
 #' @export
 #' @examples
-#' timeseries1<-sampleData
-#' calculate_other_flow_stats(timeseries1)
+#' flow_data<-obs_data
+#' flow_data$date <- as.Date(flow_data$date)
+#' flow_data <- dataCheck(flow_data, yearType = "water")
+#' calculate_other_flow_stats(flow_data)
 calculate_other_flow_stats<-function(flow_data, digits = 3)  {
 
   mean_by_year <- aggregate(flow_data$discharge, list(flow_data$year_val), 

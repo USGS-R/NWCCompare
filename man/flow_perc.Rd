@@ -20,6 +20,8 @@ This function accepts a data frame containing daily data and a list of desired p
 returns a list of the requested percentiles
 }
 \examples{
-flow_data<-sampleData
-flow_perc(flow_data,probs=c(.1,.25,.5,.75))
+flow_data<-obs_data
+flow_data$date <- as.Date(flow_data$date)
+flow_data <- dataCheck(flow_data, yearType = "water")
+flow_perc(flow_data, probs=c(.1,.25,.5,.75))
 }
