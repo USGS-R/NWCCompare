@@ -83,6 +83,57 @@ calculate_stat_nselog<-function(timeseries1,timeseries2) {
   return(nselog)
 }
 
+#' Function to return the percent bias between two data series
+#' 
+#' This function accepts two data frames containing daily data series and returns the 
+#' percent bias.
+#' 
+#' @param timeseries1 data frame containing value data for one of the chosen timeseries
+#' @param timeseries2 data frame continaing value data for the second chosen timeseries
+#' @return pbias percent bias between the two timeseries
+#' @export
+#' @examples
+#' timeseries1<-obs_data$discharge
+#' timeseries2<-mod_data$discharge
+#' calculate_stat_pbias(timeseries1,timeseries2)
+calculate_stat_pbias <- function (timeseries2, timeseries1){
+  
+  denominator <- sum(timeseries1)
+  
+  if (denominator != 0) {
+    
+    pbias <- 100 * ( sum( timeseries2 - timeseries1 ) / denominator )
+    
+  } else {
+    pbias <- NA
+    warning("'sum((obs)=0', it is not possible to compute 'pbias'")  
+  }
+  
+  return(round(pbias, 1))
+}
+
+#' Function to return the root mean square error between two data series
+#' 
+#' This function accepts two data frames containing daily data series and returns the root mean square error
+#' 
+#' @param timeseries1 data frame containing value data for one of the chosen timeseries
+#' @param timeseries2 data frame continaing value data for the second chosen timeseries
+#' @return rmse root mean square error value between the two timeseries
+#' @export
+#' @examples
+#' timeseries1<-obs_data$discharge
+#' timeseries2<-mod_data$discharge
+#' calculate_stat_rmse(timeseries1,timeseries2)
+calculate_stat_rmse<-function(timeseries1,timeseries2) {
+  if (length(timeseries1)>1) {
+    sqerror<-(timeseries1-timeseries2)^2
+    sumsqerr<-sum(sqerror)
+    n<-length(timeseries1)
+    rmse<-sqrt(sumsqerr/n)
+  } else {rmse<-NA}
+  return(rmse)
+}
+
 #' Function to return the normalized root mean square error between two data series
 #' 
 #' This function accepts two data frames containing daily data series and returns the normalized root mean square error
@@ -104,6 +155,30 @@ calculate_stat_rmsne<-function(timeseries1,timeseries2) {
     rmsne<-sqrt(sumsqerr/n)
   } else {rmsne<-NA}
   return(rmsne)
+}
+
+#' Function to return the ratio of the root mean square error to the standard deviation
+#' 
+#' This function accepts observed and modeled daily data series and returns the root mean square error/standard deviation
+#' 
+#' @param timeseries1 data frame containing value data for the observed timeseries
+#' @param timeseries2 data frame containing value data for the modeled timeseries
+#' @return rsr root mean square error/standard deviation for the two timeseries
+#' @export
+#' @examples
+#' timeseries1<-obs_data$discharge
+#' timeseries2<-mod_data$discharge
+#' calculate_stat_rsr(timeseries1,timeseries2)
+calculate_stat_rsr<-function(timeseries2, timeseries1) {
+  if (length(timeseries1)>1) {
+    sqerror<-(timeseries1-timeseries2)^2
+    sumsqerr<-sum(sqerror)
+    n<-length(timeseries1)
+    rmse<-sqrt(sumsqerr/n)
+    sdev <- sd(timeseries1,na.rm=TRUE)
+    rsr <- rmse/sdev
+  } else {rsr<-NA}
+  return(rsr)
 }
 
 #' Function to find peak flow and date of peak flow in a time series.

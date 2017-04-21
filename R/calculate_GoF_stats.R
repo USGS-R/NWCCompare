@@ -7,7 +7,6 @@
 #' @param Gaged data frame of daily flow data
 #' @return Output data frame of calculated statistics
 #' @export
-#' @importFrom hydroGOF rmse rsr pbias
 #' @importFrom stats quantile cor
 #' @examples
 #' library(EflowStats)
@@ -27,10 +26,10 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
   
   nsev <- calculate_stat_nse(Gaged$discharge,Modeled$discharge)
   nselogv <- calculate_stat_nselog(Gaged$discharge,Modeled$discharge)
-  rmsev <- rmse(Gaged$discharge,Modeled$discharge)
+  rmsev <- calculate_stat_rmse(Gaged$discharge,Modeled$discharge)
   rmsnev <- calculate_stat_rmsne(Gaged$discharge,Modeled$discharge)
-  rsrv <- rsr(Gaged$discharge,Modeled$discharge)
-  pbiasv <- pbias(Modeled$discharge,Gaged$discharge)
+  rsrv <- calculate_stat_rsr(Gaged$discharge,Modeled$discharge)
+  pbiasv <- calculate_stat_pbias(Modeled$discharge,Gaged$discharge)
   pearsonv <- cor(Modeled$discharge,Gaged$discharge,method="pearson")
   spearmanv <- cor(Modeled$discharge,Gaged$discharge,method="spearman")
   
@@ -53,12 +52,12 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
   nsev_10_25 <- calculate_stat_nse(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
   nsev_10 <- calculate_stat_nse(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
   
-  rmsev_90 <- rmse(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
-  rmsev_75_90 <- rmse(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
-  rmsev_50_75 <- rmse(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
-  rmsev_25_50 <- rmse(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
-  rmsev_10_25 <- rmse(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
-  rmsev_10 <- rmse(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
+  rmsev_90 <- calculate_stat_rmse(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
+  rmsev_75_90 <- calculate_stat_rmse(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
+  rmsev_50_75 <- calculate_stat_rmse(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
+  rmsev_25_50 <- calculate_stat_rmse(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
+  rmsev_10_25 <- calculate_stat_rmse(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
+  rmsev_10 <- calculate_stat_rmse(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
   
   rmsnev_90 <- calculate_stat_rmsne(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
   rmsnev_75_90 <- calculate_stat_rmsne(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
@@ -67,40 +66,40 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
   rmsnev_10_25 <- calculate_stat_rmsne(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
   rmsnev_10 <- calculate_stat_rmsne(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
   
-  rsrv_90 <- rsr(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
-  rsrv_75_90 <- rsr(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
-  rsrv_50_75 <- rsr(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
-  rsrv_25_50 <- rsr(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
-  rsrv_10_25 <- rsr(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
-  rsrv_10 <- rsr(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
+  rsrv_90 <- calculate_stat_rsr(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
+  rsrv_75_90 <- calculate_stat_rsr(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
+  rsrv_50_75 <- calculate_stat_rsr(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
+  rsrv_25_50 <- calculate_stat_rsr(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
+  rsrv_10_25 <- calculate_stat_rsr(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
+  rsrv_10 <- calculate_stat_rsr(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
   
   if (length(obs_90_indices)>1) {
-    pbiasv_90 <- pbias(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
+    pbiasv_90 <- calculate_stat_pbias(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
   } else {
     pbiasv_90<-NA
   }
   if (length(obs_75_90_indices)>1) {
-    pbiasv_75_90 <- pbias(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
+    pbiasv_75_90 <- calculate_stat_pbias(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
   } else {
     pbiasv_75_90<-NA
   }
   if (length(obs_50_75_indices)>1) {
-    pbiasv_50_75 <- pbias(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
+    pbiasv_50_75 <- calculate_stat_pbias(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
   } else {
     pbiasv_50_75<-NA
   }
   if (length(obs_25_50_indices)>1) {
-    pbiasv_25_50 <- pbias(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
+    pbiasv_25_50 <- calculate_stat_pbias(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
   } else {
     pbiasv_25_50<-NA
   }
   if (length(obs_10_25_indices)>1) {
-    pbiasv_10_25 <- pbias(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
+    pbiasv_10_25 <- calculate_stat_pbias(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
   } else {
     pbiasv_10_25<-NA
   }
   if (length(obs_10_indices)>1) {
-    pbiasv_10 <- pbias(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
+    pbiasv_10 <- calculate_stat_pbias(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
   } else {
     pbiasv_10<-NA
   }
@@ -143,12 +142,12 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
     
     NSEbyMonth[m] <- calculate_stat_nse(monthobs$discharge,monthmod$discharge)
     NSELOGbyMonth[m] <- calculate_stat_nselog(monthobs$discharge,monthmod$discharge)
-    RMSEbyMonth[m] <- rmse(monthobs$discharge,monthmod$discharge)
+    RMSEbyMonth[m] <- calculate_stat_rmse(monthobs$discharge,monthmod$discharge)
     RMSNEbyMonth[m] <- calculate_stat_rmsne(monthobs$discharge,monthmod$discharge)
-    RSRbyMonth[m] <- rsr(monthobs$discharge,monthmod$discharge)
+    RSRbyMonth[m] <- calculate_stat_rsr(monthobs$discharge,monthmod$discharge)
     
     if (nrow(monthmod)>1) {
-      BiasbyMonth[m] <- pbias(monthobs$discharge,monthmod$discharge)
+      BiasbyMonth[m] <- calculate_stat_pbias(monthobs$discharge,monthmod$discharge)
     } else {
       BiasbyMonth[m] <- NA
     }

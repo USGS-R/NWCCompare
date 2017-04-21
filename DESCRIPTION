@@ -9,7 +9,6 @@ Depends:
     R (>= 3.0)
 Imports:
     xml2,
-    hydroGOF,
     EflowStats,
     dataRetrieval,
     jsonlite,

@@ -7,7 +7,6 @@
 #' @param Modeled data frame of daily flow data
 #' @return Output data frame of calculated statistics
 #' @importFrom stats aggregate cor
-#' @import hydroGOF
 #' @export
 #' @examples
 #' library(EflowStats)
@@ -34,8 +33,8 @@ calculate_GoF_summary_stats <- function(Gaged,Modeled) {
   ModeledTmp <- aggregate(Modeled$discharge, list(Modeled$year_val), FUN = mean, na.rm=TRUE)
   NSEv[i] <- calculate_stat_nse(GagedTmp[,c],ModeledTmp[,c])
   NSELOGv[i] <- calculate_stat_nselog(GagedTmp[,c],ModeledTmp[,c])
-  RMSEv[i] <- rmse(GagedTmp[,c],ModeledTmp[,c])
-  PBIASv[i] <- pbias(GagedTmp[,c],ModeledTmp[,c])
+  RMSEv[i] <- calculate_stat_rmse(GagedTmp[,c],ModeledTmp[,c])
+  PBIASv[i] <- calculate_stat_pbias(GagedTmp[,c],ModeledTmp[,c])
   PEARSONv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="pearson")
   SPEARMANv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="spearman")
   
@@ -47,8 +46,8 @@ calculate_GoF_summary_stats <- function(Gaged,Modeled) {
   ModeledTmp <- aggregate(Modeled$discharge, list(Modeled$year_val,Modeled$month_val), FUN = mean, na.rm=TRUE)
   NSEv[i] <- calculate_stat_nse(GagedTmp[,c],ModeledTmp[,c])
   NSELOGv[i] <- calculate_stat_nselog(GagedTmp[,c],ModeledTmp[,c])
-  RMSEv[i] <- rmse(GagedTmp[,c],ModeledTmp[,c])
-  PBIASv[i] <- pbias(GagedTmp[,c],ModeledTmp[,c])
+  RMSEv[i] <- calculate_stat_rmse(GagedTmp[,c],ModeledTmp[,c])
+  PBIASv[i] <- calculate_stat_pbias(GagedTmp[,c],ModeledTmp[,c])
   PEARSONv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="pearson")
   SPEARMANv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="spearman")
   
@@ -63,8 +62,8 @@ calculate_GoF_summary_stats <- function(Gaged,Modeled) {
     i <- 2+m
     NSEv[i] <- calculate_stat_nse(GagedTmp[,c],ModeledTmp[,c])
     NSELOGv[i] <- calculate_stat_nselog(GagedTmp[,c],ModeledTmp[,c])
-    RMSEv[i] <- rmse(GagedTmp[,c],ModeledTmp[,c])
-    PBIASv[i] <- pbias(GagedTmp[,c],ModeledTmp[,c])
+    RMSEv[i] <- calculate_stat_rmse(GagedTmp[,c],ModeledTmp[,c])
+    PBIASv[i] <- calculate_stat_pbias(GagedTmp[,c],ModeledTmp[,c])
     PEARSONv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="pearson")
     SPEARMANv[i] <- cor(GagedTmp[,c],ModeledTmp[,c],method="spearman")
   }
