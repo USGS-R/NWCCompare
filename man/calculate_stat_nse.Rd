@@ -10,6 +10,8 @@ calculate_stat_nse(estimate_timeseries, reference_timeseries, na.rm = TRUE)
 \item{estimate_timeseries}{data frame continaing value data for the second chosen timeseries}
 
 \item{reference_timeseries}{data frame containing value data for one of the chosen timeseries}
+
+\item{na.rm}{Boolean defaults to TRUE.}
 }
 \value{
 nse Nash-Sutcliffe value between the two timeseries

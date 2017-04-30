@@ -10,6 +10,8 @@ calculate_stat_rmse(timeseries1, timeseries2, na.rm = TRUE)
 \item{timeseries1}{data frame containing value data for one of the chosen timeseries}
 
 \item{timeseries2}{data frame continaing value data for the second chosen timeseries}
+
+\item{na.rm}{Boolean defaults to TRUE.}
 }
 \value{
 rmse root mean square error value between the two timeseries

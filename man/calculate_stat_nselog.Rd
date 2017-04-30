@@ -4,9 +4,11 @@
 \alias{calculate_stat_nselog}
 \title{Function to return the Nash-Sutcliffe value between the natural logarithms of the two data series}
 \usage{
-calculate_stat_nselog(timeseries1, timeseries2)
+calculate_stat_nselog(estimate_timeseries, reference_timeseries, na.rm = TRUE)
 }
 \arguments{
+\item{na.rm}{Boolean defaults to TRUE.}
+
 \item{timeseries1}{data frame containing value data for one of the chosen timeseries}
 
 \item{timeseries2}{data frame continaing value data for the second chosen timeseries}
@@ -21,6 +23,6 @@ logarithms of the data, with zeros removed.
 \examples{
 obs_data<-obs_data
 mod_data<-mod_data
-calculate_stat_nselog(obs_data$discharge,mod_data$discharge)
+calculate_stat_nselog(mod_data$discharge, obs_data$discharge)
 
 }

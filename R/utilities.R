@@ -28,6 +28,7 @@ calculate_stat_flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
 #' 
 #' @param estimate_timeseries data frame continaing value data for the second chosen timeseries
 #' @param reference_timeseries data frame containing value data for one of the chosen timeseries
+#' @param na.rm Boolean defaults to TRUE.
 #' @return nse Nash-Sutcliffe value between the two timeseries
 #' @export
 #' @examples
@@ -51,36 +52,39 @@ calculate_stat_nse <-function(estimate_timeseries, reference_timeseries, na.rm=T
 #' 
 #' @param timeseries1 data frame containing value data for one of the chosen timeseries
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
+#' @param na.rm Boolean defaults to TRUE.
 #' @return nselog Nash-Sutcliffe value between the natural log of the two timeseries
 #' @export
 #' @examples
 #' obs_data<-obs_data
 #' mod_data<-mod_data
-#' calculate_stat_nselog(obs_data$discharge,mod_data$discharge)
+#' calculate_stat_nselog(mod_data$discharge, obs_data$discharge)
 #' 
-calculate_stat_nselog<-function(timeseries1,timeseries2) {
+calculate_stat_nselog<-function(estimate_timeseries, reference_timeseries, na.rm = TRUE) {
   # Count of zeros in dataset
-  sszeros<-subset(timeseries1,timeseries1==0)
-  czeros<-length(sszeros)
+  sszeros<-subset(reference_timeseries,reference_timeseries==0)
   
-  # Put timeseries1 and timeseries2 into a data frame  and add header
-  obsestq<-data.frame(timeseries1,timeseries2)
+  if (length(sszeros)>0) {
+    message(paste("\n", length(sszeros), 
+                  "streamflows with a zero value were detected in this dataset.", 
+                  "\nThese values will be removed before computing the \n",
+                  "Nash-Sutcliffe efficiency value from the natural logs \n",
+                  "of the streamflows."))
+  }
+  
+  obsestq<-data.frame(reference_timeseries,estimate_timeseries, na.rm = TRUE)
   colnames(obsestq)<-c("obs","est")
-  #attach(obsestq)
   
-  # If zeroes in timeseries1, display message and delete zeroes
-  if (czeros>0) {
-    cat("\n", czeros, "streamflows with a zero value were detected in this dataset. \nThese values will be removed before computing the \nNash-Sutcliffe efficiency value from the natural logs \nof the streamflows.")
-  } else {} #Do nothing if no zeros
   nozeros<-subset(obsestq,obsestq$obs>0)
   
   if (nrow(nozeros)>1) {
     
-    # Compute NS
-    numerat<-sum((log(nozeros$obs)-log(nozeros$est))^2,na.rm=TRUE)
-    denomin<-sum((log(nozeros$obs)-mean(log(nozeros$obs),na.rm=TRUE))^2,na.rm=TRUE)
-    nselog<-(1-(numerat/denomin))
+    nselog <- calculate_stat_nse(log(nozeros$est), 
+                                 log(nozeros$obs), 
+                                 na.rm = na.rm)
+
   } else {nselog<-NA}
+  
   return(nselog)
 }
 
@@ -119,6 +123,7 @@ calculate_stat_pbias <- function (estimate_timeseries, reference_timeseries){
 #' 
 #' @param timeseries1 data frame containing value data for one of the chosen timeseries
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
+#' @param na.rm Boolean defaults to TRUE.
 #' @return rmse root mean square error value between the two timeseries
 #' @export
 #' @examples

@@ -25,7 +25,7 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
   Modeled <- Modeled[order(Modeled$date),]
   
   nsev <- calculate_stat_nse(Modeled$discharge, Gaged$discharge)
-  nselogv <- calculate_stat_nselog(Gaged$discharge,Modeled$discharge)
+  nselogv <- calculate_stat_nselog(Modeled$discharge, Gaged$discharge)
   rmsev <- calculate_stat_rmse(Gaged$discharge,Modeled$discharge)
   rmsnev <- calculate_stat_rmsne(Gaged$discharge,Modeled$discharge)
   rsrv <- calculate_stat_rsr(Gaged$discharge,Modeled$discharge)
@@ -141,7 +141,7 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
     monthmod <- monthmod[order(monthmod$date),]
     
     NSEbyMonth[m] <- calculate_stat_nse(monthmod$discharge, monthobs$discharge)
-    NSELOGbyMonth[m] <- calculate_stat_nselog(monthobs$discharge,monthmod$discharge)
+    NSELOGbyMonth[m] <- calculate_stat_nselog(monthmod$discharge, monthobs$discharge)
     RMSEbyMonth[m] <- calculate_stat_rmse(monthobs$discharge,monthmod$discharge)
     RMSNEbyMonth[m] <- calculate_stat_rmsne(monthobs$discharge,monthmod$discharge)
     RSRbyMonth[m] <- calculate_stat_rsr(monthobs$discharge,monthmod$discharge)
