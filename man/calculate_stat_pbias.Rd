@@ -4,12 +4,12 @@
 \alias{calculate_stat_pbias}
 \title{Function to return the percent bias between two data series}
 \usage{
-calculate_stat_pbias(timeseries2, timeseries1)
+calculate_stat_pbias(estimate_timeseries, reference_timeseries)
 }
 \arguments{
-\item{timeseries2}{data frame continaing value data for the second chosen timeseries}
+\item{estimate_timeseries}{data frame containing value data for the modeled timeseries}
 
-\item{timeseries1}{data frame containing value data for one of the chosen timeseries}
+\item{reference_timeseries}{data frame containing value data for the observed timeseries}
 }
 \value{
 pbias percent bias between the two timeseries
@@ -19,7 +19,7 @@ This function accepts two data frames containing daily data series and returns t
 percent bias.
 }
 \examples{
-timeseries1<-obs_data$discharge
-timeseries2<-mod_data$discharge
-calculate_stat_pbias(timeseries1,timeseries2)
+reference_timeseries<-obs_data$discharge
+estimate_timeseries<-mod_data$discharge
+calculate_stat_pbias(reference_timeseries,estimate_timeseries)
 }

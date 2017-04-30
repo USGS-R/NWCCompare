@@ -45,13 +45,10 @@ names(peak_threshold) <- sites
 
 for(site in sites) {
   fd <- localData[site][[1]]
-  peaks <- find_peak_flow(fd)
-  peak_threshold[site] <- peakThreshold(fd, peaks, perc = 0.6, yearType = "water")
 }
 
 flow_data_local <- list(daily_streamflow_cfs = localData,
-                           drainage_area_sqmi = drainage_area_sqmi,
-                           peak_threshold_cfs = peak_threshold)
+                           drainage_area_sqmi = drainage_area_sqmi)
 
 ## ----justStats, echo=TRUE, eval=TRUE-------------------------------------
 stats=c("magAverage", "magLow", "magHigh",

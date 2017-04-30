@@ -4,22 +4,23 @@
 \alias{calculate_stat_rmsne}
 \title{Function to return the normalized root mean square error between two data series}
 \usage{
-calculate_stat_rmsne(timeseries1, timeseries2)
+calculate_stat_rmsne(estimate_timeseries, reference_timeseries)
 }
 \arguments{
-\item{timeseries1}{data frame containing value data for one of the chosen timeseries}
+\item{estimate_timeseries}{data frame containing value data for the modeled timeseries}
 
-\item{timeseries2}{data frame continaing value data for the second chosen timeseries}
+\item{reference_timeseries}{data frame containing value data for the observed timeseries}
 }
 \value{
 rmsne normalized root mean square error value between the two timeseries
 }
 \description{
-This function accepts two data frames containing daily data series and returns the normalized root mean square error
+This function accepts two data frames containing daily data series and returns 
+the normalized root mean square error
 }
 \examples{
 obs_data<-obs_data
 mod_data<-mod_data
-calculate_stat_rmsne(obs_data$discharge,mod_data$discharge)
+calculate_stat_rmsne(mod_data$discharge, obs_data$discharge)
 
 }

@@ -5,7 +5,7 @@
 \title{Builds a date, streamflow, drainage area dataset of NWC modeled data.}
 \usage{
 build_nwc_flow_dataset(hucs, start_date = "1980-10-01",
-  end_date = "2010-09-30", choose = "no")
+  end_date = "2010-09-30")
 }
 \arguments{
 \item{hucs}{A character vector of 12-digit HUCs.}
@@ -13,8 +13,6 @@ build_nwc_flow_dataset(hucs, start_date = "1980-10-01",
 \item{start_date}{character representation of the start date in YYYY-MM-DD format.}
 
 \item{end_date}{character representation of the end date in YYYY-MM-DD format.}
-
-\item{choose}{character as required by \link{find_peak_flow}}
 }
 \description{
 Takes a list of hucs and a start and end date of interest. Returns

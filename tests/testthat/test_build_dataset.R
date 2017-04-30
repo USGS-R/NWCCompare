@@ -13,9 +13,7 @@ test_that("huc discharge works", {
   hucs <- c("031601020108","031501100104")
   start_date <- "1980-10-01"
   end_date <- "2010-09-30"
-  expect_error(build_nwc_flow_dataset(hucs, start_date, end_date), 
-               "Flow peaks found on more than one dates:\n 1981-06-06, 1981-06-11 \n use choose input to select first or last.")
-  dataout <- build_nwc_flow_dataset(hucs, start_date, end_date, choose = "first")
+  dataout <- build_nwc_flow_dataset(hucs, start_date, end_date)
   dataout_check <- readRDS("data/test_build_nwc_flow_dataset.rds")
   expect_equal(dataout, dataout_check)
 })
