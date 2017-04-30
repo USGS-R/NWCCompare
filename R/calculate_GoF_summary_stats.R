@@ -29,7 +29,7 @@ calculate_GoF_summary_stats <- function(Gaged,Modeled) {
   c <- 2
   GagedTmp <- aggregate(Gaged$discharge, list(Gaged$year_val), FUN = mean, na.rm=TRUE)
   ModeledTmp <- aggregate(Modeled$discharge, list(Modeled$year_val), FUN = mean, na.rm=TRUE)
-  NSEv[i] <- calculate_stat_nse(GagedTmp[,c],ModeledTmp[,c])
+  NSEv[i] <- calculate_stat_nse(ModeledTmp[,c], GagedTmp[,c])
   NSELOGv[i] <- calculate_stat_nselog(GagedTmp[,c],ModeledTmp[,c])
   RMSEv[i] <- calculate_stat_rmse(GagedTmp[,c],ModeledTmp[,c])
   PBIASv[i] <- calculate_stat_pbias(ModeledTmp[,c],GagedTmp[,c])
@@ -42,7 +42,7 @@ calculate_GoF_summary_stats <- function(Gaged,Modeled) {
   Modeled$month_val <- format(Gaged$date, "%m")
   GagedTmp <- aggregate(Gaged$discharge, list(Gaged$year_val,Gaged$month_val), FUN = mean, na.rm=TRUE)
   ModeledTmp <- aggregate(Modeled$discharge, list(Modeled$year_val,Modeled$month_val), FUN = mean, na.rm=TRUE)
-  NSEv[i] <- calculate_stat_nse(GagedTmp[,c],ModeledTmp[,c])
+  NSEv[i] <- calculate_stat_nse(ModeledTmp[,c], GagedTmp[,c])
   NSELOGv[i] <- calculate_stat_nselog(GagedTmp[,c],ModeledTmp[,c])
   RMSEv[i] <- calculate_stat_rmse(GagedTmp[,c],ModeledTmp[,c])
   PBIASv[i] <- calculate_stat_pbias(ModeledTmp[,c],GagedTmp[,c])
@@ -58,7 +58,7 @@ calculate_GoF_summary_stats <- function(Gaged,Modeled) {
     GagedTmp <- aggregate(monthobs$discharge, list(monthobs$year_val), FUN = mean, na.rm=TRUE)
     ModeledTmp <- aggregate(monthmod$discharge, list(monthmod$year_val), FUN = mean, na.rm=TRUE)
     i <- 2+m
-    NSEv[i] <- calculate_stat_nse(GagedTmp[,c],ModeledTmp[,c])
+    NSEv[i] <- calculate_stat_nse(ModeledTmp[,c], GagedTmp[,c])
     NSELOGv[i] <- calculate_stat_nselog(GagedTmp[,c],ModeledTmp[,c])
     RMSEv[i] <- calculate_stat_rmse(GagedTmp[,c],ModeledTmp[,c])
     PBIASv[i] <- calculate_stat_pbias(ModeledTmp[,c],GagedTmp[,c])

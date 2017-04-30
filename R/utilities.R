@@ -23,23 +23,24 @@ calculate_stat_flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
 
 #' Function to return the Nash-Sutcliffe value between two data series
 #' 
-#' This function accepts two data frames containing daily data series and returns the Nash-Sutcliffe value
+#' This function accepts two data frames containing daily data series 
+#' and returns the Nash-Sutcliffe value
 #' 
-#' @param timeseries1 data frame containing value data for one of the chosen timeseries
-#' @param timeseries2 data frame continaing value data for the second chosen timeseries
+#' @param estimate_timeseries data frame continaing value data for the second chosen timeseries
+#' @param reference_timeseries data frame containing value data for one of the chosen timeseries
 #' @return nse Nash-Sutcliffe value between the two timeseries
 #' @export
 #' @examples
 #' obs_data<-obs_data
 #' mod_data<-mod_data
-#' calculate_stat_nse(obs_data$discharge,mod_data$discharge)
+#' calculate_stat_nse(mod_data$discharge, obs_data$discharge)
 #' 
-calculate_stat_nse <-function(timeseries1,timeseries2) {
-  if (length(timeseries1)>1) {
-    numerat<-sum((timeseries1-timeseries2)^2,na.rm=TRUE)
-    denomin<-sum((timeseries1-mean(timeseries1,na.rm=TRUE))^2,na.rm=TRUE)  #6/18/11: NSE value calculation has been fixed
-    nse<-(1-(numerat/denomin))
-  } else {nse<-NA} 
+calculate_stat_nse <-function(estimate_timeseries, reference_timeseries, na.rm=TRUE) {
+  if (length(reference_timeseries) > 1) {
+    numerat <- sum((reference_timeseries - estimate_timeseries)^2,na.rm=TRUE)
+    denomin <- sum((reference_timeseries - mean(reference_timeseries, na.rm=TRUE))^2, na.rm = na.rm)
+    nse <- (1 - (numerat / denomin))
+  } else {nse <- NA} 
   return(nse)
 }
 
@@ -124,13 +125,10 @@ calculate_stat_pbias <- function (estimate_timeseries, reference_timeseries){
 #' timeseries1<-obs_data$discharge
 #' timeseries2<-mod_data$discharge
 #' calculate_stat_rmse(timeseries1,timeseries2)
-calculate_stat_rmse<-function(timeseries1,timeseries2) {
+calculate_stat_rmse<-function(timeseries1, timeseries2, na.rm = TRUE) {
   if (length(timeseries1)>1) {
-    sqerror<-(timeseries1-timeseries2)^2
-    sumsqerr<-sum(sqerror)
-    n<-length(timeseries1)
-    rmse<-sqrt(sumsqerr/n)
-  } else {rmse<-NA}
+    rmse <- sqrt(mean((timeseries1 - timeseries2)^2, na.rm = na.rm))
+  } else { rmse <- NA }
   return(rmse)
 }
 
@@ -159,24 +157,27 @@ calculate_stat_rmsne<-function(timeseries1,timeseries2) {
 
 #' Function to return the ratio of the root mean square error to the standard deviation
 #' 
-#' This function accepts observed and modeled daily data series and returns the root mean square error/standard deviation
+#' This function accepts observed and modeled daily data series and returns the 
+#' root mean square error/standard deviation of the reference timeseries
 #' 
-#' @param timeseries1 data frame containing value data for the observed timeseries
-#' @param timeseries2 data frame containing value data for the modeled timeseries
+#' @param estimate_timeseries data frame containing value data for the modeled timeseries
+#' @param reference_timeseries data frame containing value data for the observed timeseries
 #' @return rsr root mean square error/standard deviation for the two timeseries
 #' @export
 #' @examples
-#' timeseries1<-obs_data$discharge
-#' timeseries2<-mod_data$discharge
-#' calculate_stat_rsr(timeseries1,timeseries2)
-calculate_stat_rsr<-function(timeseries2, timeseries1) {
-  if (length(timeseries1)>1) {
-    sqerror<-(timeseries1-timeseries2)^2
-    sumsqerr<-sum(sqerror)
-    n<-length(timeseries1)
-    rmse<-sqrt(sumsqerr/n)
-    sdev <- sd(timeseries1,na.rm=TRUE)
-    rsr <- rmse/sdev
+#' estimate_timeseries<-mod_data$discharge
+#' reference_timeseries<-obs_data$discharge
+#' calculate_stat_rsr(estimate_timeseries, reference_timeseries)
+calculate_stat_rsr<-function(estimate_timeseries, reference_timeseries) {
+  if (length(reference_timeseries)>1) {
+    rmse <- calculate_stat_rmse(estimate_timeseries, reference_timeseries)
+    sdev <- sd(reference_timeseries, na.rm=TRUE)
+    if(sdev > 0) {
+      rsr <- rmse/sdev
+    } else {
+      rsr <- NA
+      warning("standard deviation of reference timeseries is 0, not possible to calculate rsr.")
+    }
   } else {rsr<-NA}
   return(rsr)
 }

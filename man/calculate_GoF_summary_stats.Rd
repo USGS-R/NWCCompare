@@ -26,5 +26,5 @@ Gaged <- dataCheck(Gaged, yearType = "water")
 Modeled<-mod_data
 Modeled$date <- as.Date(Modeled$date)
 Modeled <- dataCheck(Modeled, yearType = "water")
-GoFstats <- calculate_GoF_stats(Modeled,Gaged)
+GoFstats <- calculate_GoF_stats(Gaged, Modeled)
 }

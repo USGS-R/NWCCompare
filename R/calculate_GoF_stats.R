@@ -24,7 +24,7 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
   Gaged <- Gaged[order(Gaged$date),]
   Modeled <- Modeled[order(Modeled$date),]
   
-  nsev <- calculate_stat_nse(Gaged$discharge,Modeled$discharge)
+  nsev <- calculate_stat_nse(Modeled$discharge, Gaged$discharge)
   nselogv <- calculate_stat_nselog(Gaged$discharge,Modeled$discharge)
   rmsev <- calculate_stat_rmse(Gaged$discharge,Modeled$discharge)
   rmsnev <- calculate_stat_rmsne(Gaged$discharge,Modeled$discharge)
@@ -45,12 +45,12 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
                              & Gaged$discharge<obs_percentiles[5])
   obs_90_indices <- which(Gaged$discharge>=obs_percentiles[5])
   
-  nsev_90 <- calculate_stat_nse(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
-  nsev_75_90 <- calculate_stat_nse(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
-  nsev_50_75 <- calculate_stat_nse(Gaged$discharge[obs_50_75_indices],Modeled$discharge[obs_50_75_indices])
-  nsev_25_50 <- calculate_stat_nse(Gaged$discharge[obs_25_50_indices],Modeled$discharge[obs_25_50_indices])
-  nsev_10_25 <- calculate_stat_nse(Gaged$discharge[obs_10_25_indices],Modeled$discharge[obs_10_25_indices])
-  nsev_10 <- calculate_stat_nse(Gaged$discharge[obs_10_indices],Modeled$discharge[obs_10_indices])
+  nsev_90 <- calculate_stat_nse(Modeled$discharge[obs_90_indices], Gaged$discharge[obs_90_indices])
+  nsev_75_90 <- calculate_stat_nse(Modeled$discharge[obs_75_90_indices], Gaged$discharge[obs_75_90_indices])
+  nsev_50_75 <- calculate_stat_nse(Modeled$discharge[obs_50_75_indices],Gaged$discharge[obs_50_75_indices])
+  nsev_25_50 <- calculate_stat_nse(Modeled$discharge[obs_25_50_indices],Gaged$discharge[obs_25_50_indices])
+  nsev_10_25 <- calculate_stat_nse(Modeled$discharge[obs_10_25_indices],Gaged$discharge[obs_10_25_indices])
+  nsev_10 <- calculate_stat_nse(Modeled$discharge[obs_10_indices],Gaged$discharge[obs_10_indices])
   
   rmsev_90 <- calculate_stat_rmse(Gaged$discharge[obs_90_indices],Modeled$discharge[obs_90_indices])
   rmsev_75_90 <- calculate_stat_rmse(Gaged$discharge[obs_75_90_indices],Modeled$discharge[obs_75_90_indices])
@@ -140,7 +140,7 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
     monthobs <- monthobs[order(monthobs$date),]
     monthmod <- monthmod[order(monthmod$date),]
     
-    NSEbyMonth[m] <- calculate_stat_nse(monthobs$discharge,monthmod$discharge)
+    NSEbyMonth[m] <- calculate_stat_nse(monthmod$discharge, monthobs$discharge)
     NSELOGbyMonth[m] <- calculate_stat_nselog(monthobs$discharge,monthmod$discharge)
     RMSEbyMonth[m] <- calculate_stat_rmse(monthobs$discharge,monthmod$discharge)
     RMSNEbyMonth[m] <- calculate_stat_rmsne(monthobs$discharge,monthmod$discharge)

@@ -4,7 +4,7 @@
 \alias{calculate_stat_rmse}
 \title{Function to return the root mean square error between two data series}
 \usage{
-calculate_stat_rmse(timeseries1, timeseries2)
+calculate_stat_rmse(timeseries1, timeseries2, na.rm = TRUE)
 }
 \arguments{
 \item{timeseries1}{data frame containing value data for one of the chosen timeseries}

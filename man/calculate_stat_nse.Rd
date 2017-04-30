@@ -4,22 +4,23 @@
 \alias{calculate_stat_nse}
 \title{Function to return the Nash-Sutcliffe value between two data series}
 \usage{
-calculate_stat_nse(timeseries1, timeseries2)
+calculate_stat_nse(estimate_timeseries, reference_timeseries, na.rm = TRUE)
 }
 \arguments{
-\item{timeseries1}{data frame containing value data for one of the chosen timeseries}
+\item{estimate_timeseries}{data frame continaing value data for the second chosen timeseries}
 
-\item{timeseries2}{data frame continaing value data for the second chosen timeseries}
+\item{reference_timeseries}{data frame containing value data for one of the chosen timeseries}
 }
 \value{
 nse Nash-Sutcliffe value between the two timeseries
 }
 \description{
-This function accepts two data frames containing daily data series and returns the Nash-Sutcliffe value
+This function accepts two data frames containing daily data series 
+and returns the Nash-Sutcliffe value
 }
 \examples{
 obs_data<-obs_data
 mod_data<-mod_data
-calculate_stat_nse(obs_data$discharge,mod_data$discharge)
+calculate_stat_nse(mod_data$discharge, obs_data$discharge)
 
 }
