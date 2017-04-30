@@ -12,8 +12,7 @@ test_that("Original demo for for diff stats works", {
                                        end_date = enddate)
   flow_data_b <- build_nwc_flow_dataset(hucs, 
                                         start_date = startdate, 
-                                        end_date = enddate, 
-                                        choose = "first")
+                                        end_date = enddate)
   diff_statsout <- calculate_stats_diffs(sites = sites, 
                                     flow_data_a = flow_data_a, 
                                     flow_data_b = flow_data_b, 

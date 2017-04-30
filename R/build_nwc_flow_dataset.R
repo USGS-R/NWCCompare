@@ -7,7 +7,6 @@
 #' @param hucs A character vector of 12-digit HUCs.
 #' @param start_date character representation of the start date in YYYY-MM-DD format.
 #' @param end_date character representation of the end date in YYYY-MM-DD format.
-#' @param choose character as required by \link{find_peak_flow}
 #' @importFrom EflowStats dataCheck peakThreshold
 #' @export
 #' @examples
@@ -16,7 +15,7 @@
 #' end_date <- "2010-09-30"
 #' build_nwc_flow_dataset(hucs, start_date, end_date)
 build_nwc_flow_dataset <- function(hucs, start_date="1980-10-01", 
-                                   end_date="2010-09-30", choose = "no") {
+                                   end_date="2010-09-30") {
   
   if(any(nchar(hucs)!=12)) stop("Must submit 12-digit HUC ids")
   
@@ -38,13 +37,8 @@ build_nwc_flow_dataset <- function(hucs, start_date="1980-10-01",
     
     drainage_area_sqmi[huc] <- as.numeric(get_nwc_huc(huc)$features[[1]]$properties$areasqkm) * 0.386102 # convert to sqmi
     
-    peak_flows <- find_peak_flow(fdata, choose = choose)
-    
-    peak_threshold[huc] <- peakThreshold(fdata[c("date","discharge")],
-                                          peak_flows[c("date","peak")])
   }
   
   output <- list(daily_streamflow_cfs = nwc_dataset, 
-                 drainage_area_sqmi = drainage_area_sqmi,
-                 peak_threshold_cfs = peak_threshold)
+                 drainage_area_sqmi = drainage_area_sqmi)
 }

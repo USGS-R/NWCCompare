@@ -12,7 +12,7 @@
 
 <meta name="author" content="David Blodgett" />
 
-<meta name="date" content="2017-04-21" />
+<meta name="date" content="2017-04-30" />
 
 <title>The NWCCompare R package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">The NWCCompare R package</h1>
 <h4 class="author"><em>David Blodgett</em></h4>
-<h4 class="date"><em>2017-04-21</em></h4>
+<h4 class="date"><em>2017-04-30</em></h4>
 
 
 
@@ -139,7 +139,7 @@ Modeled &lt;-<span class="st"> </span><span class="kw">dataCheck</span>(Modeled,
 ##  $ discharge: num  36.5 34.7 33.1 32.6 32.1 ...
 ##  $ year_val : int  2009 2009 2009 2009 2009 2009 2009 2009 2009 2009 ...
 ##  $ day      : num  1 2 3 4 5 6 7 8 9 10 ...</code></pre>
-<p>With your local data loaded up and run through dataCheck, or loaded with get_local_data, you are ready to build an NWCCompare data frame. For this example, we use the <code>localData</code> loaded above. It has five sites worth of data. <a href="https://github.com/USGS-R/NWCCompare/blob/master/inst/extdata/observed/drainarea.csv">drainarea.csv used below can be seen here.</a> The <code>find_peak_flow</code> function can be used to help find the annual peak flow for each site and the EflowStats function <code>peakThreshold</code> can be used to get the peak threshold for each site’s time series.</p>
+<p>With your local data loaded up and run through dataCheck, or loaded with get_local_data, you are ready to build an NWCCompare data frame. For this example, we use the <code>localData</code> loaded above. It has five sites worth of data. <a href="https://github.com/USGS-R/NWCCompare/blob/master/inst/extdata/observed/drainarea.csv">drainarea.csv used below can be seen here.</a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sites &lt;-<span class="st"> </span><span class="kw">names</span>(localData)
 
 da &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> (<span class="kw">file.path</span>(data_path, <span class="st">&quot;drainarea.csv&quot;</span>)),
@@ -153,13 +153,10 @@ peak_threshold &lt;-<span class="st"> </span><span class="kw">rep</span>(<span c
 
 <span class="cf">for</span>(site <span class="cf">in</span> sites) {
   fd &lt;-<span class="st"> </span>localData[site][[<span class="dv">1</span>]]
-  peaks &lt;-<span class="st"> </span><span class="kw">find_peak_flow</span>(fd)
-  peak_threshold[site] &lt;-<span class="st"> </span><span class="kw">peakThreshold</span>(fd, peaks, <span class="dt">perc =</span> <span class="fl">0.6</span>, <span class="dt">yearType =</span> <span class="st">&quot;water&quot;</span>)
 }
 
 flow_data_local &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">daily_streamflow_cfs =</span> localData,
-                           <span class="dt">drainage_area_sqmi =</span> drainage_area_sqmi,
-                           <span class="dt">peak_threshold_cfs =</span> peak_threshold)</code></pre></div>
+                           <span class="dt">drainage_area_sqmi =</span> drainage_area_sqmi)</code></pre></div>
 </div>
 <div id="calculating-summary-and-difference-statistics" class="section level2">
 <h2>Calculating Summary and Difference Statistics</h2>
@@ -233,7 +230,7 @@ GoF_anmon_stats &lt;-<span class="st"> </span><span class="kw">calculate_GoF_sum
 ##  $ rmse              : num 184
 ##  $ rmsne             : num 5.18
 ##  $ rsr               : num 0.61
-##  $ pbias             : num 24
+##  $ pbias             : num -19.4
 ##  $ pearson           : num 0.847
 ##  $ spearman          : num 0.902
 ##  $ nse_90            : num 0.592

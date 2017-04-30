@@ -63,7 +63,7 @@ Modeled <- dataCheck(Modeled, yearType = "water")
 str(Modeled)
 ```
 
-With your local data loaded up and run through dataCheck, or loaded with get_local_data, you are ready to build an NWCCompare data frame. For this example, we use the `localData` loaded above. It has five sites worth of data. [drainarea.csv used below can be seen here.](https://github.com/USGS-R/NWCCompare/blob/master/inst/extdata/observed/drainarea.csv) The `find_peak_flow` function can be used to help find the annual peak flow for each site and the EflowStats function `peakThreshold` can be used to get the peak threshold for each site's time series.
+With your local data loaded up and run through dataCheck, or loaded with get_local_data, you are ready to build an NWCCompare data frame. For this example, we use the `localData` loaded above. It has five sites worth of data. [drainarea.csv used below can be seen here.](https://github.com/USGS-R/NWCCompare/blob/master/inst/extdata/observed/drainarea.csv)
 
 ```{r buildfYourOwn, echo=TRUE, eval=TRUE}
 sites <- names(localData)
@@ -79,13 +79,10 @@ names(peak_threshold) <- sites
 
 for(site in sites) {
   fd <- localData[site][[1]]
-  peaks <- find_peak_flow(fd)
-  peak_threshold[site] <- peakThreshold(fd, peaks, perc = 0.6, yearType = "water")
 }
 
 flow_data_local <- list(daily_streamflow_cfs = localData,
-                           drainage_area_sqmi = drainage_area_sqmi,
-                           peak_threshold_cfs = peak_threshold)
+                           drainage_area_sqmi = drainage_area_sqmi)
 ```
 
 ## Calculating Summary and Difference Statistics
