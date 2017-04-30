@@ -26,8 +26,8 @@ calculate_stat_flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
 #' This function accepts two data frames containing daily data series 
 #' and returns the Nash-Sutcliffe value
 #' 
-#' @param estimate_timeseries data frame continaing value data for the second chosen timeseries
-#' @param reference_timeseries data frame containing value data for one of the chosen timeseries
+#' @param estimate_timeseries data frame containing value data for the modeled timeseries
+#' @param reference_timeseries data frame containing value data for the observed timeseries
 #' @param na.rm Boolean defaults to TRUE.
 #' @return nse Nash-Sutcliffe value between the two timeseries
 #' @export
@@ -39,7 +39,11 @@ calculate_stat_flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {
 calculate_stat_nse <-function(estimate_timeseries, reference_timeseries, na.rm=TRUE) {
   if (length(reference_timeseries) > 1) {
     numerat <- sum((reference_timeseries - estimate_timeseries)^2,na.rm=TRUE)
-    denomin <- sum((reference_timeseries - mean(reference_timeseries, na.rm=TRUE))^2, na.rm = na.rm)
+    
+    denomin <- sum((reference_timeseries - mean(reference_timeseries, 
+                                                na.rm = na.rm))^2, 
+                   na.rm = na.rm)
+    
     nse <- (1 - (numerat / denomin))
   } else {nse <- NA} 
   return(nse)
@@ -50,8 +54,8 @@ calculate_stat_nse <-function(estimate_timeseries, reference_timeseries, na.rm=T
 #' This function accepts two data frames containing daily data series and returns the Nash-Sutcliffe value of the natural 
 #' logarithms of the data, with zeros removed.
 #' 
-#' @param timeseries1 data frame containing value data for one of the chosen timeseries
-#' @param timeseries2 data frame continaing value data for the second chosen timeseries
+#' @param estimate_timeseries data frame containing value data for the modeled timeseries
+#' @param reference_timeseries data frame containing value data for the observed timeseries
 #' @param na.rm Boolean defaults to TRUE.
 #' @return nselog Nash-Sutcliffe value between the natural log of the two timeseries
 #' @export
@@ -93,8 +97,8 @@ calculate_stat_nselog<-function(estimate_timeseries, reference_timeseries, na.rm
 #' This function accepts two data frames containing daily data series and returns the 
 #' percent bias.
 #' 
-#' @param estimate_timeseries data frame continaing value data for the second chosen timeseries
-#' @param reference_timeseries data frame containing value data for one of the chosen timeseries
+#' @param estimate_timeseries data frame containing value data for the modeled timeseries
+#' @param reference_timeseries data frame containing value data for the observed timeseries
 #' @return pbias percent bias between the two timeseries
 #' @export
 #' @examples
@@ -119,7 +123,8 @@ calculate_stat_pbias <- function (estimate_timeseries, reference_timeseries){
 
 #' Function to return the root mean square error between two data series
 #' 
-#' This function accepts two data frames containing daily data series and returns the root mean square error
+#' This function accepts two data frames containing daily data series and returns 
+#' the root mean square error
 #' 
 #' @param timeseries1 data frame containing value data for one of the chosen timeseries
 #' @param timeseries2 data frame continaing value data for the second chosen timeseries
@@ -139,23 +144,23 @@ calculate_stat_rmse<-function(timeseries1, timeseries2, na.rm = TRUE) {
 
 #' Function to return the normalized root mean square error between two data series
 #' 
-#' This function accepts two data frames containing daily data series and returns the normalized root mean square error
+#' This function accepts two data frames containing daily data series and returns 
+#' the normalized root mean square error
 #' 
-#' @param timeseries1 data frame containing value data for one of the chosen timeseries
-#' @param timeseries2 data frame continaing value data for the second chosen timeseries
+#' @param estimate_timeseries data frame containing value data for the modeled timeseries
+#' @param reference_timeseries data frame containing value data for the observed timeseries
 #' @return rmsne normalized root mean square error value between the two timeseries
 #' @export
 #' @examples
 #' obs_data<-obs_data
 #' mod_data<-mod_data
-#' calculate_stat_rmsne(obs_data$discharge,mod_data$discharge)
+#' calculate_stat_rmsne(mod_data$discharge, obs_data$discharge)
 #' 
-calculate_stat_rmsne<-function(timeseries1,timeseries2) {
-  if (length(timeseries1)>1) {
-    sqerror<-((timeseries1-timeseries2)/timeseries1)^2
-    sumsqerr<-sum(sqerror)
-    n<-length(timeseries1)
-    rmsne<-sqrt(sumsqerr/n)
+calculate_stat_rmsne<-function(estimate_timeseries, reference_timeseries) {
+  if (length(reference_timeseries)>1) {
+    sumsqerr<-sum(((reference_timeseries-estimate_timeseries) / reference_timeseries)^2)
+    
+    rmsne<-sqrt(sumsqerr / length(reference_timeseries))
   } else {rmsne<-NA}
   return(rmsne)
 }

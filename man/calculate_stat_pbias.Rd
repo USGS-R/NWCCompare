@@ -7,9 +7,9 @@
 calculate_stat_pbias(estimate_timeseries, reference_timeseries)
 }
 \arguments{
-\item{estimate_timeseries}{data frame continaing value data for the second chosen timeseries}
+\item{estimate_timeseries}{data frame containing value data for the modeled timeseries}
 
-\item{reference_timeseries}{data frame containing value data for one of the chosen timeseries}
+\item{reference_timeseries}{data frame containing value data for the observed timeseries}
 }
 \value{
 pbias percent bias between the two timeseries

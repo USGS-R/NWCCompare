@@ -7,9 +7,9 @@
 calculate_stat_nse(estimate_timeseries, reference_timeseries, na.rm = TRUE)
 }
 \arguments{
-\item{estimate_timeseries}{data frame continaing value data for the second chosen timeseries}
+\item{estimate_timeseries}{data frame containing value data for the modeled timeseries}
 
-\item{reference_timeseries}{data frame containing value data for one of the chosen timeseries}
+\item{reference_timeseries}{data frame containing value data for the observed timeseries}
 
 \item{na.rm}{Boolean defaults to TRUE.}
 }

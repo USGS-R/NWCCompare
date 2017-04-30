@@ -17,7 +17,8 @@ calculate_stat_rmse(timeseries1, timeseries2, na.rm = TRUE)
 rmse root mean square error value between the two timeseries
 }
 \description{
-This function accepts two data frames containing daily data series and returns the root mean square error
+This function accepts two data frames containing daily data series and returns 
+the root mean square error
 }
 \examples{
 timeseries1<-obs_data$discharge
