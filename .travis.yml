@@ -1,30 +1,33 @@
-language: c
+# Defines the options for building the project on linux with Travis-CI
+# For more configuration options, see the wiki:
+# https://github.com/craigcitro/r-travis/wiki/Porting-to-native-R-support-in-Travis
 
-os: osx
+language: r
+cache: packages
+sudo: true
+dist: trusty
+warnings_are_errors: false
 
-env:
-   global:
-     - CRAN: "http://cran.rstudio.com"
-     - R_BUILD_ARGS="--no-build-vignettes --no-manual"
-     - R_CHECK_ARGS="--no-build-vignettes --no-vignettes --no-manual --no-examples"
-     - BOOTSTRAP_LATEX=""
-     - NOT_CRAN="true"
+r_build_args: --no-build-vignettes --no-manual --no-multiarch
+r_check_args: --no-build-vignettes --no-manual
 
-script: ./travis-tool.sh run_tests
+repos:
+  CRAN: https://cran.rstudio.com
+  GRAN: https://owi.usgs.gov/R
 
-before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
-  - ./travis-tool.sh install_deps
-  - ./travis-tool.sh github_package jimhester/covr
-  - ./travis-tool.sh github_package USGS-R/EflowStats
+before_script:
+  - Rscript -e "install.packages('knitr')"
+  - Rscript -e "install.packages('rmarkdown')"
 
-after_failure:
-  ./travis-tool.sh dump_logs
-  
+r_github_packages:
+  - jimhester/covr
+  - USGS-R/EflowStats
+
 after_success:
   - Rscript -e 'covr::coveralls()'
+
+after_failure:
+  - ./travis-tool.sh dump_logs
 
 notifications:
   email:
