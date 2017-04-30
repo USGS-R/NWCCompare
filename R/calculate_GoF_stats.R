@@ -29,7 +29,7 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
   rmsev <- calculate_stat_rmse(Gaged$discharge,Modeled$discharge)
   rmsnev <- calculate_stat_rmsne(Gaged$discharge,Modeled$discharge)
   rsrv <- calculate_stat_rsr(Gaged$discharge,Modeled$discharge)
-  pbiasv <- calculate_stat_pbias(Modeled$discharge,Gaged$discharge)
+  pbiasv <- calculate_stat_pbias(Gaged$discharge,Modeled$discharge)
   pearsonv <- cor(Modeled$discharge,Gaged$discharge,method="pearson")
   spearmanv <- cor(Modeled$discharge,Gaged$discharge,method="spearman")
   
@@ -147,7 +147,7 @@ calculate_GoF_stats <- function(Modeled,Gaged) {
     RSRbyMonth[m] <- calculate_stat_rsr(monthobs$discharge,monthmod$discharge)
     
     if (nrow(monthmod)>1) {
-      BiasbyMonth[m] <- calculate_stat_pbias(monthobs$discharge,monthmod$discharge)
+      BiasbyMonth[m] <- calculate_stat_pbias(monthmod$discharge,monthobs$discharge)
     } else {
       BiasbyMonth[m] <- NA
     }

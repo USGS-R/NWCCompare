@@ -88,21 +88,21 @@ calculate_stat_nselog<-function(timeseries1,timeseries2) {
 #' This function accepts two data frames containing daily data series and returns the 
 #' percent bias.
 #' 
-#' @param timeseries1 data frame containing value data for one of the chosen timeseries
-#' @param timeseries2 data frame continaing value data for the second chosen timeseries
+#' @param estimate_timeseries data frame continaing value data for the second chosen timeseries
+#' @param reference_timeseries data frame containing value data for one of the chosen timeseries
 #' @return pbias percent bias between the two timeseries
 #' @export
 #' @examples
-#' timeseries1<-obs_data$discharge
-#' timeseries2<-mod_data$discharge
-#' calculate_stat_pbias(timeseries1,timeseries2)
-calculate_stat_pbias <- function (timeseries2, timeseries1){
+#' reference_timeseries<-obs_data$discharge
+#' estimate_timeseries<-mod_data$discharge
+#' calculate_stat_pbias(reference_timeseries,estimate_timeseries)
+calculate_stat_pbias <- function (estimate_timeseries, reference_timeseries){
   
-  denominator <- sum(timeseries1)
+  denominator <- sum(reference_timeseries)
   
   if (denominator != 0) {
     
-    pbias <- 100 * ( sum( timeseries2 - timeseries1 ) / denominator )
+    pbias <- 100 * ( sum( estimate_timeseries - reference_timeseries ) / denominator )
     
   } else {
     pbias <- NA
