@@ -9,7 +9,6 @@
 #' @param digits A numeric. Number of digits to round indice values
 #' @return OtherStats data frame of calculated statistics
 #' @importFrom stats aggregate median sd
-#' @importFrom EflowStats cv
 #' @export
 #' @examples
 #' library(EflowStats)
@@ -24,9 +23,9 @@ calculate_other_flow_stats<-function(flow_data, digits = 3)  {
   
   med_flow<-round(median(mean_by_year, na.rm=TRUE), digits=digits)
   
-  cv_flow<-round(cv(mean_by_year), digits=digits)
+  cv_flow<-round(calculate_stat_cv(mean_by_year), digits=digits)
   
-  cv_daily<-round(cv(flow_data$discharge),digits=digits)
+  cv_daily<-round(calculate_stat_cv(flow_data$discharge),digits=digits)
   
   obs_percentiles <- calculate_stat_flow_perc(flow_data)
   flow_10 <- obs_percentiles[1]
