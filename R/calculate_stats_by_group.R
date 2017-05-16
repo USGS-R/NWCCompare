@@ -2,7 +2,7 @@
 #' 
 #' This function traverses a collection of daily streamflow data and 
 #' calculates the requested statistics for each time series. Available 
-#' statistics include those implemented by \link[EflowStats]{hitStats}, 
+#' statistics include those implemented by \link[EflowStats]{hitAllStats}, 
 #' \link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}.
 #' 
 #' @param stats string containing stat groups desired. 
@@ -16,7 +16,7 @@
 #' @param digits A numeric. Number of digits to round indice values
 #' @return Data frame of calculated statistics. Time series ids are used 
 #' as row names, statistic ids as column names.
-#' @importFrom EflowStats magnifSeven hitStats dataCheck
+#' @importFrom EflowStats magnifSeven hitAllStats dataCheck
 #' @importFrom stats aggregate
 #' @export
 #' @examples
@@ -24,11 +24,11 @@
 #' startdate <- "2008-10-01"
 #' enddate <- "2013-09-30"
 #' nwis_dataset <- build_nwis_dv_dataset(sites, startdate, enddate)
-#' stats=c("magAverage", "magLow", "magHigh", 
-#'         "frequencyLow", "frequencyHigh", 
-#'         "durationLow", "durationHigh", 
-#'         "timingAverage", "timingLow", "timingHigh", 
-#'         "rateChange", 
+#' stats=c("hitMagAverage", "hitMagLow", "hitMagHigh", 
+#'         "hitFrequencyLow", "hitFrequencyHigh", 
+#'         "hitDurationLow", "hitDurationHigh", 
+#'         "hitTimingAverage", "hitTimingLow", "hitTimingHigh", 
+#'         "hitRateChange", 
 #'         "magnifSeven", "otherStat")
 #' eflow_stats <- calculate_stats_by_group(stats, nwis_dataset)
 calculate_stats_by_group<-function(stats, flow_data, 
@@ -60,7 +60,7 @@ calculate_stats_by_group<-function(stats, flow_data,
     
     flow_data_site <- flow_data$daily_streamflow_cfs[site][[1]]
     
-    hitStats_result <- hitStats(flow_data_site,
+    hitAllStats_result <- hitAllStats(flow_data_site,
                                 drainArea=drainage_area,
                                 floodThreshold=flood_threshold,
                                 stats = stats,
@@ -69,7 +69,7 @@ calculate_stats_by_group<-function(stats, flow_data,
     min_date[site] <- as.character(min(flow_data_site$date))
     max_date[site] <- as.character(max(flow_data_site$date))
     
-    nrows_out <- nrow(hitStats_result)
+    nrows_out <- nrow(hitAllStats_result)
     
     if (mag7) {
       mag7_result <- magnifSeven(flow_data_site, yearType, digits)
@@ -85,7 +85,7 @@ calculate_stats_by_group<-function(stats, flow_data,
       output <- data.frame(matrix(ncol = (length(sites) + 1), nrow = nrows_out))
       names(output) <- c("indice", sites)
       
-      output[,1:2] <- rbind(mag7_result, ostat_result, hitStats_result)
+      output[,1:2] <- rbind(mag7_result, ostat_result, hitAllStats_result)
       
       output[1:7,1] <- c("lam1","tau2","tau3",
                          "tau4","ar1","amplitude","phase")
@@ -96,7 +96,7 @@ calculate_stats_by_group<-function(stats, flow_data,
       init = FALSE
     } else {
       
-      output[site] <- rbind(mag7_result, ostat_result, hitStats_result)["statistic"]
+      output[site] <- rbind(mag7_result, ostat_result, hitAllStats_result)["statistic"]
       
     }
   }

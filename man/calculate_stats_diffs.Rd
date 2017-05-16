@@ -28,7 +28,7 @@ statsout data frame of calculated statistics
 }
 \description{
 This function accepts two data frames of daily flow data and returns a data frame of 
-calculated difference statistics from \link[EflowStats]{hitStats}, 
+calculated difference statistics from \link[EflowStats]{hitAllStats}, 
 \link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}, and \link{calculate_GoF_stats}.
 HitStats, magnifSeven, and other_flow_stats are differented as \code{(a-b)/a}
 }

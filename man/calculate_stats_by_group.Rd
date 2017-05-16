@@ -27,7 +27,7 @@ as row names, statistic ids as column names.
 \description{
 This function traverses a collection of daily streamflow data and 
 calculates the requested statistics for each time series. Available 
-statistics include those implemented by \link[EflowStats]{hitStats}, 
+statistics include those implemented by \link[EflowStats]{hitAllStats}, 
 \link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}.
 }
 \examples{
@@ -35,11 +35,11 @@ sites <- c("02177000","02178400")
 startdate <- "2008-10-01"
 enddate <- "2013-09-30"
 nwis_dataset <- build_nwis_dv_dataset(sites, startdate, enddate)
-stats=c("magAverage", "magLow", "magHigh", 
-        "frequencyLow", "frequencyHigh", 
-        "durationLow", "durationHigh", 
-        "timingAverage", "timingLow", "timingHigh", 
-        "rateChange", 
+stats=c("hitMagAverage", "hitMagLow", "hitMagHigh", 
+        "hitFrequencyLow", "hitFrequencyHigh", 
+        "hitDurationLow", "hitDurationHigh", 
+        "hitTimingAverage", "hitTimingLow", "hitTimingHigh", 
+        "hitRateChange", 
         "magnifSeven", "otherStat")
 eflow_stats <- calculate_stats_by_group(stats, nwis_dataset)
 }

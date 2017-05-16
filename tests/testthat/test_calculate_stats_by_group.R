@@ -24,11 +24,11 @@ test_that("Original demo for NWIS works", {
   enddate <- "2013-09-30"
   nwis_dataset <- build_nwis_dv_dataset(sites, startdate, enddate)
   
-  stats=c("magAverage", "magLow", "magHigh",
-          "frequencyLow", "frequencyHigh",
-          "durationLow", "durationHigh",
-          "timingAverage", "timingLow", "timingHigh",
-          "rateChange",
+  stats=c("hitMagAverage", "hitMagLow", "hitMagHigh",
+          "hitFrequencyLow", "hitFrequencyHigh",
+          "hitDurationLow", "hitDurationHigh",
+          "hitTimingAverage", "hitTimingLow", "hitTimingHigh",
+          "hitRateChange",
           "magnifSeven", "otherStat")
   
   statsout <- calculate_stats_by_group(stats = stats, 
