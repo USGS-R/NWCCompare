@@ -4,7 +4,7 @@
 #' returns a list of the requested percentiles
 #' 
 #' @param flow_data A dataframe containing a NWCCompare flow dataset. 
-#' Should have been cleaned by \link[EflowStats]{dataCheck}
+#' Should have been cleaned by \link[EflowStats]{validate_data}
 #' @param probs vector containing requested percentile value(s)
 #' @return obs_percentiles requested flow percentiles for the given data frame
 #' @importFrom stats quantile
@@ -13,7 +13,7 @@
 #' library(EflowStats)
 #' flow_data<-obs_data
 #' flow_data$date <- as.Date(flow_data$date)
-#' flow_data <- dataCheck(flow_data, yearType = "water")
+#' flow_data <- validate_data(flow_data, yearType = "water")
 #' calculate_stat_flow_perc(flow_data, probs=c(.1,.25,.5,.75))
 #' 
 calculate_stat_flow_perc <- function(flow_data, probs=c(.1,.25,.5,.75,.9,.15)) {

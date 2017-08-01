@@ -8,7 +8,7 @@
 #' @param start_date A string representation of the start date in YYYY-MM-DD format.
 #' @param end_date A string representation of the end date in YYYY-MM-DD format.
 #' @importFrom dataRetrieval readNWISdv readNWISsite readNWISpeak
-#' @importFrom EflowStats dataCheck peakThreshold
+#' @importFrom EflowStats validate_data get_peakThreshold
 #' @export
 #' @examples
 #' sites <- c("02177000","02178400")
@@ -28,12 +28,12 @@ build_nwis_dv_dataset <- function(sites, start_date, end_date) {
   names(peak_threshold) <- sites
   
   for(site in sites) {
-    streamflow <- readNWISdv(siteNumber = site, 
+    streamflow <- readNWISdv(siteNumbers = site, 
                             parameterCd = "00060",
                             startDate = start_date,
                             endDate = end_date)
     
-    nwis_dataset[site] <- list(dataCheck(streamflow[c("Date","X_00060_00003")],yearType="water"))
+    nwis_dataset[site] <- list(validate_data(streamflow[c("Date","X_00060_00003")],yearType="water"))
     
     drainage_area_sqmi[site] <- as.numeric(readNWISsite(site)$drain_area_va)
   
@@ -41,7 +41,7 @@ build_nwis_dv_dataset <- function(sites, start_date, end_date) {
                               startDate = start_date,
                               endDate = end_date)
     
-    peak_threshold[site] <- peakThreshold(nwis_dataset[site][[1]][c("date","discharge")],
+    peak_threshold[site] <- get_peakThreshold(nwis_dataset[site][[1]][c("date","discharge")],
                                           peakFlows[c("peak_dt","peak_va")])
   }
   

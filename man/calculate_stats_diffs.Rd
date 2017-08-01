@@ -12,7 +12,7 @@ calculate_stats_diffs(sites, flow_data_a, flow_data_b, yearType = "water",
 and flow_data_b flow data.}
 
 \item{flow_data_a}{A dataframe containing a NWCCompare flow dataset. 
-Should have been cleaned by \link[EflowStats]{dataCheck} and constructed by
+Should have been cleaned by \link[EflowStats]{validate_data} and constructed by
 a build dataset function from this package.}
 
 \item{flow_data_b}{A second NWCCompare flow dataset to be compared
@@ -28,9 +28,9 @@ statsout data frame of calculated statistics
 }
 \description{
 This function accepts two data frames of daily flow data and returns a data frame of 
-calculated difference statistics from \link[EflowStats]{hitAllStats}, 
-\link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}, and \link{calculate_GoF_stats}.
-HitStats, magnifSeven, and other_flow_stats are differented as \code{(a-b)/a}
+calculated difference statistics from \link[EflowStats]{calc_allHIT}, 
+\link[EflowStats]{calc_magnifSeven}, \link{calculate_other_flow_stats}, and \link{calculate_GoF_stats}.
+HitStats, calc_magnifSeven, and other_flow_stats are differented as \code{(a-b)/a}
 }
 \details{
 Assumptions:

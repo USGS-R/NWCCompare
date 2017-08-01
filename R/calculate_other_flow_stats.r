@@ -5,7 +5,7 @@
 #' 1) mean, 2) median, 3) cv, 4) cv daily, 5) l7Q10, 6) l7Q2, 7) return_10 and 8) flow percentiles.
 #' 
 #' @param flow_data A dataframe containing a NWCCompare flow dataset. 
-#' Should have been cleaned by \link[EflowStats]{dataCheck}
+#' Should have been cleaned by \link[EflowStats]{validate_data}
 #' @param digits A numeric. Number of digits to round indice values
 #' @return OtherStats data frame of calculated statistics
 #' @importFrom stats aggregate median sd
@@ -14,7 +14,7 @@
 #' library(EflowStats)
 #' flow_data<-obs_data
 #' flow_data$date <- as.Date(flow_data$date)
-#' flow_data <- dataCheck(flow_data, yearType = "water")
+#' flow_data <- validate_data(flow_data, yearType = "water")
 #' calculate_other_flow_stats(flow_data)
 calculate_other_flow_stats<-function(flow_data, digits = 3)  {
 

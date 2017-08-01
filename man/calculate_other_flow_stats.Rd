@@ -8,7 +8,7 @@ calculate_other_flow_stats(flow_data, digits = 3)
 }
 \arguments{
 \item{flow_data}{A dataframe containing a NWCCompare flow dataset. 
-Should have been cleaned by \link[EflowStats]{dataCheck}}
+Should have been cleaned by \link[EflowStats]{validate_data}}
 
 \item{digits}{A numeric. Number of digits to round indice values}
 }
@@ -24,6 +24,6 @@ time series of streamflow with date in the format Y-m-d. Output is a vector of O
 library(EflowStats)
 flow_data<-obs_data
 flow_data$date <- as.Date(flow_data$date)
-flow_data <- dataCheck(flow_data, yearType = "water")
+flow_data <- validate_data(flow_data, yearType = "water")
 calculate_other_flow_stats(flow_data)
 }

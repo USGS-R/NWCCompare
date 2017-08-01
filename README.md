@@ -6,6 +6,15 @@ Code Coverage: [![Coverage Status](https://coveralls.io/repos/github/USGS-R/NWCC
 
 *NOTICE: NWCCompare has been completely rewritten. The v4.1 release, which works with EflowStats v4.1.1 is the last release of the v4 generation of the package. Please look through the vignette and function documentation and submit any feedback via issues in this repository.* 
 
+## Package Status
+
+[![status](https://img.shields.io/badge/USGS-Support-yellow.svg)](https://owi.usgs.gov/R/packages.html#support)
+
+This package is considered a 'support' package. For more information, see:
+[https://owi.usgs.gov/R/packages.html#support](https://owi.usgs.gov/R/packages.html#support)
+
+## Installation
+
 install this package using the following code:
 
 install.packages("NWCCompare",repos="http://usgs-r.github.com",type="source")

@@ -23,12 +23,12 @@ str(localData[1])
 ## ----getfYourOwn, echo=TRUE, eval=TRUE-----------------------------------
 # Here you would load your data. It should have two columns, the first for date
 # the second for discharge. A sample is printed below. We also need the EflowStats
-# function dataCheck for this example.
+# function validate_data for this example.
 library(EflowStats)
 Modeled<-mod_data
 str(mod_data)
 Modeled$date <- as.Date(Modeled$date)
-Modeled <- dataCheck(Modeled, yearType = "water")
+Modeled <- validate_data(Modeled, yearType = "water")
 str(Modeled)
 
 ## ----buildfYourOwn, echo=TRUE, eval=TRUE---------------------------------
@@ -51,12 +51,12 @@ flow_data_local <- list(daily_streamflow_cfs = localData,
                            drainage_area_sqmi = drainage_area_sqmi)
 
 ## ----justStats, echo=TRUE, eval=TRUE-------------------------------------
-stats=c("magAverage", "magLow", "magHigh",
-        "frequencyLow", "frequencyHigh",
-        "durationLow", "durationHigh",
-        "timingAverage", "timingLow", "timingHigh",
-        "rateChange",
-        "magnifSeven", "otherStat")
+stats=c("calc_magAverage", "calc_magLow", "calc_magHigh",
+        "calc_frequencyLow", "calc_frequencyHigh",
+        "calc_durationLow", "calc_durationHigh",
+        "calc_timingAverage", "calc_timingLow", "calc_timingHigh",
+        "calc_rateChange",
+        "calc_magnifSeven", "otherStat")
 eflow_stats <- calculate_stats_by_group(stats, flow_data_nwis)
 str(eflow_stats, list.len = "10")
 

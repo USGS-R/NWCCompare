@@ -7,7 +7,7 @@
 #' @param hucs A character vector of 12-digit HUCs.
 #' @param start_date character representation of the start date in YYYY-MM-DD format.
 #' @param end_date character representation of the end date in YYYY-MM-DD format.
-#' @importFrom EflowStats dataCheck peakThreshold
+#' @importFrom EflowStats validate_data get_peakThreshold
 #' @export
 #' @examples
 #' hucs <- c("031601020108","031501100104")
@@ -32,7 +32,7 @@ build_nwc_flow_dataset <- function(hucs, start_date="1980-10-01",
     streamflow <- get_nwc_wb_data(huc, start_date = start_date, end_date = end_date,
                                   local = FALSE, return_var = "discharge")
     
-    fdata <- dataCheck(streamflow$discharge[c("date", "data")],yearType="water")
+    fdata <- validate_data(streamflow$discharge[c("date", "data")],yearType="water")
     nwc_dataset[huc] <- list(fdata)
     
     drainage_area_sqmi[huc] <- as.numeric(get_nwc_huc(huc)$features[[1]]$properties$areasqkm) * 0.386102 # convert to sqmi
