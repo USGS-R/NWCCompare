@@ -4,7 +4,7 @@ context("calculate_stats_by_group")
 #   sites<-"031601020108"
 #   startdate <- "2008-10-01"
 #   enddate <- "2010-09-29"
-#   stats<-"rateStat,magnifSeven,magStat,flowStat,durStat,timStat"
+#   stats<-"rateStat,calc_magnifSeven,magStat,flowStat,durStat,timStat"
 #   sites<-read.csv(header=F,colClasses=c("character"),text=sites)
 #   statsout <- calculate_stats_by_group(stats = stats, 
 #                                    sites = sites, 
@@ -24,12 +24,12 @@ test_that("Original demo for NWIS works", {
   enddate <- "2013-09-30"
   nwis_dataset <- build_nwis_dv_dataset(sites, startdate, enddate)
   
-  stats=c("hitMagAverage", "hitMagLow", "hitMagHigh",
-          "hitFrequencyLow", "hitFrequencyHigh",
-          "hitDurationLow", "hitDurationHigh",
-          "hitTimingAverage", "hitTimingLow", "hitTimingHigh",
-          "hitRateChange",
-          "magnifSeven", "otherStat")
+  stats=c("calc_magAverage", "calc_magLow", "calc_magHigh",
+          "calc_frequencyLow", "calc_frequencyHigh",
+          "calc_durationLow", "calc_durationHigh",
+          "calc_timingAverage", "calc_timingLow", "calc_timingHigh",
+          "calc_rateChange",
+          "calc_magnifSeven", "otherStat")
   
   statsout <- calculate_stats_by_group(stats = stats, 
                                        flow_data = nwis_dataset, 

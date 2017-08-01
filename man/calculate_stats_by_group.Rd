@@ -10,10 +10,10 @@ calculate_stats_by_group(stats, flow_data, yearType = "water", digits = 3)
 \item{stats}{string containing stat groups desired. 
 options are: "all", "magAverage", "magLow", "magHigh", "frequencyLow", 
 "frequencyHigh", "durationLow", "durationHigh", "timingAverage", 
-"timingLow", "timingHigh", "rateChange", "magnifSeven", "otherStat"}
+"timingLow", "timingHigh", "rateChange", "calc_magnifSeven", "otherStat"}
 
 \item{flow_data}{A dataframe containing a NWCCompare flow dataset. 
-Should have been cleaned by \link[EflowStats]{dataCheck}}
+Should have been cleaned by \link[EflowStats]{validate_data}}
 
 \item{yearType}{A charcter of either "water" or "calendar" indicating 
 whether to use water years or calendar years, respectively.}
@@ -27,19 +27,19 @@ as row names, statistic ids as column names.
 \description{
 This function traverses a collection of daily streamflow data and 
 calculates the requested statistics for each time series. Available 
-statistics include those implemented by \link[EflowStats]{hitAllStats}, 
-\link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}.
+statistics include those implemented by \link[EflowStats]{calc_allHIT}, 
+\link[EflowStats]{calc_magnifSeven}, \link{calculate_other_flow_stats}.
 }
 \examples{
 sites <- c("02177000","02178400")
 startdate <- "2008-10-01"
 enddate <- "2013-09-30"
 nwis_dataset <- build_nwis_dv_dataset(sites, startdate, enddate)
-stats=c("hitMagAverage", "hitMagLow", "hitMagHigh", 
-        "hitFrequencyLow", "hitFrequencyHigh", 
-        "hitDurationLow", "hitDurationHigh", 
-        "hitTimingAverage", "hitTimingLow", "hitTimingHigh", 
-        "hitRateChange", 
-        "magnifSeven", "otherStat")
+stats=c("calc_magAverage", "calc_magLow", "calc_magHigh",
+        "calc_frequencyLow", "calc_frequencyHigh",
+        "calc_durationLow", "calc_durationHigh",
+        "calc_timingAverage", "calc_timingLow", "calc_timingHigh",
+        "calc_rateChange",
+        "calc_magnifSeven", "otherStat")
 eflow_stats <- calculate_stats_by_group(stats, nwis_dataset)
 }

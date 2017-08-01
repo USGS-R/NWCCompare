@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -12,7 +12,7 @@
 
 <meta name="author" content="David Blodgett" />
 
-<meta name="date" content="2017-04-30" />
+<meta name="date" content="2017-08-01" />
 
 <title>The NWCCompare R package</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">The NWCCompare R package</h1>
 <h4 class="author"><em>David Blodgett</em></h4>
-<h4 class="date"><em>2017-04-30</em></h4>
+<h4 class="date"><em>2017-08-01</em></h4>
 
 
 
@@ -105,7 +105,7 @@ flow_data_nwc &lt;-<span class="st"> </span><span class="kw">build_nwc_flow_data
 ##   ..- attr(*, &quot;names&quot;)= chr &quot;02335757&quot;
 ##  $ peak_threshold_cfs  : Named num 1983
 ##   ..- attr(*, &quot;names&quot;)= chr &quot;02335757&quot;</code></pre>
-<p>As can be seen here, the dataset returned by the build functions is a list with three named elements: <code>daily_streamflow_cfs</code>, <code>drainage_area_sqmi</code>, and <code>peak_threshold_cfs</code>. The daily_streamflow_cfs element contains a <code>data.frame</code> with <code>date</code>, <code>discharge</code>, <code>year_val</code>, and <code>day</code> columns that is ready to be passed to EflowStats functions. The drainage area and peak flow elements of the flow data list contain one drainage area value and one peak threshold value per site. The peak threshold value is derived with the EflowStats function <code>peakThreshold</code> function.</p>
+<p>As can be seen here, the dataset returned by the build functions is a list with three named elements: <code>daily_streamflow_cfs</code>, <code>drainage_area_sqmi</code>, and <code>peak_threshold_cfs</code>. The daily_streamflow_cfs element contains a <code>data.frame</code> with <code>date</code>, <code>discharge</code>, <code>year_val</code>, and <code>day</code> columns that is ready to be passed to EflowStats functions. The drainage area and peak flow elements of the flow data list contain one drainage area value and one peak threshold value per site. The peak threshold value is derived with the EflowStats function <code>get_peakThreshold</code> function.</p>
 <p>Local data can also be loaded into a similar list. While a bit more involved than getting NWIS or NWC data, it’s not hard. The NWCCompare function <code>get_local_data</code> can be used to get started if you have files in the format shown <a href="https://github.com/USGS-R/NWCCompare/tree/master/inst/extdata/modeled">here</a> and <a href="https://github.com/USGS-R/NWCCompare/tree/master/inst/extdata/observed">here</a>. File names must start with <code>mod</code> or <code>obs</code>, have a site id after the prefix, and end in <code>.csv</code>. or <code>.txt</code>. Each file should contain three columns: site number, date, and discharge. The file should use column headings with values <code>siteNo</code>, <code>date</code>, and <code>discharge</code>. The date format should be YYYY-MM-DD.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_path &lt;-<span class="st"> </span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="dt">package=</span><span class="st">&quot;NWCCompare&quot;</span>)
 data_path &lt;-<span class="st"> </span><span class="kw">paste</span>(data_path, <span class="st">&quot;modeled&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;/&quot;</span>)
@@ -124,7 +124,7 @@ localData &lt;-<span class="st"> </span><span class="kw">get_local_data</span>(d
 <p>If you don’t have data in the format required for <code>get_local_data</code>, don’t worry. As long as you can get the data loaded into a <code>data.frame</code> with two collumns: <code>date</code> and <code>discharge</code>, you can build your own NWCCompare stream flow data frame using the approach shown below. This example starts with the <code>mod_data</code> sample data from the package but you would read the data into R using one of the normal R data loading methods.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Here you would load your data. It should have two columns, the first for date</span>
 <span class="co"># the second for discharge. A sample is printed below. We also need the EflowStats</span>
-<span class="co"># function dataCheck for this example.</span>
+<span class="co"># function validate_data for this example.</span>
 <span class="kw">library</span>(EflowStats)
 Modeled&lt;-mod_data
 <span class="kw">str</span>(mod_data)</code></pre></div>
@@ -132,14 +132,14 @@ Modeled&lt;-mod_data
 ##  $ date     : chr  &quot;2008-10-01&quot; &quot;2008-10-02&quot; &quot;2008-10-03&quot; &quot;2008-10-04&quot; ...
 ##  $ discharge: num  36.5 34.7 33.1 32.6 32.1 ...</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Modeled<span class="op">$</span>date &lt;-<span class="st"> </span><span class="kw">as.Date</span>(Modeled<span class="op">$</span>date)
-Modeled &lt;-<span class="st"> </span><span class="kw">dataCheck</span>(Modeled, <span class="dt">yearType =</span> <span class="st">&quot;water&quot;</span>)
+Modeled &lt;-<span class="st"> </span><span class="kw">validate_data</span>(Modeled, <span class="dt">yearType =</span> <span class="st">&quot;water&quot;</span>)
 <span class="kw">str</span>(Modeled)</code></pre></div>
 <pre><code>## 'data.frame':    730 obs. of  4 variables:
 ##  $ date     : Date, format: &quot;2008-10-01&quot; &quot;2008-10-02&quot; ...
 ##  $ discharge: num  36.5 34.7 33.1 32.6 32.1 ...
 ##  $ year_val : int  2009 2009 2009 2009 2009 2009 2009 2009 2009 2009 ...
 ##  $ day      : num  1 2 3 4 5 6 7 8 9 10 ...</code></pre>
-<p>With your local data loaded up and run through dataCheck, or loaded with get_local_data, you are ready to build an NWCCompare data frame. For this example, we use the <code>localData</code> loaded above. It has five sites worth of data. <a href="https://github.com/USGS-R/NWCCompare/blob/master/inst/extdata/observed/drainarea.csv">drainarea.csv used below can be seen here.</a></p>
+<p>With your local data loaded up and run through validate_data, or loaded with get_local_data, you are ready to build an NWCCompare data frame. For this example, we use the <code>localData</code> loaded above. It has five sites worth of data. <a href="https://github.com/USGS-R/NWCCompare/blob/master/inst/extdata/observed/drainarea.csv">drainarea.csv used below can be seen here.</a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sites &lt;-<span class="st"> </span><span class="kw">names</span>(localData)
 
 da &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> (<span class="kw">file.path</span>(data_path, <span class="st">&quot;drainarea.csv&quot;</span>)),
@@ -161,12 +161,12 @@ flow_data_local &lt;-<span class="st"> </span><span class="kw">list</span>(<span
 <div id="calculating-summary-and-difference-statistics" class="section level2">
 <h2>Calculating Summary and Difference Statistics</h2>
 <p>Now that we have some data to work with, we can calculate a suite of hydro statistics for one of the datasets.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stats=<span class="kw">c</span>(<span class="st">&quot;magAverage&quot;</span>, <span class="st">&quot;magLow&quot;</span>, <span class="st">&quot;magHigh&quot;</span>,
-        <span class="st">&quot;frequencyLow&quot;</span>, <span class="st">&quot;frequencyHigh&quot;</span>,
-        <span class="st">&quot;durationLow&quot;</span>, <span class="st">&quot;durationHigh&quot;</span>,
-        <span class="st">&quot;timingAverage&quot;</span>, <span class="st">&quot;timingLow&quot;</span>, <span class="st">&quot;timingHigh&quot;</span>,
-        <span class="st">&quot;rateChange&quot;</span>,
-        <span class="st">&quot;magnifSeven&quot;</span>, <span class="st">&quot;otherStat&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">stats=<span class="kw">c</span>(<span class="st">&quot;calc_magAverage&quot;</span>, <span class="st">&quot;calc_magLow&quot;</span>, <span class="st">&quot;calc_magHigh&quot;</span>,
+        <span class="st">&quot;calc_frequencyLow&quot;</span>, <span class="st">&quot;calc_frequencyHigh&quot;</span>,
+        <span class="st">&quot;calc_durationLow&quot;</span>, <span class="st">&quot;calc_durationHigh&quot;</span>,
+        <span class="st">&quot;calc_timingAverage&quot;</span>, <span class="st">&quot;calc_timingLow&quot;</span>, <span class="st">&quot;calc_timingHigh&quot;</span>,
+        <span class="st">&quot;calc_rateChange&quot;</span>,
+        <span class="st">&quot;calc_magnifSeven&quot;</span>, <span class="st">&quot;otherStat&quot;</span>)
 eflow_stats &lt;-<span class="st"> </span><span class="kw">calculate_stats_by_group</span>(stats, flow_data_nwis)
 <span class="kw">str</span>(eflow_stats, <span class="dt">list.len =</span> <span class="st">&quot;10&quot;</span>)</code></pre></div>
 <pre><code>## 'data.frame':    1 obs. of  191 variables:
@@ -246,7 +246,7 @@ GoF_anmon_stats &lt;-<span class="st"> </span><span class="kw">calculate_GoF_sum
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

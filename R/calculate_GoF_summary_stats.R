@@ -12,10 +12,10 @@
 #' library(EflowStats)
 #' Gaged <- obs_data
 #' Gaged$date <- as.Date(Gaged$date)
-#' Gaged <- dataCheck(Gaged, yearType = "water")
+#' Gaged <- validate_data(Gaged, yearType = "water")
 #' Modeled<-mod_data
 #' Modeled$date <- as.Date(Modeled$date)
-#' Modeled <- dataCheck(Modeled, yearType = "water")
+#' Modeled <- validate_data(Modeled, yearType = "water")
 #' GoFstats <- calculate_GoF_stats(Gaged, Modeled)
 calculate_GoF_summary_stats <- function(Gaged,Modeled) {
   NSEv <- vector(length=14)

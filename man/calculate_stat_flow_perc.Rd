@@ -9,7 +9,7 @@ calculate_stat_flow_perc(flow_data, probs = c(0.1, 0.25, 0.5, 0.75, 0.9,
 }
 \arguments{
 \item{flow_data}{A dataframe containing a NWCCompare flow dataset. 
-Should have been cleaned by \link[EflowStats]{dataCheck}}
+Should have been cleaned by \link[EflowStats]{validate_data}}
 
 \item{probs}{vector containing requested percentile value(s)}
 }
@@ -24,7 +24,7 @@ returns a list of the requested percentiles
 library(EflowStats)
 flow_data<-obs_data
 flow_data$date <- as.Date(flow_data$date)
-flow_data <- dataCheck(flow_data, yearType = "water")
+flow_data <- validate_data(flow_data, yearType = "water")
 calculate_stat_flow_perc(flow_data, probs=c(.1,.25,.5,.75))
 
 }

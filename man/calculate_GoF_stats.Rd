@@ -22,9 +22,9 @@ data and returns a data frame of calculated GoF statistics
 library(EflowStats)
 Gaged <- obs_data
 Gaged$date <- as.Date(Gaged$date)
-Gaged <- dataCheck(Gaged, yearType = "water")
+Gaged <- validate_data(Gaged, yearType = "water")
 Modeled<-mod_data
 Modeled$date <- as.Date(Modeled$date)
-Modeled <- dataCheck(Modeled, yearType = "water")
+Modeled <- validate_data(Modeled, yearType = "water")
 calculate_GoF_stats(Modeled,Gaged)
 }

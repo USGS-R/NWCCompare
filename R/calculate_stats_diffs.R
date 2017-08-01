@@ -1,9 +1,9 @@
 #' Function to calculate the differences in statistics for two given datasets.
 #' 
 #' This function accepts two data frames of daily flow data and returns a data frame of 
-#' calculated difference statistics from \link[EflowStats]{hitAllStats}, 
-#' \link[EflowStats]{magnifSeven}, \link{calculate_other_flow_stats}, and \link{calculate_GoF_stats}.
-#' HitStats, magnifSeven, and other_flow_stats are differented as \code{(a-b)/a} 
+#' calculated difference statistics from \link[EflowStats]{calc_allHIT}, 
+#' \link[EflowStats]{calc_magnifSeven}, \link{calculate_other_flow_stats}, and \link{calculate_GoF_stats}.
+#' HitStats, calc_magnifSeven, and other_flow_stats are differented as \code{(a-b)/a} 
 #' 
 #' Assumptions:
 #' Dates must match between the two data sources.
@@ -11,7 +11,7 @@
 #' @param sites A two column dataframe containing site names for flow_data_a
 #' and flow_data_b flow data.
 #' @param flow_data_a A dataframe containing a NWCCompare flow dataset. 
-#' Should have been cleaned by \link[EflowStats]{dataCheck} and constructed by
+#' Should have been cleaned by \link[EflowStats]{validate_data} and constructed by
 #' a build dataset function from this package.
 #' @param flow_data_b A second NWCCompare flow dataset to be compared
 #' to flow_data_a. 
@@ -43,21 +43,21 @@ calculate_stats_diffs<-function(sites, flow_data_a, flow_data_b,
           flow_data_b$daily_streamflow_cfs[[1]]$date)) {
     stop("Dates in flow data do not match, can not proceed.")}
   
-  stats=c("hitMagAverage", "hitMagLow", "hitMagHigh",
-          "hitFrequencyLow", "hitFrequencyHigh",
-          "hitDurationLow", "hitDurationHigh",
-          "hitTimingAverage", "hitTimingLow", "hitTimingHigh",
-          "hitRateChange",
-          "magnifSeven", "otherStat")
+  stats=c("calc_magAverage", "calc_magLow", "calc_magHigh",
+          "calc_frequencyLow", "calc_frequencyHigh",
+          "calc_durationLow", "calc_durationHigh",
+          "calc_timingAverage", "calc_timingLow", "calc_timingHigh",
+          "calc_rateChange",
+          "calc_magnifSeven", "otherStat")
   
   min_date <- as.character(min(flow_data_a$daily_streamflow_cfs[[1]]$date))
   max_date <- as.character(max(flow_data_a$daily_streamflow_cfs[[1]]$date))
   
-  hitAllStats_result_a <- calculate_stats_by_group(stats = stats, 
+  calc_allHIT_result_a <- calculate_stats_by_group(stats = stats, 
                                                 flow_data = flow_data_a, 
                                                 yearType = yearType, 
                                                 digits = digits)
-  hitAllStats_result_b <- calculate_stats_by_group(stats = stats, 
+  calc_allHIT_result_b <- calculate_stats_by_group(stats = stats, 
                                                 flow_data = flow_data_b, 
                                                 yearType = yearType, 
                                                 digits = digits)
@@ -72,14 +72,14 @@ calculate_stats_diffs<-function(sites, flow_data_a, flow_data_b,
     GoFstats_results_site <- calculate_GoF_stats(flow_data_b$daily_streamflow_cfs[site_b][[1]],
                                                  flow_data_a$daily_streamflow_cfs[site_a][[1]])
     if(i==1) {
-      statsout <- cbind(hitAllStats_result_a,GoFstats_results_site)
+      statsout <- cbind(calc_allHIT_result_a,GoFstats_results_site)
       init <- FALSE
     }
     
-    statsout[i,4:(ncol(hitAllStats_result_a)-1)] <- (hitAllStats_result_a[i,4:(ncol(hitAllStats_result_a)-1)] - 
-                                               hitAllStats_result_b[i,4:(ncol(hitAllStats_result_a)-1)]) / 
-                                              hitAllStats_result_a[i,4:(ncol(hitAllStats_result_a)-1)]
-    statsout[i,(ncol(hitAllStats_result_a)+1):ncol(statsout)] <- GoFstats_results_site
+    statsout[i,4:(ncol(calc_allHIT_result_a)-1)] <- (calc_allHIT_result_a[i,4:(ncol(calc_allHIT_result_a)-1)] - 
+                                               calc_allHIT_result_b[i,4:(ncol(calc_allHIT_result_a)-1)]) / 
+                                              calc_allHIT_result_a[i,4:(ncol(calc_allHIT_result_a)-1)]
+    statsout[i,(ncol(calc_allHIT_result_a)+1):ncol(statsout)] <- GoFstats_results_site
   }
   return(statsout)
 }

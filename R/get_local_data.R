@@ -72,7 +72,7 @@ get_local_data <- function(data_path, start_year="", end_year="", sep_char=",") 
       x_obs <- x_obs[which(strptime(x_obs$date, "%Y-%m-%d") <= strptime(end_date, "%Y-%m-%d")),]
     }
     
-    obs_data <- dataCheck(x_obs, yearType = "water")
+    obs_data <- validate_data(x_obs, yearType = "water")
 
     dataOut[[site]]<-obs_data
   }
